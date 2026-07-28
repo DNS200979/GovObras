@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CarbonFree Obras — Plano de Negócio | DNS-TI Consultoria</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400..700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ardosia:#16232A;
+  --ardosia-2:#1F323B;
+  --concreto:#E3E7E2;
+  --papel:#F8F9F6;
+  --linha:#C4CBC3;
+  --linha-forte:#9AA69C;
+  --verde:#1F6F5C;
+  --verde-claro:#E4F0EB;
+  --ambar:#B4661A;
+  --ambar-claro:#F7EBDD;
+  --texto:#22302F;
+  --texto-fraco:#5C6B66;
+  --azul:#2C5670;
+
+  --display:'Archivo',system-ui,sans-serif;
+  --corpo:'Source Serif 4',Georgia,serif;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+
+  --max:1120px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+
+body{
+  font-family:var(--corpo);
+  font-size:16.5px;
+  line-height:1.62;
+  color:var(--texto);
+  background:var(--concreto);
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- utilitários tipográficos ---------- */
+.eyebrow{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--texto-fraco);
+  font-weight:500;
+}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:500}
+
+h1,h2,h3,h4{font-family:var(--display);font-weight:800;line-height:1.1;letter-spacing:-.015em}
+h2{font-size:clamp(26px,3.6vw,38px);font-stretch:105%}
+h3{font-size:19px;font-weight:700;letter-spacing:-.005em;margin-bottom:8px}
+h4{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;font-family:var(--display)}
+
+p{margin-bottom:14px}
+p:last-child{margin-bottom:0}
+strong{font-weight:700}
+a{color:var(--verde)}
+
+/* ---------- HERO ---------- */
+.hero{
+  background:var(--ardosia);
+  color:#DDE4E1;
+  padding:56px 0 0;
+  position:relative;
+  overflow:hidden;
+}
+.hero::before{
+  content:"";
+  position:absolute;inset:0;
+  background-image:linear-gradient(var(--ardosia-2) 1px,transparent 1px),linear-gradient(90deg,var(--ardosia-2) 1px,transparent 1px);
+  background-size:44px 44px;
+  opacity:.55;
+  pointer-events:none;
+}
+.hero-inner{max-width:var(--max);margin:0 auto;padding:0 28px;position:relative}
+.brandline{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:34px}
+.brandline .mark{
+  font-family:var(--display);font-weight:900;font-size:15px;letter-spacing:.02em;
+  color:#F8F9F6;background:var(--verde);padding:5px 10px;border-radius:3px;
+}
+.brandline .sub{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:#7E938B}
+
+.hero h1{
+  font-size:clamp(38px,6.4vw,72px);
+  font-stretch:112%;
+  color:#F8F9F6;
+  max-width:15ch;
+  margin-bottom:20px;
+}
+.hero h1 em{font-style:normal;color:#5FBFA3}
+.hero-lede{
+  font-size:clamp(17px,2vw,20px);
+  max-width:58ch;
+  color:#B6C4BE;
+  margin-bottom:34px;
+}
+.hero-meta{
+  display:flex;gap:28px;flex-wrap:wrap;
+  border-top:1px solid #2E4048;padding-top:16px;margin-bottom:46px;
+}
+.hero-meta div{font-family:var(--mono);font-size:11.5px;color:#7E938B;letter-spacing:.06em}
+.hero-meta div b{display:block;color:#DDE4E1;font-weight:500;font-size:13px;letter-spacing:0;margin-top:3px}
+
+/* ---------- SIGNATURE: razonete de carbono ---------- */
+.razonete{
+  background:var(--papel);
+  color:var(--texto);
+  border-radius:5px 5px 0 0;
+  padding:26px 28px 30px;
+  box-shadow:0 -2px 0 var(--verde);
+}
+.razonete-head{
+  display:flex;justify-content:space-between;align-items:baseline;
+  flex-wrap:wrap;gap:10px;
+  border-bottom:2px solid var(--ardosia);padding-bottom:10px;margin-bottom:0;
+}
+.razonete-head .t{font-family:var(--display);font-weight:800;font-size:16px;letter-spacing:-.01em}
+.razonete-head .s{font-family:var(--mono);font-size:10.5px;color:var(--texto-fraco);letter-spacing:.08em;text-transform:uppercase}
+
+.livro{display:grid;grid-template-columns:1fr 1px 1fr;gap:0}
+.coluna{padding:16px 20px 0}
+.coluna:first-child{padding-left:0}
+.coluna:last-child{padding-right:0}
+.divisor{background:var(--ardosia)}
+.col-titulo{
+  font-family:var(--display);font-weight:800;font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+  padding-bottom:9px;margin-bottom:10px;border-bottom:1px solid var(--linha);
+  display:flex;justify-content:space-between;align-items:center;
+}
+.col-titulo .un{font-family:var(--mono);font-weight:400;font-size:10px;letter-spacing:.06em;color:var(--texto-fraco)}
+.lado-passivo .col-titulo{color:var(--ambar)}
+.lado-ativo .col-titulo{color:var(--verde)}
+
+.linha-razao{
+  display:grid;grid-template-columns:auto 1fr auto;gap:9px;align-items:baseline;
+  padding:5px 0;font-size:13.5px;
+}
+.linha-razao .cod{font-family:var(--mono);font-size:10px;color:var(--texto-fraco);letter-spacing:.04em;min-width:34px}
+.linha-razao .desc{border-bottom:1px dotted var(--linha);line-height:1.3}
+.linha-razao .val{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:500;font-size:13px}
+.lado-passivo .val{color:var(--ambar)}
+.lado-ativo .val{color:var(--verde)}
+
+.soma{
+  display:flex;justify-content:space-between;align-items:baseline;
+  margin-top:12px;padding-top:9px;border-top:1px solid var(--ardosia);
+  font-family:var(--display);font-weight:800;font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+}
+.soma .v{font-family:var(--mono);font-size:17px;letter-spacing:0}
+.lado-passivo .soma .v{color:var(--ambar)}
+.lado-ativo .soma .v{color:var(--verde)}
+
+.saldo{
+  margin-top:22px;padding:15px 20px;
+  background:var(--ardosia);color:#F8F9F6;border-radius:4px;
+  display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;
+}
+.saldo .rot{font-family:var(--display);font-weight:800;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase}
+.saldo .rot small{display:block;font-family:var(--mono);font-weight:400;font-size:10px;letter-spacing:.05em;text-transform:none;color:#8FA69D;margin-top:3px}
+.saldo .n{font-family:var(--mono);font-size:26px;font-weight:600;color:#E8A24E}
+.saldo .n span{font-size:13px;color:#8FA69D;font-weight:400}
+.razonete-nota{
+  font-family:var(--mono);font-size:10.5px;color:var(--texto-fraco);
+  margin-top:14px;line-height:1.55;letter-spacing:.01em;
+}
+
+/* ---------- LAYOUT DOC ---------- */
+.doc{max-width:var(--max);margin:0 auto;padding:0 28px}
+.layout{display:grid;grid-template-columns:190px 1fr;gap:52px;align-items:start;padding-top:60px}
+
+.toc{position:sticky;top:24px;font-family:var(--mono);font-size:11px;line-height:1.45}
+.toc .toc-h{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--texto-fraco);padding-bottom:8px;border-bottom:1px solid var(--linha-forte);margin-bottom:10px}
+.toc a{
+  display:grid;grid-template-columns:22px 1fr;gap:4px;
+  padding:4px 0;color:var(--texto-fraco);text-decoration:none;
+  border-left:2px solid transparent;padding-left:8px;margin-left:-10px;
+  transition:color .15s,border-color .15s;
+}
+.toc a:hover{color:var(--texto)}
+.toc a.on{color:var(--ardosia);border-left-color:var(--verde);font-weight:600}
+.toc a .i{color:var(--linha-forte)}
+.toc a.on .i{color:var(--verde)}
+
+section{margin-bottom:70px;scroll-margin-top:20px}
+.sec-head{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;margin-bottom:22px}
+.sec-num{
+  font-family:var(--mono);font-size:12px;font-weight:600;color:var(--verde);
+  border:1px solid var(--linha-forte);border-radius:3px;padding:4px 7px;margin-top:6px;
+}
+.sec-head .kicker{display:block;margin-bottom:6px}
+.lede{font-size:18.5px;color:var(--texto-fraco);max-width:62ch;margin-bottom:26px;line-height:1.55}
+
+/* ---------- componentes ---------- */
+.card{background:var(--papel);border:1px solid var(--linha);border-radius:5px;padding:20px 22px}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.gap-top{margin-top:20px}
+
+table{width:100%;border-collapse:collapse;font-size:14px;background:var(--papel);border:1px solid var(--linha);border-radius:5px;overflow:hidden}
+thead th{
+  background:var(--ardosia);color:#DDE4E1;text-align:left;
+  font-family:var(--display);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  padding:10px 13px;vertical-align:bottom;
+}
+tbody td{padding:10px 13px;border-top:1px solid var(--linha);vertical-align:top;line-height:1.45}
+tbody tr:nth-child(even) td{background:rgba(196,203,195,.16)}
+td.c,th.c{text-align:center}
+td.r,th.r{text-align:right}
+.tabela-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+.tag{
+  display:inline-block;font-family:var(--mono);font-size:10px;font-weight:500;
+  letter-spacing:.06em;padding:2px 6px;border-radius:3px;white-space:nowrap;
+}
+.tag-p{background:var(--ambar-claro);color:var(--ambar)}
+.tag-a{background:var(--verde-claro);color:var(--verde)}
+.tag-n{background:#E6EBEF;color:var(--azul)}
+
+.badge-mod{
+  font-family:var(--mono);font-size:10.5px;font-weight:600;
+  background:var(--ardosia);color:#DDE4E1;padding:2px 6px;border-radius:3px;letter-spacing:.04em;
+}
+
+ul.lista{list-style:none;margin:0}
+ul.lista li{position:relative;padding-left:20px;margin-bottom:8px;font-size:15px;line-height:1.5}
+ul.lista li::before{
+  content:"";position:absolute;left:0;top:.62em;
+  width:7px;height:7px;border:1.5px solid var(--verde);border-radius:1px;
+}
+ul.lista li:last-child{margin-bottom:0}
+
+.produto{background:var(--papel);border:1px solid var(--linha);border-radius:5px;overflow:hidden}
+.produto-top{padding:16px 20px;border-bottom:1px solid var(--linha);background:var(--ardosia);color:#DDE4E1}
+.produto-top .nome{font-family:var(--display);font-weight:800;font-size:17px;color:#F8F9F6}
+.produto-top .quem{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:#7E938B;margin-top:4px}
+.produto-body{padding:18px 20px}
+.produto-body .form{font-family:var(--mono);font-size:11px;color:var(--texto-fraco);letter-spacing:.05em;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--linha)}
+
+.destaque{
+  border-left:3px solid var(--verde);background:var(--verde-claro);
+  padding:15px 18px;border-radius:0 4px 4px 0;font-size:15px;
+}
+.alerta{
+  border-left:3px solid var(--ambar);background:var(--ambar-claro);
+  padding:15px 18px;border-radius:0 4px 4px 0;font-size:15px;
+}
+
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.kpi{background:var(--papel);border:1px solid var(--linha);border-radius:5px;padding:15px 16px}
+.kpi .v{font-family:var(--mono);font-size:24px;font-weight:600;color:var(--ardosia);line-height:1.1}
+.kpi .v small{font-size:12px;color:var(--texto-fraco);font-weight:400}
+.kpi .l{font-size:12.5px;color:var(--texto-fraco);margin-top:6px;line-height:1.35}
+
+.fase{display:grid;grid-template-columns:110px 1fr;gap:18px;padding:16px 0;border-top:1px solid var(--linha)}
+.fase:last-child{border-bottom:1px solid var(--linha)}
+.fase .quando{font-family:var(--mono);font-size:11.5px;color:var(--verde);font-weight:600;letter-spacing:.04em}
+.fase .quando small{display:block;color:var(--texto-fraco);font-weight:400;margin-top:3px;letter-spacing:0}
+
+/* ---------- simulador ---------- */
+.sim{background:var(--ardosia);color:#DDE4E1;border-radius:6px;padding:24px 26px}
+.sim h3{color:#F8F9F6;font-size:16px;margin-bottom:4px}
+.sim .sub{font-family:var(--mono);font-size:11px;color:#7E938B;letter-spacing:.06em;margin-bottom:20px}
+.sim-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:start}
+.ctrl{margin-bottom:18px}
+.ctrl label{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;color:#B6C4BE;margin-bottom:7px}
+.ctrl label b{color:#5FBFA3;font-size:14px;font-weight:600}
+input[type=range]{
+  width:100%;-webkit-appearance:none;appearance:none;height:3px;border-radius:2px;
+  background:#3A4E56;outline:none;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;width:16px;height:16px;border-radius:50%;
+  background:#5FBFA3;cursor:pointer;border:3px solid var(--ardosia);box-shadow:0 0 0 1px #5FBFA3;
+}
+input[type=range]::-moz-range-thumb{
+  width:16px;height:16px;border-radius:50%;background:#5FBFA3;cursor:pointer;border:3px solid var(--ardosia);
+}
+input[type=range]:focus-visible{box-shadow:0 0 0 3px rgba(95,191,163,.35)}
+.saida{border-top:1px solid #2E4048;padding-top:14px}
+.saida .item{display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;font-family:var(--mono);font-size:12.5px;color:#B6C4BE}
+.saida .item b{color:#F8F9F6;font-size:15px;font-weight:500}
+.saida .total{margin-top:10px;padding-top:12px;border-top:1px solid #2E4048;display:flex;justify-content:space-between;align-items:baseline}
+.saida .total span{font-family:var(--display);font-weight:800;font-size:12px;letter-spacing:.09em;text-transform:uppercase}
+.saida .total b{font-family:var(--mono);font-size:26px;font-weight:600;color:#5FBFA3}
+
+/* ---------- rodapé ---------- */
+footer{background:var(--ardosia);color:#8FA69D;margin-top:40px;padding:44px 0 36px}
+.footer-inner{max-width:var(--max);margin:0 auto;padding:0 28px;font-family:var(--mono);font-size:11.5px;line-height:1.7;letter-spacing:.03em}
+.footer-inner b{color:#DDE4E1;font-weight:500}
+
+/* ---------- responsivo ---------- */
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr;gap:0;padding-top:38px}
+  .toc{display:none}
+  .grid2,.grid3,.sim-grid{grid-template-columns:1fr}
+  .kpi-row{grid-template-columns:repeat(2,1fr)}
+  .livro{grid-template-columns:1fr}
+  .divisor{height:1px;margin:14px 0}
+  .coluna{padding:14px 0 0}
+  .fase{grid-template-columns:1fr;gap:6px}
+}
+@media (max-width:560px){
+  body{font-size:16px}
+  .doc,.hero-inner,.footer-inner{padding:0 18px}
+  .razonete{padding:20px 18px 24px}
+  .kpi-row{grid-template-columns:1fr}
+  .sec-head{grid-template-columns:1fr}
+  .sec-num{justify-self:start}
+}
+
+@media print{
+  .toc,.sim{display:none}
+  body{background:#fff}
+  section{page-break-inside:avoid}
+  .layout{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ========================= HERO ========================= -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="brandline">
+      <span class="mark">CARBONFREE OBRAS</span>
+      <span class="sub">DNS-TI Consultoria · Florianópolis/SC · Plano de Negócio Rev. 0.1</span>
+    </div>
+
+    <h1>Toda obra tem um <em>balanço de carbono</em>. Quase nenhuma prefeitura consegue auditá-lo.</h1>
+
+    <p class="hero-lede">
+      Um ecossistema de três produtos independentes — gerenciador em nuvem para a prefeitura,
+      aplicativo para a construtora e aplicativo de campo para o fiscal — que transforma
+      emissões e remoções de carbono de canteiro em lançamentos rastreáveis, com evidência
+      fiscal assinada digitalmente e trilha de auditoria imutável.
+    </p>
+
+    <div class="hero-meta">
+      <div>Base regulatória<b>Lei 15.042/2024 · CONAMA 307 · Lei 14.133/2021</b></div>
+      <div>Norma de cálculo<b>ISO 14064-1 · EN 15978 · GHG Protocol BR</b></div>
+      <div>Reuso de plataforma<b>Motor CarbonFree 15.042</b></div>
+    </div>
+
+    <!-- SIGNATURE -->
+    <div class="razonete">
+      <div class="razonete-head">
+        <span class="t">Balanço de Carbono da Obra</span>
+        <span class="s">Exemplo · residencial vertical · 9.400 m² · ciclo A1–A5</span>
+      </div>
+
+      <div class="livro">
+        <div class="coluna lado-passivo">
+          <div class="col-titulo"><span>Passivo — emissões</span><span class="un">tCO₂e</span></div>
+          <div class="linha-razao"><span class="cod">A1–A3</span><span class="desc">Cimento e concreto usinado</span><span class="val" data-alvo="1284">0</span></div>
+          <div class="linha-razao"><span class="cod">A1–A3</span><span class="desc">Aço CA-50 / CA-60</span><span class="val" data-alvo="742">0</span></div>
+          <div class="linha-razao"><span class="cod">A1–A3</span><span class="desc">Alvenaria, esquadrias, revestimentos</span><span class="val" data-alvo="311">0</span></div>
+          <div class="linha-razao"><span class="cod">A4</span><span class="desc">Transporte de insumos até o canteiro</span><span class="val" data-alvo="168">0</span></div>
+          <div class="linha-razao"><span class="cod">A5</span><span class="desc">Diesel, energia e resíduos de canteiro</span><span class="val" data-alvo="203">0</span></div>
+          <div class="linha-razao"><span class="cod">USO</span><span class="desc">Supressão vegetal autorizada</span><span class="val" data-alvo="47">0</span></div>
+          <div class="soma"><span>Total do passivo</span><span class="v" data-alvo="2755">0</span></div>
+        </div>
+
+        <div class="divisor"></div>
+
+        <div class="coluna lado-ativo">
+          <div class="col-titulo"><span>Ativo — remoções e reduções</span><span class="un">tCO₂e</span></div>
+          <div class="linha-razao"><span class="cod">SUB</span><span class="desc">Cimento CP III/CP IV em substituição a CP II</span><span class="val" data-alvo="386">0</span></div>
+          <div class="linha-razao"><span class="cod">RCC</span><span class="desc">Agregado reciclado e desvio de aterro</span><span class="val" data-alvo="94">0</span></div>
+          <div class="linha-razao"><span class="cod">ENE</span><span class="desc">Geração fotovoltaica no canteiro</span><span class="val" data-alvo="31">0</span></div>
+          <div class="linha-razao"><span class="cod">ARB</span><span class="desc">Compensação arbórea (estoque 20 anos)</span><span class="val" data-alvo="118">0</span></div>
+          <div class="linha-razao"><span class="cod">CRV</span><span class="desc">CRVE adquiridos e aposentados em registro</span><span class="val" data-alvo="450">0</span></div>
+          <div class="linha-razao"><span class="cod">MAD</span><span class="desc">Carbono biogênico em madeira certificada</span><span class="val" data-alvo="62">0</span></div>
+          <div class="soma"><span>Total do ativo</span><span class="v" data-alvo="1141">0</span></div>
+        </div>
+      </div>
+
+      <div class="saldo">
+        <div class="rot">Saldo líquido da obra<small>Intensidade: 172 kgCO₂e/m² · Meta municipal Faixa B: ≤ 200</small></div>
+        <div class="n" data-alvo="1614">0<span> tCO₂e</span></div>
+      </div>
+
+      <p class="razonete-nota">
+        Cada linha acima é um lançamento com evidência vinculada — chave de NF-e, CT-e, MTR, laudo ou
+        registro de crédito — e hash SHA-256 gravado em trilha append-only. É essa amarração que separa
+        um relatório de sustentabilidade de um documento fiscalizável. Valores ilustrativos.
+      </p>
+    </div>
+  </div>
+</header>
+
+<!-- ========================= DOCUMENTO ========================= -->
+<div class="doc">
+<div class="layout">
+
+  <nav class="toc" id="toc" aria-label="Índice do documento">
+    <div class="toc-h">Índice</div>
+    <a href="#tese"><span class="i">01</span><span>Tese</span></a>
+    <a href="#regulatorio"><span class="i">02</span><span>Base regulatória</span></a>
+    <a href="#problema"><span class="i">03</span><span>Problema</span></a>
+    <a href="#solucao"><span class="i">04</span><span>Solução</span></a>
+    <a href="#requisitos"><span class="i">05</span><span>Requisitos auditáveis</span></a>
+    <a href="#gov"><span class="i">06</span><span>Gerenciador · Prefeitura</span></a>
+    <a href="#obra"><span class="i">07</span><span>App · Construtora</span></a>
+    <a href="#fiscal"><span class="i">08</span><span>App · Fiscal</span></a>
+    <a href="#arquitetura"><span class="i">09</span><span>Arquitetura</span></a>
+    <a href="#dados"><span class="i">10</span><span>Modelo de dados</span></a>
+    <a href="#antifraude"><span class="i">11</span><span>Anti-fraude e LGPD</span></a>
+    <a href="#incentivos"><span class="i">12</span><span>Incentivos municipais</span></a>
+    <a href="#negocio"><span class="i">13</span><span>Modelo de negócio</span></a>
+    <a href="#gtm"><span class="i">14</span><span>Go-to-market</span></a>
+    <a href="#roadmap"><span class="i">15</span><span>Roadmap</span></a>
+    <a href="#projecoes"><span class="i">16</span><span>Projeções</span></a>
+    <a href="#riscos"><span class="i">17</span><span>Riscos</span></a>
+  </nav>
+
+  <main>
+
+  <!-- 01 TESE -->
+  <section id="tese">
+    <div class="sec-head">
+      <span class="sec-num">01</span>
+      <div><span class="eyebrow kicker">Tese</span><h2>Carbono de obra é contabilidade, não relatório</h2></div>
+    </div>
+
+    <p class="lede">
+      Programas municipais de construção sustentável no Brasil fracassam por um motivo repetido:
+      exigem <em>declaração</em> sem criar <em>evidência</em>. O selo é concedido com base em
+      memorial descritivo e boa-fé, e o fiscal não tem como contestar.
+    </p>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>O que muda com partidas dobradas</h3>
+        <p>Emissão é passivo. Remoção, substituição de material e desvio de resíduo são ativo.
+        Todo lançamento nasce amarrado a um documento que já existe e já é assinado digitalmente
+        pelo Estado — NF-e, CT-e, MTR, CDF, fatura de energia.</p>
+        <p>A construtora não preenche formulário: ela <strong>importa o XML que já emitiu</strong>.
+        O sistema converte quantidade × fator de emissão versionado em tCO₂e.</p>
+      </div>
+      <div class="card">
+        <h3>Por que a prefeitura é o cliente certo</h3>
+        <p>O município detém três alavancas que ninguém mais tem: o <strong>alvará de construção</strong>,
+        o <strong>habite-se</strong> e o <strong>IPTU</strong>. São gates naturais — pontos onde uma
+        exigência documental já é rotina e juridicamente sustentável (art. 30, CF).</p>
+        <p>Nenhuma construtora ignora um condicionante de habite-se. Esse é o mecanismo de adoção
+        que campanhas voluntárias nunca conseguem.</p>
+      </div>
+    </div>
+
+    <div class="destaque gap-top">
+      <strong>Posicionamento.</strong> O CarbonFree Obras não vende consultoria ESG. Vende
+      <em>infraestrutura de fiscalização</em>: o mesmo papel que o sistema de ISS eletrônico cumpre
+      para serviços, este cumpre para o carbono da construção civil.
+    </div>
+  </section>
+
+  <!-- 02 REGULATÓRIO -->
+  <section id="regulatorio">
+    <div class="sec-head">
+      <span class="sec-num">02</span>
+      <div><span class="eyebrow kicker">Base regulatória</span><h2>Os ganchos legais que sustentam a exigência</h2></div>
+    </div>
+
+    <p class="lede">
+      O produto não depende de legislação nova. Ele se acopla a obrigações já vigentes e a
+      competências municipais consolidadas.
+    </p>
+
+    <div class="tabela-wrap">
+    <table>
+      <thead>
+        <tr><th style="width:22%">Instrumento</th><th style="width:38%">O que estabelece</th><th>Uso no produto</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>Lei 15.042/2024</b><br><span class="mono" style="font-size:11px;color:var(--texto-fraco)">SBCE</span></td>
+          <td>Sistema Brasileiro de Comércio de Emissões. Reporte obrigatório acima de 10 mil tCO₂e/ano; plano de monitoramento e entrega de CBE acima de 25 mil.</td>
+          <td>Fabricantes de cimento, aço, cal e vidro entram no regulado. A construtora herda isso como <b>Escopo 3, categoria 1</b>. O sistema já entrega o inventário no formato do PMD.</td>
+        </tr>
+        <tr>
+          <td><b>CONAMA 307/2002</b><br><span class="mono" style="font-size:11px;color:var(--texto-fraco)">+ Lei 12.305/2010</span></td>
+          <td>PGRCC obrigatório para licenciamento de obra; classificação A/B/C/D; destinação com MTR e CDF rastreáveis.</td>
+          <td><b>Melhor gancho existente.</b> A prefeitura já fiscaliza RCC. O manifesto vira lançamento de carbono automático, sem processo novo.</td>
+        </tr>
+        <tr>
+          <td><b>Lei 10.257/2001</b><br><span class="mono" style="font-size:11px;color:var(--texto-fraco)">Estatuto da Cidade</span></td>
+          <td>Outorga onerosa do direito de construir, IPTU progressivo, operações urbanas, transferência do direito de construir.</td>
+          <td>Base jurídica para bonificar desempenho: potencial construtivo adicional ou desconto de outorga por faixa de intensidade de carbono.</td>
+        </tr>
+        <tr>
+          <td><b>Lei 14.133/2021</b><br><span class="mono" style="font-size:11px;color:var(--texto-fraco)">Licitações</span></td>
+          <td>Art. 11 (desenvolvimento sustentável), art. 26 (margem de preferência), art. 45 (requisitos de obras).</td>
+          <td>Duas frentes: critério de julgamento em obras públicas municipais <em>e</em> o próprio caminho de contratação do software.</td>
+        </tr>
+        <tr>
+          <td><b>ISO 14064-1/-3</b><br><span class="mono" style="font-size:11px;color:var(--texto-fraco)">+ GHG Protocol BR</span></td>
+          <td>Quantificação e verificação de inventários de GEE. Princípios: relevância, integridade, consistência, transparência, exatidão.</td>
+          <td>Define a estrutura do inventário e o dossiê exportável para verificação por OVV acreditado (ISO 14065).</td>
+        </tr>
+        <tr>
+          <td><b>EN 15978 / EN 15804</b><br><span class="mono" style="font-size:11px;color:var(--texto-fraco)">DAP Brasil</span></td>
+          <td>Módulos de ciclo de vida da edificação (A1–A5, B1–B7, C1–C4, D) e regras de Declaração Ambiental de Produto.</td>
+          <td>Vocabulário de classificação de todo lançamento. DAP do fornecedor sobrepõe fator genérico e melhora a nota da obra.</td>
+        </tr>
+        <tr>
+          <td><b>Lei 14.300/2022</b><br><span class="mono" style="font-size:11px;color:var(--texto-fraco)">+ INI-C / PBE Edifica</span></td>
+          <td>Geração distribuída; etiquetagem de eficiência energética de edificações.</td>
+          <td>Lançamentos do lado ativo — fotovoltaico no canteiro e no empreendimento, etiqueta nível A na entrega.</td>
+        </tr>
+        <tr>
+          <td><b>Lei 13.709/2018</b><br><span class="mono" style="font-size:11px;color:var(--texto-fraco)">LGPD</span></td>
+          <td>Tratamento de dados pessoais; base legal de execução de política pública (art. 7º, III) e cumprimento de obrigação legal.</td>
+          <td>Governa fotos de campo, geolocalização de fiscais e dados de trabalhadores em deslocamento.</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="alerta gap-top">
+      <strong>Ponto de atenção jurídica.</strong> O município não pode criar tributo ambiental novo
+      nem obrigação sem lei. O caminho é: <b>lei municipal</b> instituindo o programa e o selo →
+      <b>decreto</b> regulamentando o procedimento → <b>vinculação ao alvará e ao habite-se</b> como
+      condicionante documental. Recomenda-se entregar a minuta de lei e de decreto como parte do
+      pacote de implantação — é o item que mais acelera a venda.
+    </div>
+  </section>
+
+  <!-- 03 PROBLEMA -->
+  <section id="problema">
+    <div class="sec-head">
+      <span class="sec-num">03</span>
+      <div><span class="eyebrow kicker">Problema</span><h2>Três atores, três dores distintas</h2></div>
+    </div>
+
+    <div class="grid3">
+      <div class="card">
+        <h4 style="color:var(--verde);margin-bottom:10px">Prefeitura</h4>
+        <ul class="lista">
+          <li>Não sabe quanto carbono a construção civil do município emite.</li>
+          <li>Tem programa de IPTU Verde no papel, sem critério mensurável para conceder ou negar.</li>
+          <li>Fiscal analisa dossiê em PDF, sem cruzamento com base fiscal.</li>
+          <li>Não consegue prestar contas do inventário municipal ao MCTI ou a financiadores climáticos.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4 style="color:var(--verde);margin-bottom:10px">Construtora</h4>
+        <ul class="lista">
+          <li>Recebe pedido de dado de carbono de banco, investidor e cliente corporativo — e responde com planilha.</li>
+          <li>Levantar A1–A5 manualmente custa de 80 a 200 horas por obra.</li>
+          <li>Sem inventário, perde margem de preferência em licitação e taxa verde de crédito.</li>
+          <li>Não sabe qual troca de material reduz mais por real investido.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4 style="color:var(--verde);margin-bottom:10px">Fiscal</h4>
+        <ul class="lista">
+          <li>Vai a campo com prancheta e volta com foto solta no celular.</li>
+          <li>Canteiro tem sinal instável — sistema online não funciona onde a vistoria acontece.</li>
+          <li>Sem checklist normativo, cada fiscal aplica um critério.</li>
+          <li>Auto de infração cai por vício de prova.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 SOLUÇÃO -->
+  <section id="solucao">
+    <div class="sec-head">
+      <span class="sec-num">04</span>
+      <div><span class="eyebrow kicker">Solução</span><h2>Três produtos, um motor de cálculo</h2></div>
+    </div>
+
+    <p class="lede">
+      Aplicações independentes, com ciclo de release e contrato próprios, compartilhando o motor de
+      quantificação e a base de fatores de emissão via API interna. Nenhuma delas depende do ERP
+      CarbonFree 15.042 para operar.
+    </p>
+
+    <div class="grid3">
+      <div class="produto">
+        <div class="produto-top">
+          <div class="nome">CarbonFree Gov</div>
+          <div class="quem">Prefeitura · secretarias</div>
+        </div>
+        <div class="produto-body">
+          <div class="form">Web SPA · multi-tenant · desktop</div>
+          <p style="font-size:14.5px">Painel de comando do programa municipal: cadastro de obras, análise de dossiês, homologação de selos, régua de incentivos, inventário agregado do setor e emissão de autos.</p>
+        </div>
+      </div>
+      <div class="produto">
+        <div class="produto-top">
+          <div class="nome">CarbonFree Obra</div>
+          <div class="quem">Construtora · engenharia e suprimentos</div>
+        </div>
+        <div class="produto-body">
+          <div class="form">PWA + app híbrido · por obra</div>
+          <p style="font-size:14.5px">Escrituração do balanço: importação de XML fiscal, apontamento de canteiro, plano de compensação, simulador de troca de material e envio do dossiê à prefeitura.</p>
+        </div>
+      </div>
+      <div class="produto">
+        <div class="produto-top">
+          <div class="nome">CarbonFree Fiscal</div>
+          <div class="quem">Fiscal · campo</div>
+        </div>
+        <div class="produto-body">
+          <div class="form">Nativo · <b style="color:#5FBFA3">offline-first</b> · Android/iOS</div>
+          <p style="font-size:14.5px">Vistoria em campo com checklist normativo, captura de prova com geotag e hash, conferência de amostra e lavratura de auto assinado com certificado.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="destaque gap-top">
+      <strong>O ativo estratégico é a base de fatores versionada.</strong> Cada fator carrega fonte,
+      ano, incerteza e vigência. Isso permite recálculo determinístico: dois anos depois, o sistema
+      reproduz exatamente o número que gerou o selo. Sem isso, nenhum auto de infração se sustenta
+      em contencioso.
+    </div>
+  </section>
+
+  <!-- 05 REQUISITOS AUDITÁVEIS -->
+  <section id="requisitos">
+    <div class="sec-head">
+      <span class="sec-num">05</span>
+      <div><span class="eyebrow kicker">Núcleo do produto</span><h2>Requisitos auditáveis da obra</h2></div>
+    </div>
+
+    <p class="lede">
+      A pergunta que define o produto: <em>o que exatamente o fiscal pode checar e contestar?</em>
+      Cada linha abaixo é um requisito com unidade, evidência primária e teste de verificação.
+      Classificação por módulo EN 15978.
+    </p>
+
+    <h3 style="margin-top:30px;margin-bottom:12px">5.1 &nbsp;Passivo — o que a obra emite</h3>
+    <div class="tabela-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:8%">Mód.</th>
+          <th style="width:20%">Requisito</th>
+          <th style="width:13%">Unidade</th>
+          <th style="width:26%">Evidência primária</th>
+          <th>Teste de verificação</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="badge-mod">A1–A3</span></td>
+          <td>Cimento e aglomerantes por tipo (CP II / III / IV / V)</td>
+          <td class="mono" style="font-size:12px">t · tCO₂e/t</td>
+          <td>NF-e (XML), NCM 2523.x, DAP do fabricante quando houver</td>
+          <td>Chave de 44 dígitos validada na SEFAZ; CNPJ emitente ativo; quantidade confrontada com o quantitativo do projeto estrutural (tolerância parametrizável)</td>
+        </tr>
+        <tr>
+          <td><span class="badge-mod">A1–A3</span></td>
+          <td>Concreto usinado por classe de fck e teor de adição</td>
+          <td class="mono" style="font-size:12px">m³ · kgCO₂e/m³</td>
+          <td>NF-e da concreteira + ficha técnica do traço</td>
+          <td>Volume × área de fôrma do projeto; teor de adição declarado confrontado com DAP ou traço registrado</td>
+        </tr>
+        <tr>
+          <td><span class="badge-mod">A1–A3</span></td>
+          <td>Aço CA-50/CA-60 por rota siderúrgica (BF-BOF ou EAF)</td>
+          <td class="mono" style="font-size:12px">t · tCO₂e/t</td>
+          <td>NF-e, NCM 7213/7214, certificado de origem do fabricante</td>
+          <td>Rota declarada verificada contra cadastro de usinas; sem comprovação, aplica-se o fator conservador da rota integrada</td>
+        </tr>
+        <tr>
+          <td><span class="badge-mod">A1–A3</span></td>
+          <td>Alvenaria, argamassa, revestimento, esquadria, vidro, impermeabilizante</td>
+          <td class="mono" style="font-size:12px">t · m² · un</td>
+          <td>NF-e agrupada por NCM</td>
+          <td>Conversão automática NCM → categoria de material → fator; itens não mapeados entram em fila de curadoria</td>
+        </tr>
+        <tr>
+          <td><span class="badge-mod">A4</span></td>
+          <td>Transporte de insumo do fornecedor ao canteiro</td>
+          <td class="mono" style="font-size:12px">t·km</td>
+          <td><b>CT-e (XML)</b>; na ausência, distância rodoviária calculada entre CEP de origem e da obra</td>
+          <td>Massa do CT-e conferida com a NF-e vinculada; modal e classe de veículo determinam o fator</td>
+        </tr>
+        <tr>
+          <td><span class="badge-mod">A5</span></td>
+          <td>Combustível de máquinas, geradores e gruas</td>
+          <td class="mono" style="font-size:12px">L · kgCO₂e/L</td>
+          <td>NF-e de combustível + diário de obra com horímetro por equipamento</td>
+          <td>Consumo declarado × consumo específico do equipamento; desvio acima do limiar abre pendência</td>
+        </tr>
+        <tr>
+          <td><span class="badge-mod">A5</span></td>
+          <td>Energia elétrica do canteiro</td>
+          <td class="mono" style="font-size:12px">MWh</td>
+          <td>Fatura da distribuidora vinculada à UC do canteiro</td>
+          <td>Fator médio mensal do SIN publicado pelo MCTI; UC confrontada com endereço da obra</td>
+        </tr>
+        <tr>
+          <td><span class="badge-mod">A5</span></td>
+          <td>Resíduos da construção — geração e destinação por classe</td>
+          <td class="mono" style="font-size:12px">t · % desvio</td>
+          <td><b>MTR / CTR e CDF</b> do receptor licenciado</td>
+          <td>Massa do MTR × distância ao receptor; licença ambiental do receptor válida na data; classe A destinada a aterro entra como passivo agravado</td>
+        </tr>
+        <tr>
+          <td><span class="badge-mod">A5</span></td>
+          <td>Deslocamento de trabalhadores ao canteiro</td>
+          <td class="mono" style="font-size:12px">pass·km</td>
+          <td>Pesquisa amostral de origem-destino ou vale-transporte</td>
+          <td>Amostra mínima de 20% do efetivo; extrapolação por número médio de trabalhadores no período</td>
+        </tr>
+        <tr>
+          <td><span class="badge-mod">USO</span></td>
+          <td>Supressão vegetal e movimentação de solo</td>
+          <td class="mono" style="font-size:12px">m² · un · tC</td>
+          <td>Autorização de supressão, inventário florestal, laudo do responsável técnico com ART</td>
+          <td>Área e indivíduos conferidos por ortofoto ou imagem de satélite anterior e posterior; ART ativa no CREA/CAU</td>
+        </tr>
+        <tr>
+          <td><span class="badge-mod">B1</span></td>
+          <td>Gases fluorados em sistemas de climatização instalados</td>
+          <td class="mono" style="font-size:12px">kg × GWP</td>
+          <td>Ficha técnica do equipamento, carga de refrigerante e ART de instalação</td>
+          <td>GWP conforme AR6 do IPCC; taxa de vazamento anual padrão aplicada quando não houver medição</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 style="margin-top:34px;margin-bottom:12px">5.2 &nbsp;Ativo — o que a obra reduz ou remove</h3>
+    <p style="font-size:15px;color:var(--texto-fraco);margin-bottom:14px;max-width:70ch">
+      Regra estrutural: <strong>redução exige linha de base</strong>. Nada entra no ativo sem cenário
+      de referência declarado, adicionalidade demonstrada e vedação de dupla contagem.
+    </p>
+    <div class="tabela-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:8%">Tipo</th>
+          <th style="width:20%">Requisito</th>
+          <th style="width:13%">Unidade</th>
+          <th style="width:26%">Evidência primária</th>
+          <th>Teste de verificação</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="tag tag-a">SUB</span></td>
+          <td>Substituição de material por alternativa de menor intensidade</td>
+          <td class="mono" style="font-size:12px">tCO₂e evitado</td>
+          <td>NF-e do material efetivamente usado + memorial de projeto com a especificação original</td>
+          <td>Linha de base é a especificação aprovada no alvará. Troca não prevista em projeto exige aditivo com ART</td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-a">RCC</span></td>
+          <td>Agregado reciclado e desvio de aterro</td>
+          <td class="mono" style="font-size:12px">t · % desvio</td>
+          <td>MTR com destino a usina de reciclagem licenciada + CDF + NF-e de compra de agregado reciclado</td>
+          <td>Licença de operação do receptor válida; balanço de massa fechado — entrada de agregado ≈ saída de resíduo classe A</td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-a">ENE</span></td>
+          <td>Energia renovável no canteiro ou no empreendimento</td>
+          <td class="mono" style="font-size:12px">MWh</td>
+          <td>Fatura com compensação (Lei 14.300), certificado I-REC ou contrato de mercado livre</td>
+          <td>Certificado não pode ter sido usado por outro consumidor no mesmo período; verificação de serial</td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-a">ARB</span></td>
+          <td>Compensação arbórea com sobrevivência monitorada</td>
+          <td class="mono" style="font-size:12px">un · tC estocado</td>
+          <td>Termo de compensação, coordenadas de cada muda, espécie, foto georreferenciada</td>
+          <td><b>Checkpoints em 12, 24 e 36 meses.</b> Crédito é liberado em parcelas conforme sobrevivência; morte reverte o lançamento</td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-a">MAD</span></td>
+          <td>Carbono biogênico estocado em madeira de origem controlada</td>
+          <td class="mono" style="font-size:12px">m³ · tC</td>
+          <td>Certificado de cadeia de custódia FSC ou Cerflor + DOF/IBAMA</td>
+          <td>Estoque contabilizado apenas em elemento permanente da edificação; fôrma e escoramento não contam</td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-a">CRV</span></td>
+          <td>Créditos verificados adquiridos e aposentados</td>
+          <td class="mono" style="font-size:12px">tCO₂e</td>
+          <td>Comprovante de aposentadoria em registro público com número de série, safra e projeto</td>
+          <td>Serial consultado no registro; retirement em nome do CNPJ da obra; limite percentual de compensação definido pelo município</td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-a">EFI</span></td>
+          <td>Desempenho energético projetado da edificação</td>
+          <td class="mono" style="font-size:12px">nível INI-C</td>
+          <td>Etiqueta PBE Edifica emitida por OIA acreditado pelo INMETRO</td>
+          <td>Bonificação de nota, não crédito de tCO₂e. Entra na régua do selo, não no balanço</td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-a">AGU</span></td>
+          <td>Reuso de água pluvial e cinza</td>
+          <td class="mono" style="font-size:12px">m³</td>
+          <td>Projeto hidrossanitário aprovado + hidrômetro do sistema de reuso</td>
+          <td>Efeito indireto via energia de bombeamento e tratamento evitados; fator regional da concessionária</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="alerta gap-top">
+      <strong>Hierarquia obrigatória.</strong> O sistema impõe a ordem <em>evitar → reduzir →
+      substituir → compensar</em>. Compensação por compra de crédito é limitada a um teto percentual
+      configurável pelo município — a sugestão padrão é <b>30% do passivo</b>. Sem esse teto, o
+      programa vira licença de emitir e perde legitimidade política na primeira reportagem.
+    </div>
+
+    <h3 style="margin-top:34px;margin-bottom:12px">5.3 &nbsp;Requisitos de processo — o que torna o dado auditável</h3>
+    <div class="grid2">
+      <div class="card">
+        <h4 style="margin-bottom:10px">Rastreabilidade</h4>
+        <ul class="lista">
+          <li>Todo lançamento aponta para ao menos uma evidência; lançamento órfão é bloqueado.</li>
+          <li>Hash SHA-256 do arquivo gravado no momento do upload.</li>
+          <li>Trilha append-only: quem lançou, quem alterou, o que mudou, quando.</li>
+          <li>Versionamento do inventário — o dossiê homologado é congelado e imutável.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4 style="margin-bottom:10px">Reprodutibilidade</h4>
+        <ul class="lista">
+          <li>Cada cálculo grava o ID da versão do fator aplicado.</li>
+          <li>Recálculo histórico reproduz o resultado original bit a bit.</li>
+          <li>Incerteza propagada e declarada por categoria (ISO 14064-1, anexo).</li>
+          <li>Metodologia exportável em PDF junto ao dossiê.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4 style="margin-bottom:10px">Segregação de funções</h4>
+        <ul class="lista">
+          <li>Quem lança na construtora ≠ quem assina o dossiê.</li>
+          <li>Quem analisa na prefeitura ≠ quem homologa o selo.</li>
+          <li>Fiscal de campo não edita lançamento — só registra constatação.</li>
+          <li>Perfis com RLS no banco, não apenas na interface.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4 style="margin-bottom:10px">Completude</h4>
+        <ul class="lista">
+          <li>Limite do inventário declarado e travado por obra.</li>
+          <li>Cobertura mínima exigida: 90% da massa de materiais estruturais.</li>
+          <li>Lacuna preenchida com fator conservador, sinalizada no dossiê.</li>
+          <li>Nível de garantia registrado: autodeclarado, verificado internamente ou por OVV.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 GOV -->
+  <section id="gov">
+    <div class="sec-head">
+      <span class="sec-num">06</span>
+      <div><span class="eyebrow kicker">Produto 1</span><h2>CarbonFree Gov — gerenciador em nuvem</h2></div>
+    </div>
+
+    <p class="lede">Web SPA multi-tenant. Um tenant por município ou consórcio intermunicipal, com isolamento por RLS.</p>
+
+    <div class="tabela-wrap">
+    <table>
+      <thead><tr><th style="width:26%">Módulo</th><th>Funcionalidades</th></tr></thead>
+      <tbody>
+        <tr><td><b>Cadastro de obras</b></td><td>Vínculo com alvará, matrícula do imóvel, CNO/CEI, inscrição imobiliária, coordenadas, tipologia, área construída, cronograma. Importação do sistema de licenciamento existente.</td></tr>
+        <tr><td><b>Mesa de análise</b></td><td>Fila de dossiês por prazo e risco, visão lado a lado de lançamento e evidência, marcação de pendências, solicitação de esclarecimento com prazo, histórico de tramitação.</td></tr>
+        <tr><td><b>Motor de risco</b></td><td>Score por obra a partir de sinais: divergência quantitativo × NF-e, ausência de MTR, fornecedor sem histórico, salto de intensidade entre versões, obra sem vistoria há N dias. Direciona a fiscalização por amostragem.</td></tr>
+        <tr><td><b>Régua de incentivo</b></td><td>Faixas de intensidade (kgCO₂e/m²) por tipologia, benefício associado a cada faixa, simulação de impacto na receita de IPTU e de outorga antes de publicar a regra.</td></tr>
+        <tr><td><b>Homologação e selo</b></td><td>Emissão do certificado com QR de verificação pública, validade, condicionantes, revogação motivada. Página pública de consulta do selo.</td></tr>
+        <tr><td><b>Fiscalização</b></td><td>Programação de vistorias, distribuição por fiscal e território, recebimento dos autos de campo, notificação, prazo de defesa, TAC, aplicação de sanção.</td></tr>
+        <tr><td><b>Inventário municipal</b></td><td>Agregação do setor de construção civil, série histórica, exportação no formato do GHG Protocol e do inventário municipal. Insumo para plano de ação climática e captação junto a fundos.</td></tr>
+        <tr><td><b>Transparência</b></td><td>Portal aberto com ranking de obras por intensidade, painel agregado e API de dados abertos — atende a Lei de Acesso à Informação e gera pressão reputacional, que é o mecanismo de indução mais barato.</td></tr>
+        <tr><td><b>Administração</b></td><td>Perfis e permissões, gestão da base de fatores, parâmetros do programa, modelos de documento, integrações, log de auditoria consultável.</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <!-- 07 OBRA -->
+  <section id="obra">
+    <div class="sec-head">
+      <span class="sec-num">07</span>
+      <div><span class="eyebrow kicker">Produto 2</span><h2>CarbonFree Obra — app da construtora</h2></div>
+    </div>
+
+    <p class="lede">
+      PWA responsivo com empacotamento híbrido. Regra de projeto: <strong>a construtora nunca digita
+      um dado que já existe em documento fiscal.</strong>
+    </p>
+
+    <div class="tabela-wrap">
+    <table>
+      <thead><tr><th style="width:26%">Módulo</th><th>Funcionalidades</th></tr></thead>
+      <tbody>
+        <tr><td><b>Ingestão fiscal</b></td><td>Upload de XML de NF-e e CT-e em lote, leitura de DANFE por câmera, integração com o ERP da construtora, conexão com a caixa postal de documentos eletrônicos. Classificação automática NCM → material → fator.</td></tr>
+        <tr><td><b>Curadoria de itens</b></td><td>Fila de itens não reconhecidos com sugestão do motor e aprendizado por confirmação. O mapeamento vira ativo reutilizável entre obras.</td></tr>
+        <tr><td><b>Apontamento de canteiro</b></td><td>Diário de obra com horímetro de equipamento, leitura de medidor de energia, registro de MTR, efetivo em campo. Funciona offline e sincroniza.</td></tr>
+        <tr><td><b>Balanço em tempo real</b></td><td>Razonete ativo/passivo, intensidade acumulada em kgCO₂e/m², posição frente à faixa-alvo do município, projeção de fechamento na conclusão da obra.</td></tr>
+        <tr><td><b>Simulador de decisão</b></td><td>Comparação de alternativas de material com custo e tCO₂e evitado, ordenando por <b>R$ por tCO₂e evitado</b>. É a tela que a construtora usa antes de comprar — e o principal motivo de retenção.</td></tr>
+        <tr><td><b>Plano de compensação</b></td><td>Cadastro de mudas com foto georreferenciada, agenda de monitoramento, registro de créditos aposentados, acompanhamento do teto de compensação.</td></tr>
+        <tr><td><b>Dossiê e assinatura</b></td><td>Geração do inventário no padrão ISO 14064-1, assinatura com certificado ICP-Brasil ou gov.br pelo responsável técnico, protocolo na prefeitura, acompanhamento de exigências.</td></tr>
+        <tr><td><b>Carteira multi-obra</b></td><td>Consolidação corporativa, benchmark entre obras, exportação para relatório de sustentabilidade e para o Escopo 3 do inventário da empresa.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="destaque gap-top">
+      <strong>Ativo/passivo na linguagem da construtora.</strong> O saldo positivo de uma obra pode
+      ser carregado para o portfólio da empresa e usado em licitação, em captação com taxa verde ou
+      na comercialização de unidades. É o que converte obrigação em ativo comercial — e o argumento
+      que vende a licença B2B.
+    </div>
+  </section>
+
+  <!-- 08 FISCAL -->
+  <section id="fiscal">
+    <div class="sec-head">
+      <span class="sec-num">08</span>
+      <div><span class="eyebrow kicker">Produto 3</span><h2>CarbonFree Fiscal — app de campo</h2></div>
+    </div>
+
+    <p class="lede">
+      Nativo, <strong>offline-first</strong>. Canteiro tem sinal ruim e vistoria não pode depender de
+      conectividade. Base SQLite local com fila de sincronização e resolução de conflito por
+      timestamp do servidor.
+    </p>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>Antes da vistoria</h3>
+        <ul class="lista">
+          <li>Download do pacote da obra para uso offline: dossiê, lançamentos, histórico, pendências.</li>
+          <li>Roteiro do dia otimizado por proximidade geográfica.</li>
+          <li>Checklist gerado conforme fase da obra — fundação, estrutura, acabamento, entrega.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Em campo</h3>
+        <ul class="lista">
+          <li>Captura de foto e vídeo com geotag, timestamp assinado e hash calculado no dispositivo.</li>
+          <li>Leitura de QR e de placa de equipamento; conferência de nota por chave de acesso.</li>
+          <li>Amostragem: confronto entre material declarado e material observado em estoque.</li>
+          <li>Conferência de mudas por coordenada, com registro de sobrevivência.</li>
+          <li>Anotação por voz transcrita, para não digitar de capacete.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Fechamento</h3>
+        <ul class="lista">
+          <li>Auto de constatação ou de infração gerado no dispositivo.</li>
+          <li>Assinatura do fiscal com certificado e ciência do responsável da obra na tela.</li>
+          <li>Entrega de via ao autuado por e-mail e QR de verificação.</li>
+          <li>Sincronização automática ao recuperar conexão, com confirmação de recebimento.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Integridade da prova</h3>
+        <ul class="lista">
+          <li>Detecção de adulteração de EXIF e de mock location.</li>
+          <li>Bloqueio de importação da galeria — só captura in-app.</li>
+          <li>Encadeamento de hash entre registros da mesma vistoria.</li>
+          <li>Registro do fingerprint do dispositivo e da versão do app no auto.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 09 ARQUITETURA -->
+  <section id="arquitetura">
+    <div class="sec-head">
+      <span class="sec-num">09</span>
+      <div><span class="eyebrow kicker">Engenharia</span><h2>Arquitetura e integrações</h2></div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>Stack</h3>
+        <ul class="lista">
+          <li><b>Backend:</b> FastAPI (Python 3.12), Pydantic v2, workers assíncronos com fila para ingestão de XML e cálculo em lote.</li>
+          <li><b>Dados:</b> Supabase — Postgres com RLS, Storage para evidências, Auth com MFA obrigatório para perfis públicos.</li>
+          <li><b>Gov:</b> SPA com build único, empacotável como arquivo servido pelo próprio datacenter do município quando exigido.</li>
+          <li><b>Obra:</b> PWA com service worker e IndexedDB; wrapper Capacitor para as lojas.</li>
+          <li><b>Fiscal:</b> React Native (Expo), SQLite, sincronização incremental.</li>
+          <li><b>Observabilidade:</b> log estruturado, trilha de auditoria em tabela append-only com trigger de bloqueio de UPDATE e DELETE.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Integrações</h3>
+        <ul class="lista">
+          <li><b>SEFAZ / DFe:</b> validação de chave de NF-e e CT-e, manifestação do destinatário.</li>
+          <li><b>SINIR e MTR estadual:</b> em SC, o sistema do IMA. Consulta de manifesto e CDF.</li>
+          <li><b>BrasilAPI / Receita:</b> CNPJ, situação cadastral, CNAE — reaproveitado do CarbonFree 15.042.</li>
+          <li><b>Sistema de licenciamento do município:</b> alvará, habite-se, cadastro imobiliário, IPTU. Integração por API quando existir, por importação de arquivo quando não.</li>
+          <li><b>gov.br / ICP-Brasil:</b> autenticação e assinatura qualificada.</li>
+          <li><b>Registros de crédito:</b> consulta de serial e status de aposentadoria.</li>
+          <li><b>MCTI:</b> fator médio mensal de emissão do SIN.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="alerta gap-top">
+      <strong>Requisito não funcional decisivo em B2G.</strong> Muitos editais municipais exigem
+      hospedagem em território nacional, plano de continuidade, RTO/RPO declarados e cláusula de
+      <em>portabilidade e reversão</em> — devolução integral da base em formato aberto ao fim do
+      contrato. Isso precisa estar na arquitetura desde o primeiro dia, não depois de perder um pregão.
+    </div>
+  </section>
+
+  <!-- 10 DADOS -->
+  <section id="dados">
+    <div class="sec-head">
+      <span class="sec-num">10</span>
+      <div><span class="eyebrow kicker">Engenharia</span><h2>Núcleo do modelo de dados</h2></div>
+    </div>
+
+    <div class="tabela-wrap">
+    <table>
+      <thead><tr><th style="width:26%">Entidade</th><th>Conteúdo essencial</th></tr></thead>
+      <tbody>
+        <tr><td class="mono"><b>municipios</b></td><td>Tenant, parâmetros do programa, faixas da régua, teto de compensação, vigências.</td></tr>
+        <tr><td class="mono"><b>obras</b></td><td>Alvará, inscrição imobiliária, CNO, construtora, tipologia, área, coordenadas, fase, limite do inventário.</td></tr>
+        <tr><td class="mono"><b>inventarios</b></td><td>Versão, período, status, nível de garantia, hash do fechamento, responsável técnico.</td></tr>
+        <tr><td class="mono"><b>lancamentos</b></td><td>Inventário, módulo EN 15978, natureza (ativo/passivo), item, quantidade, unidade, <span class="mono">fator_id</span>, tCO₂e, incerteza.</td></tr>
+        <tr><td class="mono"><b>fatores_emissao</b></td><td>Categoria, valor, unidade, fonte, ano-base, incerteza, vigência inicial e final. <b>Nunca sofre UPDATE — só nova versão.</b></td></tr>
+        <tr><td class="mono"><b>evidencias</b></td><td>Tipo, chave de acesso, CNPJ emitente, hash SHA-256, caminho no storage, status de validação, resultado da consulta externa.</td></tr>
+        <tr><td class="mono"><b>acoes_remocao</b></td><td>Tipo, linha de base, adicionalidade, tCO₂e reconhecido, condicionantes, parcela liberada.</td></tr>
+        <tr><td class="mono"><b>mudas</b></td><td>Espécie, coordenadas, data de plantio, checkpoints de sobrevivência, fotos vinculadas.</td></tr>
+        <tr><td class="mono"><b>creditos_retirados</b></td><td>Registro, serial, safra, projeto, tCO₂e, titular da aposentadoria. Índice único no serial impede dupla contagem.</td></tr>
+        <tr><td class="mono"><b>fiscalizacoes</b></td><td>Obra, fiscal, agendamento, checklist aplicado, constatações, mídias, coordenada de execução.</td></tr>
+        <tr><td class="mono"><b>autos</b></td><td>Tipo, enquadramento legal, prazo de defesa, tramitação, sanção, TAC vinculado.</td></tr>
+        <tr><td class="mono"><b>selos</b></td><td>Nível, faixa atingida, benefício concedido, validade, condicionantes, motivo de revogação.</td></tr>
+        <tr><td class="mono"><b>trilha_auditoria</b></td><td>Append-only. Ator, ação, entidade, diff, IP, timestamp do servidor. RLS de leitura, gravação por trigger.</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <!-- 11 ANTIFRAUDE -->
+  <section id="antifraude">
+    <div class="sec-head">
+      <span class="sec-num">11</span>
+      <div><span class="eyebrow kicker">Governança</span><h2>Anti-fraude, verificação e LGPD</h2></div>
+    </div>
+
+    <div class="tabela-wrap">
+    <table>
+      <thead><tr><th style="width:30%">Vetor de fraude</th><th style="width:35%">Como acontece</th><th>Controle</th></tr></thead>
+      <tbody>
+        <tr><td>Nota fria ou de terceiro</td><td>Uso de NF-e de outra obra ou de empresa coligada para inflar o ativo</td><td>Chave validada na SEFAZ; CNPJ destinatário obrigatoriamente o da obra; índice único de chave por inventário no banco</td></tr>
+        <tr><td>Dupla contagem de crédito</td><td>Mesmo CRVE ou I-REC declarado em duas obras</td><td>Índice único de serial global; consulta de status de aposentadoria no registro; titular confrontado</td></tr>
+        <tr><td>Muda fantasma</td><td>Foto de plantio reutilizada ou tirada em outro local</td><td>Captura in-app com geotag, detecção de mock location, hash na origem, conferência presencial nos checkpoints</td></tr>
+        <tr><td>Subdeclaração de material</td><td>Omissão de compras para reduzir o passivo</td><td>Confronto com quantitativo do projeto estrutural e com índices de consumo por m² da tipologia; cobertura mínima de 90% da massa</td></tr>
+        <tr><td>RCC desviado</td><td>Resíduo com MTR emitido mas descartado irregularmente</td><td>Validação de CDF no receptor; licença ambiental vigente na data; balanço de massa entrada/saída</td></tr>
+        <tr><td>Fator favorável indevido</td><td>Alegação de rota de aço reciclado ou cimento com adição sem lastro</td><td>Sem DAP ou certificado, aplica-se o fator conservador. Ônus da prova é de quem quer o benefício</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="grid2 gap-top">
+      <div class="card">
+        <h3>Camadas de garantia</h3>
+        <ul class="lista">
+          <li><b>Nível 1 — autodeclarado:</b> lançamentos com evidência anexada, validação automática.</li>
+          <li><b>Nível 2 — analisado:</b> conferência documental pelo técnico da prefeitura.</li>
+          <li><b>Nível 3 — verificado em campo:</b> vistoria com amostragem por risco.</li>
+          <li><b>Nível 4 — verificado por OVV:</b> parecer de organismo acreditado (ISO 14065). Exigido para as faixas superiores do selo e para obras acima de porte definido.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>LGPD</h3>
+        <ul class="lista">
+          <li>Base legal: execução de política pública (art. 7º, III) e cumprimento de obrigação legal.</li>
+          <li>Dados de trabalhadores tratados de forma agregada — nunca origem-destino individualizada.</li>
+          <li>Geolocalização do fiscal registrada apenas no ato da vistoria, com finalidade declarada.</li>
+          <li>Retenção alinhada ao prazo do processo administrativo e à prescrição da sanção.</li>
+          <li>RIPD entregue como artefato de implantação; encarregado indicado pelo município.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 INCENTIVOS -->
+  <section id="incentivos">
+    <div class="sec-head">
+      <span class="sec-num">12</span>
+      <div><span class="eyebrow kicker">Desenho de política</span><h2>A régua de incentivo municipal</h2></div>
+    </div>
+
+    <p class="lede">
+      Fiscalização sem contrapartida gera resistência do setor e desgaste político. A régua é o que
+      transforma o programa em pauta positiva — e é o principal argumento de venda para o prefeito.
+    </p>
+
+    <div class="tabela-wrap">
+    <table>
+      <thead>
+        <tr><th style="width:12%">Faixa</th><th style="width:22%">Intensidade A1–A5<br><span class="mono" style="font-weight:400;font-size:10px;text-transform:none;letter-spacing:0">kgCO₂e/m² · residencial vertical</span></th><th>Contrapartida sugerida</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="tag tag-a">AAA</span></td><td class="mono">≤ 150</td><td>Desconto de IPTU de 15 a 20% por 5 anos · potencial construtivo adicional bonificado · análise prioritária de projeto</td></tr>
+        <tr><td><span class="tag tag-a">AA</span></td><td class="mono">151 – 200</td><td>Desconto de IPTU de 10% por 5 anos · redução de outorga onerosa · selo público</td></tr>
+        <tr><td><span class="tag tag-n">A</span></td><td class="mono">201 – 280</td><td>Desconto de IPTU de 5% · selo público · preferência em licitação municipal (art. 26, Lei 14.133)</td></tr>
+        <tr><td><span class="tag tag-n">B</span></td><td class="mono">281 – 380</td><td>Conformidade. Sem benefício e sem sanção</td></tr>
+        <tr><td><span class="tag tag-p">C</span></td><td class="mono">&gt; 380</td><td>Plano de adequação obrigatório com prazo · compensação adicional como condicionante de habite-se</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <p style="margin-top:16px;font-size:14.5px;color:var(--texto-fraco);max-width:74ch">
+      Faixas ilustrativas. A calibração real é feita no piloto, sobre a distribuição observada das
+      obras do município. Calibrar acima da mediana local esvazia o programa; calibrar muito abaixo
+      distribui benefício sem induzir mudança. O CarbonFree Gov simula o impacto na receita antes da
+      publicação do decreto.
+    </p>
+
+    <div class="destaque gap-top">
+      <strong>O incentivo mais barato não custa dinheiro.</strong> Em pesquisa com incorporadoras, a
+      <em>análise prioritária de projeto</em> — reduzir de 90 para 30 dias a fila de aprovação —
+      costuma valer mais que desconto tributário, porque antecipa o lançamento e o fluxo de caixa.
+      Custa zero ao caixa municipal e é o item que faz o setor apoiar o programa em vez de resistir.
+    </div>
+  </section>
+
+  <!-- 13 NEGÓCIO -->
+  <section id="negocio">
+    <div class="sec-head">
+      <span class="sec-num">13</span>
+      <div><span class="eyebrow kicker">Comercial</span><h2>Modelo de negócio</h2></div>
+    </div>
+
+    <p class="lede">
+      Receita em dois lados. O contrato com a prefeitura é a âncora e cria o mercado; a licença da
+      construtora escala com o número de obras e tem margem melhor.
+    </p>
+
+    <div class="tabela-wrap">
+    <table>
+      <thead><tr><th style="width:20%">Plano</th><th style="width:26%">Perfil</th><th class="r" style="width:18%">Mensal</th><th class="r" style="width:18%">Implantação</th><th>Inclui</th></tr></thead>
+      <tbody>
+        <tr><td><b>Gov Essencial</b></td><td>Município até 100 mil hab.</td><td class="r mono">R$ 4.900</td><td class="r mono">R$ 28.000</td><td>Até 6 fiscais, 150 obras ativas</td></tr>
+        <tr><td><b>Gov Pleno</b></td><td>100 a 500 mil hab.</td><td class="r mono">R$ 11.900</td><td class="r mono">R$ 60.000</td><td>Até 20 fiscais, 600 obras, 1 integração</td></tr>
+        <tr><td><b>Gov Metropolitano</b></td><td>Acima de 500 mil ou consórcio</td><td class="r mono">R$ 24.000</td><td class="r mono">R$ 120.000</td><td>Fiscais ilimitados, SLA dedicado, portal de dados abertos</td></tr>
+        <tr><td><b>Obra Starter</b></td><td>Obra individual até 5.000 m²</td><td class="r mono">R$ 390</td><td class="r mono">—</td><td>Balanço, dossiê, protocolo</td></tr>
+        <tr><td><b>Obra Pro</b></td><td>Obra acima de 5.000 m²</td><td class="r mono">R$ 990</td><td class="r mono">—</td><td>+ DAP, simulador, dossiê ISO 14064-1 para OVV</td></tr>
+        <tr><td><b>Obra Corporate</b></td><td>Incorporadora com carteira</td><td class="r mono">a partir de<br>R$ 6.500</td><td class="r mono">sob consulta</td><td>Multi-obra, API, consolidação de Escopo 3</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <p style="margin-top:14px;font-size:14.5px;color:var(--texto-fraco)">
+      Linhas complementares: fiscal adicional a R$ 180/mês · integração sob medida a partir de
+      R$ 22.000 · capacitação presencial a R$ 6.500/turma · taxa por dossiê homologado de R$ 350 a
+      R$ 900, opcionalmente repassada à construtora e compartilhada com o município.
+    </p>
+
+    <!-- SIMULADOR -->
+    <div class="sim gap-top">
+      <h3>Simulador de receita anual</h3>
+      <p class="sub">Ajuste a carteira para ver o efeito na receita recorrente</p>
+      <div class="sim-grid">
+        <div>
+          <div class="ctrl">
+            <label for="s1"><span>Prefeituras · Essencial</span><b id="v1">2</b></label>
+            <input type="range" id="s1" min="0" max="30" value="2">
+          </div>
+          <div class="ctrl">
+            <label for="s2"><span>Prefeituras · Pleno</span><b id="v2">1</b></label>
+            <input type="range" id="s2" min="0" max="20" value="1">
+          </div>
+          <div class="ctrl">
+            <label for="s3"><span>Prefeituras · Metropolitano</span><b id="v3">0</b></label>
+            <input type="range" id="s3" min="0" max="8" value="0">
+          </div>
+          <div class="ctrl">
+            <label for="s4"><span>Obras ativas licenciadas</span><b id="v4">25</b></label>
+            <input type="range" id="s4" min="0" max="600" value="25" step="5">
+          </div>
+        </div>
+        <div class="saida">
+          <div class="item"><span>Recorrente · prefeituras</span><b id="o1">—</b></div>
+          <div class="item"><span>Recorrente · construtoras</span><b id="o2">—</b></div>
+          <div class="item"><span>Implantações no período</span><b id="o3">—</b></div>
+          <div class="item"><span>Receita mensal recorrente</span><b id="o4">—</b></div>
+          <div class="total"><span>Receita anual</span><b id="o5">—</b></div>
+          <p style="font-family:var(--mono);font-size:10px;color:#7E938B;margin-top:14px;line-height:1.5">
+            Ticket médio de obra: R$ 560/mês (mix Starter/Pro/Corporate). Implantações consideradas
+            uma vez, no ano de entrada.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 14 GTM -->
+  <section id="gtm">
+    <div class="sec-head">
+      <span class="sec-num">14</span>
+      <div><span class="eyebrow kicker">Comercial</span><h2>Go-to-market e caminho de contratação</h2></div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>Sequência de entrada</h3>
+        <ul class="lista">
+          <li><b>1.</b> Piloto gratuito de 6 meses em um município da Grande Florianópolis, com 3 a 5 construtoras voluntárias. Objetivo: gerar o caso de referência e calibrar as faixas com dado real.</li>
+          <li><b>2.</b> Publicação do relatório do piloto com números reais de intensidade — vira material de venda e pauta de imprensa.</li>
+          <li><b>3.</b> Expansão via <b>consórcios intermunicipais</b> — em SC, o CIGA e os consórcios regionais reduzem drasticamente o custo de aquisição por município.</li>
+          <li><b>4.</b> Canal com o SINDUSCON e com a CBIC regional: a construtora que já usa pede o programa no município vizinho.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Como o município contrata</h3>
+        <ul class="lista">
+          <li><b>Dispensa por valor</b> (art. 75, II, Lei 14.133) para o piloto e para municípios pequenos.</li>
+          <li><b>Pregão eletrônico</b> para o SaaS — exige participar da elaboração do termo de referência.</li>
+          <li><b>Inexigibilidade</b> quando houver características técnicas exclusivas comprovadas — exige laudo e é frágil isoladamente.</li>
+          <li><b>Ata de registro de preços</b> de consórcio — o caminho mais eficiente: uma licitação, vários municípios aderindo.</li>
+          <li><b>Emenda parlamentar e fundos</b> — Fundo Clima do BNDES, Fundo Municipal de Meio Ambiente, cooperação internacional.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="alerta gap-top">
+      <strong>Ciclo de venda B2G é longo.</strong> Entre o primeiro contato e a assinatura, conte de
+      9 a 18 meses, atravessando orçamento, LOA e, com frequência, ciclo eleitoral. O plano precisa
+      ser financiado pela receita B2B e por consultoria enquanto o funil público amadurece — o que se
+      encaixa na operação atual da DNS-TI.
+    </div>
+  </section>
+
+  <!-- 15 ROADMAP -->
+  <section id="roadmap">
+    <div class="sec-head">
+      <span class="sec-num">15</span>
+      <div><span class="eyebrow kicker">Execução</span><h2>Roadmap</h2></div>
+    </div>
+
+    <div class="fase">
+      <div class="quando">M0 – M3<small>Fundação</small></div>
+      <div>Motor de quantificação e base de fatores versionada (reuso do CarbonFree 15.042). Modelo de dados e RLS. Ingestão de NF-e e CT-e com classificação por NCM. Balanço ativo/passivo funcionando ponta a ponta. Minutas de lei e decreto municipais.</div>
+    </div>
+    <div class="fase">
+      <div class="quando">M3 – M6<small>MVP dos três apps</small></div>
+      <div>Gov com cadastro de obras, mesa de análise e homologação. Obra com ingestão, apontamento e dossiê. Fiscal com checklist offline e captura de prova. Assinatura via gov.br. Início do piloto.</div>
+    </div>
+    <div class="fase">
+      <div class="quando">M6 – M12<small>Piloto e endurecimento</small></div>
+      <div>Integração com MTR estadual e com o sistema de licenciamento do município-piloto. Motor de risco e amostragem. Régua de incentivo com simulação de receita. Portal público de transparência. Relatório do piloto com dados reais.</div>
+    </div>
+    <div class="fase">
+      <div class="quando">M12 – M18<small>Escala</small></div>
+      <div>Multi-tenant para consórcios. Simulador de decisão de material. Carteira multi-obra e consolidação de Escopo 3. Trilha de verificação por OVV. Onboarding self-service para construtoras.</div>
+    </div>
+    <div class="fase">
+      <div class="quando">M18 – M30<small>Plataforma</small></div>
+      <div>Marketplace de fornecedores com DAP. Conexão com registro de créditos para aposentadoria direta. API pública e dados abertos. Extensão para módulos B (operação) e C (fim de vida). Interoperabilidade com o SBCE para o Escopo 3 das construtoras reguladas.</div>
+    </div>
+  </section>
+
+  <!-- 16 PROJEÇÕES -->
+  <section id="projecoes">
+    <div class="sec-head">
+      <span class="sec-num">16</span>
+      <div><span class="eyebrow kicker">Financeiro</span><h2>Projeções — cenário-base</h2></div>
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi"><div class="v">R$ 620<small> mil</small></div><div class="l">Investimento de desenvolvimento até o MVP</div></div>
+      <div class="kpi"><div class="v">~40<small>%</small></div><div class="l">Reuso do motor do CarbonFree 15.042</div></div>
+      <div class="kpi"><div class="v">M22</div><div class="l">Ponto de equilíbrio no cenário-base</div></div>
+      <div class="kpi"><div class="v">R$ 3,7<small> mi</small></div><div class="l">Receita projetada no ano 3</div></div>
+    </div>
+
+    <div class="tabela-wrap gap-top">
+    <table>
+      <thead><tr><th>Indicador</th><th class="r">Ano 1</th><th class="r">Ano 2</th><th class="r">Ano 3</th></tr></thead>
+      <tbody>
+        <tr><td>Prefeituras contratadas (acumulado)</td><td class="r mono">3</td><td class="r mono">11</td><td class="r mono">26</td></tr>
+        <tr><td>Obras ativas licenciadas</td><td class="r mono">25</td><td class="r mono">110</td><td class="r mono">300</td></tr>
+        <tr><td>Receita recorrente — prefeituras</td><td class="r mono">R$ 218.000</td><td class="r mono">R$ 968.000</td><td class="r mono">R$ 2.320.000</td></tr>
+        <tr><td>Receita recorrente — construtoras</td><td class="r mono">R$ 84.000</td><td class="r mono">R$ 396.000</td><td class="r mono">R$ 1.008.000</td></tr>
+        <tr><td>Implantação e serviços</td><td class="r mono">R$ 116.000</td><td class="r mono">R$ 340.000</td><td class="r mono">R$ 560.000</td></tr>
+        <tr style="background:var(--verde-claro)"><td><b>Receita total</b></td><td class="r mono"><b>R$ 418.000</b></td><td class="r mono"><b>R$ 1.704.000</b></td><td class="r mono"><b>R$ 3.888.000</b></td></tr>
+        <tr><td>Custo de equipe</td><td class="r mono">R$ 690.000</td><td class="r mono">R$ 1.340.000</td><td class="r mono">R$ 2.180.000</td></tr>
+        <tr><td>Infraestrutura, licenças de base e comercial</td><td class="r mono">R$ 168.000</td><td class="r mono">R$ 322.000</td><td class="r mono">R$ 596.000</td></tr>
+        <tr style="background:var(--ambar-claro)"><td><b>Resultado</b></td><td class="r mono"><b>−R$ 440.000</b></td><td class="r mono"><b>+R$ 42.000</b></td><td class="r mono"><b>+R$ 1.112.000</b></td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <p style="margin-top:14px;font-size:14px;color:var(--texto-fraco);max-width:74ch">
+      <b>Premissas.</b> Equipe inicial de 3 pessoas (backend, mobile, produto/regulatório), chegando
+      a 12 no ano 3. Ciclo de venda B2G de 12 meses em média. Churn municipal desprezível dentro do
+      contrato e risco concentrado na renovação após troca de gestão. Ticket de obra estável em
+      termos reais. Custo de licença de base de inventário de ciclo de vida de terceiros incluído a
+      partir do ano 2.
+    </p>
+  </section>
+
+  <!-- 17 RISCOS -->
+  <section id="riscos">
+    <div class="sec-head">
+      <span class="sec-num">17</span>
+      <div><span class="eyebrow kicker">Riscos</span><h2>Riscos e mitigação</h2></div>
+    </div>
+
+    <div class="tabela-wrap">
+    <table>
+      <thead><tr><th style="width:30%">Risco</th><th style="width:14%">Severidade</th><th>Mitigação</th></tr></thead>
+      <tbody>
+        <tr><td>Troca de gestão municipal descontinua o programa</td><td><span class="tag tag-p">Alta</span></td><td>Instituir por lei, não por decreto isolado. Vincular ao habite-se, que atravessa mandatos. Contratos plurianuais. Portal público que cria custo político de reversão.</td></tr>
+        <tr><td>Resistência organizada do setor da construção</td><td><span class="tag tag-p">Alta</span></td><td>Régua de incentivo antes de sanção. Fase voluntária. Envolver o SINDUSCON na calibração desde o piloto. Fast-track de licenciamento como contrapartida sem custo fiscal.</td></tr>
+        <tr><td>Qualidade dos fatores de emissão nacionais</td><td><span class="tag tag-p">Média</span></td><td>Hierarquia explícita: DAP específica &gt; média setorial nacional &gt; fator internacional conservador. Incerteza declarada. Curadoria contínua com base no DAP Brasil.</td></tr>
+        <tr><td>Ciclo de venda B2G longo consome caixa</td><td><span class="tag tag-p">Alta</span></td><td>Receita B2B independente do contrato público — construtora pode usar o app para relatório próprio mesmo sem programa municipal. Consultoria da DNS-TI financia o desenvolvimento.</td></tr>
+        <tr><td>Entrada de player grande de govtech ou de certificadora</td><td><span class="tag tag-n">Média</span></td><td>Barreira real é a base de fatores curada e o mapeamento NCM→material acumulado. Vantagem de tempo no piloto e nos consórcios de SC.</td></tr>
+        <tr><td>Judicialização de auto de infração</td><td><span class="tag tag-n">Média</span></td><td>Trilha imutável, fator versionado com recálculo determinístico, prova com hash na origem, segregação de funções. O produto é desenhado para sobreviver a perícia.</td></tr>
+        <tr><td>Regulamentação do SBCE alterar o escopo</td><td><span class="tag tag-n">Baixa</span></td><td>Módulo municipal opera em camada distinta do SBCE. Mudança tende a ampliar a demanda por inventário de Escopo 3, não reduzi-la.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="destaque gap-top">
+      <strong>Próximos três passos concretos.</strong>
+      (1) Escolher o município-piloto e mapear quem decide — costuma ser a Secretaria de Meio Ambiente
+      com apoio da Fazenda. (2) Fechar 3 construtoras voluntárias com obras em fase inicial, para
+      capturar o ciclo A1–A5 inteiro. (3) Redigir a minuta de lei do programa e levá-la junto na
+      primeira reunião — chegar com o instrumento jurídico pronto encurta meses de discussão.
+    </div>
+  </section>
+
+  </main>
+</div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <b>CarbonFree Obras</b> — Plano de Negócio Rev. 0.1 · Julho de 2026<br>
+    DNS-TI Consultoria · Florianópolis, SC<br><br>
+    Documento de trabalho interno. Valores financeiros, faixas de intensidade e fatores de emissão
+    citados são estimativas de planejamento e devem ser calibrados com dados do município-piloto
+    antes de qualquer uso contratual ou normativo.
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduz = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- contagem do razonete ---- */
+  function fmt(n){ return n.toLocaleString('pt-BR'); }
+  var alvos = document.querySelectorAll('[data-alvo]');
+
+  function anima(){
+    alvos.forEach(function(el){
+      var fim = parseInt(el.dataset.alvo,10);
+      if(reduz){ el.firstChild ? el.firstChild.nodeValue = fmt(fim) : el.textContent = fmt(fim); return; }
+      var ini = performance.now(), dur = 1100 + Math.random()*400;
+      function passo(t){
+        var p = Math.min((t-ini)/dur,1);
+        var e = 1 - Math.pow(1-p,3);
+        var v = fmt(Math.round(fim*e));
+        if(el.firstChild && el.firstChild.nodeType===3){ el.firstChild.nodeValue = v; }
+        else { el.textContent = v; }
+        if(p<1) requestAnimationFrame(passo);
+      }
+      requestAnimationFrame(passo);
+    });
+  }
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(ent){
+      ent.forEach(function(e){ if(e.isIntersecting){ anima(); io.disconnect(); } });
+    },{threshold:.25});
+    var alvoEl = document.querySelector('.razonete');
+    if(alvoEl) io.observe(alvoEl); else anima();
+  } else { anima(); }
+
+  /* ---- índice ativo ---- */
+  var links = Array.prototype.slice.call(document.querySelectorAll('#toc a'));
+  var secs  = links.map(function(a){ return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
+  if('IntersectionObserver' in window && secs.length){
+    var io2 = new IntersectionObserver(function(ents){
+      ents.forEach(function(e){
+        if(e.isIntersecting){
+          links.forEach(function(l){ l.classList.remove('on'); });
+          var at = links.filter(function(l){ return l.getAttribute('href') === '#'+e.target.id; })[0];
+          if(at) at.classList.add('on');
+        }
+      });
+    },{rootMargin:'-15% 0px -70% 0px'});
+    secs.forEach(function(s){ io2.observe(s); });
+  }
+
+  /* ---- simulador ---- */
+  var P = {ess:{m:4900,i:28000}, ple:{m:11900,i:60000}, met:{m:24000,i:120000}, obra:560};
+  var ids = ['s1','s2','s3','s4'];
+  function brl(n){ return 'R$ ' + Math.round(n).toLocaleString('pt-BR'); }
+
+  function calc(){
+    var a = +document.getElementById('s1').value,
+        b = +document.getElementById('s2').value,
+        c = +document.getElementById('s3').value,
+        o = +document.getElementById('s4').value;
+
+    document.getElementById('v1').textContent = a;
+    document.getElementById('v2').textContent = b;
+    document.getElementById('v3').textContent = c;
+    document.getElementById('v4').textContent = o;
+
+    var recGov  = a*P.ess.m + b*P.ple.m + c*P.met.m;
+    var recObra = o*P.obra;
+    var impl    = a*P.ess.i + b*P.ple.i + c*P.met.i;
+    var mrr     = recGov + recObra;
+
+    document.getElementById('o1').textContent = brl(recGov) + '/mês';
+    document.getElementById('o2').textContent = brl(recObra) + '/mês';
+    document.getElementById('o3').textContent = brl(impl);
+    document.getElementById('o4').textContent = brl(mrr) + '/mês';
+    document.getElementById('o5').textContent = brl(mrr*12 + impl);
+  }
+  ids.forEach(function(id){
+    var el = document.getElementById(id);
+    if(el) el.addEventListener('input', calc);
+  });
+  calc();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "name": "CarbonFree Obra",
+  "short_name": "CF Obra",
+  "description": "Escrituração do balanço de carbono da obra.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#16232A",
+  "theme_color": "#16232A",
+  "icons": []
+}

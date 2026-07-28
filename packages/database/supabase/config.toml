@@ -1,0 +1,22 @@
+project_id = "carbonfree-obras"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public"]
+
+[db]
+port = 54322
+
+[studio]
+enabled = true
+port = 54323
+
+[auth]
+enabled = true
+site_url = "http://localhost:3000"
+additional_redirect_urls = ["http://localhost:3001"]
+
+[auth.mfa]
+# MFA obrigatório para perfis públicos (seção 09 do plano).
+max_enrolled_factors = 10

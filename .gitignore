@@ -1,1 +1,24 @@
 .claude/
+
+# dependencies
+node_modules/
+.pnpm-store/
+
+# build outputs
+.next/
+out/
+dist/
+.expo/
+.turbo/
+*.tsbuildinfo
+
+# env
+.env
+.env*.local
+
+# supabase
+packages/database/supabase/.branches/
+packages/database/supabase/.temp/
+
+# os/editor
+.DS_Store

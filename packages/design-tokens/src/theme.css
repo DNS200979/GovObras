@@ -1,0 +1,24 @@
+/* Tema compartilhado CarbonFree (Tailwind v4 @theme) — importado por apps/gov e apps/obra */
+@theme {
+  --color-ardosia: #16232a;
+  --color-ardosia-2: #1f323b;
+  --color-concreto: #e3e7e2;
+  --color-papel: #f8f9f6;
+  --color-linha: #c4cbc3;
+  --color-linha-forte: #9aa69c;
+  --color-verde: #1f6f5c;
+  --color-verde-claro: #e4f0eb;
+  --color-ambar: #b4661a;
+  --color-ambar-claro: #f7ebdd;
+  --color-texto: #22302f;
+  --color-texto-fraco: #5c6b66;
+  --color-azul: #2c5670;
+
+  --font-display: "Archivo", system-ui, sans-serif;
+  --font-body: "Source Serif 4", Georgia, serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --radius-sm: 3px;
+  --radius-md: 5px;
+  --radius-lg: 6px;
+}

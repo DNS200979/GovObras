@@ -1,0 +1,8 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+  # Expo/Metro usa resolução própria (npm) — fica fora do grafo pnpm/Turborepo.
+  - "!apps/fiscal"
+allowBuilds:
+  sharp: true
+  unrs-resolver: true

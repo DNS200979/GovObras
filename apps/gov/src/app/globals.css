@@ -1,0 +1,15 @@
+@import "tailwindcss";
+@import "@carbonfree/design-tokens/theme.css";
+
+@theme inline {
+  --color-background: var(--color-concreto);
+  --color-foreground: var(--color-texto);
+  --font-sans: var(--font-display);
+  --font-mono: var(--font-mono);
+}
+
+body {
+  background: var(--color-concreto);
+  color: var(--color-texto);
+  font-family: var(--font-body);
+}

@@ -33,6 +33,20 @@ packages/
   Native) usa resolução própria e tem atrito conhecido com pnpm; o app usa
   npm isoladamente, mas continua no mesmo repositório git.
 
+## Banco de dados
+
+Supabase real provisionado via Vercel Marketplace (projeto `supabase-erin-leaf`,
+time `dns200979s-projects`), conectado tanto a `carbonfree-gov` quanto a
+`carbonfree-obra` — os dois apps compartilham o mesmo banco. O schema completo
+de `packages/database/supabase/migrations/` já está aplicado (13 tabelas +
+RLS), verificado com insert/select/delete reais e com confirmação de que
+acesso anônimo é bloqueado pelas policies.
+
+```bash
+cd apps/gov  # ou apps/obra
+vercel env pull .env.local --yes   # traz as credenciais reais do Supabase
+```
+
 ## Rodando localmente
 
 ```bash
@@ -46,12 +60,14 @@ npm start             # Expo Dev Tools — escaneie o QR no Expo Go
 
 ## Próximos passos
 
-1. Provisionar um projeto Supabase real e rodar as migrations de
-   `packages/database/supabase/migrations/` (hoje os dashboards usam dados
-   de exemplo em `src/lib/mock-data.ts` / `src/data/mock.ts`).
-2. Gerar os tipos do banco: `pnpm --filter @carbonfree/database gen:types`
-   (requer `supabase link` com o projeto real).
+1. Trocar as queries mock (`src/lib/mock-data.ts` no Gov, `src/data/mock.ts`
+   no Obra) por chamadas reais ao Supabase (`@carbonfree/database`) — o
+   banco já existe e tem dado nenhum ainda, só o schema.
+2. Gerar os tipos do banco: requer Docker/Podman local (`supabase gen types
+   --db-url ...`) ou `supabase login` + `supabase link --project-ref
+   sidkrwbzbfkbjyqnurgp` seguido de `pnpm --filter @carbonfree/database
+   gen:types` — nenhum dos dois disponível neste ambiente de execução.
 3. Trocar os ícones placeholder de `apps/obra/public/manifest.webmanifest`
    e `apps/fiscal/assets/` pela identidade visual definitiva.
 4. Autenticação (gov.br / ICP-Brasil para assinatura, e-mail+MFA para
-   perfis administrativos) — hoje as telas não têm login.
+   perfis administrativos) — hoje as telas não têm login nem criam `perfis`.

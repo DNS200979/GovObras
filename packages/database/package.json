@@ -6,6 +6,7 @@
   "exports": {
     ".": "./src/index.ts",
     "./server": "./src/server.ts",
+    "./admin": "./src/admin.ts",
     "./types": "./src/types.ts"
   },
   "scripts": {

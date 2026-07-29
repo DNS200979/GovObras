@@ -2,23 +2,30 @@ import { AppShell } from "@carbonfree/ui/app-shell";
 import { Badge } from "@carbonfree/ui/badge";
 import { Card, CardEyebrow, CardTitle } from "@carbonfree/ui/card";
 import { obraNav } from "@/lib/nav";
-import { obraAtual } from "@/lib/mock-data";
+import { getObraAtual } from "@/lib/queries";
 
-const etapas = [
-  { nome: "Inventário ISO 14064-1 gerado", concluida: true },
-  { nome: "Assinatura do responsável técnico (gov.br)", concluida: false },
-  { nome: "Protocolo na prefeitura", concluida: false },
-  { nome: "Homologação e emissão do selo", concluida: false },
-];
+const RANK: Record<string, number> = { rascunho: 0, protocolado: 1, em_analise: 2, homologado: 3, rejeitado: 3 };
 
-export default function DossiePage() {
+export const dynamic = "force-dynamic";
+
+export default async function DossiePage() {
+  const { obra, statusInventarioAtual } = await getObraAtual();
+  const rank = RANK[statusInventarioAtual] ?? 0;
+
+  const etapas = [
+    { nome: "Inventário ISO 14064-1 gerado", concluida: rank >= 0 },
+    { nome: "Assinatura do responsável técnico (gov.br)", concluida: rank >= 1 },
+    { nome: "Protocolo na prefeitura", concluida: rank >= 2 },
+    { nome: "Homologação e emissão do selo", concluida: statusInventarioAtual === "homologado" },
+  ];
+
   return (
     <AppShell
       productName="CARBONFREE OBRA"
       productTag="Construtora · Engenharia"
       nav={obraNav("/dossie")}
     >
-      <CardEyebrow>{obraAtual.nome}</CardEyebrow>
+      <CardEyebrow>{obra.nome}</CardEyebrow>
       <h1 className="mt-1 mb-6 font-display text-3xl font-extrabold tracking-tight text-ardosia">
         Dossiê e assinatura
       </h1>

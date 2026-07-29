@@ -1,0 +1,179 @@
+import { createAdminClient } from "@carbonfree/database/admin";
+
+/**
+ * Leituras server-side com service role (bypassa RLS) — ver nota em
+ * @carbonfree/database/admin. Substituir por client com sessão quando o
+ * login existir.
+ */
+
+const TIERS = ["AAA", "AA", "A", "B", "C"] as const;
+
+function faixaPorIntensidade(kgM2: number): (typeof TIERS)[number] {
+  if (kgM2 <= 150) return "AAA";
+  if (kgM2 <= 200) return "AA";
+  if (kgM2 <= 280) return "A";
+  if (kgM2 <= 380) return "B";
+  return "C";
+}
+
+function riscoPorIntensidade(kgM2: number): "baixo" | "medio" | "alto" {
+  if (kgM2 > 380) return "alto";
+  if (kgM2 > 250) return "medio";
+  return "baixo";
+}
+
+function relativo(iso: string) {
+  const dias = Math.round((Date.now() - new Date(iso).getTime()) / 86_400_000);
+  if (dias <= 0) return "hoje";
+  if (dias === 1) return "1 dia atrás";
+  return `${dias} dias atrás`;
+}
+
+async function obrasComInventarioAtual() {
+  const db = createAdminClient();
+
+  const { data: obras, error: obrasErr } = await db
+    .from("obras")
+    .select("id, nome, alvara_numero, tipologia, area_construida_m2, fase, construtoras(razao_social)");
+  if (obrasErr) throw obrasErr;
+
+  const { data: inventarios, error: invErr } = await db
+    .from("inventarios")
+    .select("id, obra_id, versao, status, created_at, homologado_em, lancamentos(natureza, tco2e, created_at)")
+    .order("versao", { ascending: false });
+  if (invErr) throw invErr;
+
+  // pega a versão mais recente de cada obra
+  const atualPorObra = new Map<string, (typeof inventarios)[number]>();
+  for (const inv of inventarios ?? []) {
+    if (!atualPorObra.has(inv.obra_id)) atualPorObra.set(inv.obra_id, inv);
+  }
+
+  return (obras ?? []).map((obra) => {
+    const inv = atualPorObra.get(obra.id);
+    const passivo = inv?.lancamentos?.filter((l) => l.natureza === "passivo").reduce((s, l) => s + Number(l.tco2e), 0) ?? 0;
+    const ativo = inv?.lancamentos?.filter((l) => l.natureza === "ativo").reduce((s, l) => s + Number(l.tco2e), 0) ?? 0;
+    const netT = passivo - ativo;
+    const intensidade = obra.area_construida_m2 > 0 ? Math.round((netT * 1000) / obra.area_construida_m2) : 0;
+    return {
+      obraId: obra.id,
+      nome: obra.nome,
+      alvara: obra.alvara_numero,
+      construtora: (obra.construtoras as unknown as { razao_social: string } | null)?.razao_social ?? "—",
+      tipologia: obra.tipologia,
+      areaM2: obra.area_construida_m2,
+      fase: obra.fase,
+      passivo,
+      ativo,
+      intensidade,
+      status: inv?.status ?? "rascunho",
+      atualizadoEm: inv?.created_at ?? null,
+    };
+  });
+}
+
+export async function getPainelData() {
+  const db = createAdminClient();
+  const obras = await obrasComInventarioAtual();
+
+  const { count: selosEmitidos } = await db.from("selos").select("*", { count: "exact", head: true });
+
+  const dossiesPendentes = obras.filter((o) => o.status === "em_analise" || o.status === "protocolado").length;
+  const intensidades = obras.filter((o) => o.intensidade > 0).map((o) => o.intensidade);
+  const intensidadeMedia = intensidades.length
+    ? Math.round(intensidades.reduce((a, b) => a + b, 0) / intensidades.length)
+    : 0;
+
+  const balancoMunicipal = obras.reduce(
+    (acc, o) => ({ passivo: acc.passivo + o.passivo, ativo: acc.ativo + o.ativo }),
+    { passivo: 0, ativo: 0 },
+  );
+
+  const contagemFaixas = Object.fromEntries(TIERS.map((t) => [t, 0])) as Record<(typeof TIERS)[number], number>;
+  for (const o of obras) if (o.intensidade > 0) contagemFaixas[faixaPorIntensidade(o.intensidade)]++;
+  const distribuicaoFaixas = TIERS.map((faixa) => ({
+    faixa,
+    obras: contagemFaixas[faixa],
+    tone: (faixa === "AAA" || faixa === "AA" ? "ativo" : faixa === "C" ? "passivo" : "neutro") as
+      | "ativo"
+      | "passivo"
+      | "neutro",
+  }));
+
+  // série mensal real a partir das datas de criação dos lançamentos existentes
+  const { data: lancamentos } = await db
+    .from("lancamentos")
+    .select("natureza, tco2e, created_at, inventarios(obra_id, obras(area_construida_m2))");
+  const porMes = new Map<string, { label: string; passivo: number; ativo: number; areas: Set<string> }>();
+  for (const l of lancamentos ?? []) {
+    const data = new Date(l.created_at);
+    const chave = `${data.getFullYear()}-${String(data.getMonth() + 1).padStart(2, "0")}`;
+    const label = data.toLocaleDateString("pt-BR", { month: "short", year: "2-digit" });
+    const areaObj = l.inventarios as unknown as { obra_id: string; obras: { area_construida_m2: number } } | null;
+    if (!porMes.has(chave)) porMes.set(chave, { label, passivo: 0, ativo: 0, areas: new Set() });
+    const bucket = porMes.get(chave)!;
+    if (l.natureza === "passivo") bucket.passivo += Number(l.tco2e);
+    else bucket.ativo += Number(l.tco2e);
+    if (areaObj) bucket.areas.add(`${areaObj.obra_id}:${areaObj.obras.area_construida_m2}`);
+  }
+  const serieIntensidade = [...porMes.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([, v]) => {
+      const areaTotal = [...v.areas].reduce((s, key) => s + Number(key.split(":")[1]), 0) || 1;
+      return { mes: v.label, intensidade: Math.round(((v.passivo - v.ativo) * 1000) / areaTotal) };
+    });
+
+  const mesaAnalise = obras
+    .filter((o) => o.status !== "homologado" && o.status !== "rejeitado")
+    .sort((a, b) => b.intensidade - a.intensidade)
+    .map((o) => ({
+      id: o.obraId,
+      obra: o.nome,
+      alvara: o.alvara,
+      construtora: o.construtora,
+      intensidade: o.intensidade,
+      risco: riscoPorIntensidade(o.intensidade),
+      atualizado: o.atualizadoEm ? relativo(o.atualizadoEm) : "—",
+      status: o.status,
+    }));
+
+  return {
+    kpis: {
+      obrasAtivas: obras.length,
+      dossiesPendentes,
+      selosEmitidos: selosEmitidos ?? 0,
+      intensidadeMediaKgM2: intensidadeMedia,
+    },
+    balancoMunicipal,
+    distribuicaoFaixas,
+    serieIntensidade,
+    mesaAnalise,
+  };
+}
+
+export async function getObrasList() {
+  return obrasComInventarioAtual();
+}
+
+export async function getFiscalizacoes() {
+  const db = createAdminClient();
+  const { data, error } = await db
+    .from("fiscalizacoes")
+    .select("id, agendado_para, status, obras(alvara_numero, construtoras(razao_social)), perfis(nome)")
+    .order("agendado_para", { ascending: true });
+  if (error) throw error;
+
+  return (data ?? []).map((f) => {
+    const obra = f.obras as unknown as { alvara_numero: string; construtoras: { razao_social: string } } | null;
+    const fiscal = f.perfis as unknown as { nome: string } | null;
+    return {
+      obra: obra?.alvara_numero ?? "—",
+      construtora: obra?.construtoras?.razao_social ?? "—",
+      fiscal: fiscal?.nome ?? "—",
+      quando: f.agendado_para
+        ? new Date(f.agendado_para).toLocaleString("pt-BR", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })
+        : "—",
+      status: f.status,
+    };
+  });
+}

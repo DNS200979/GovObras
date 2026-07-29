@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Badge } from "@carbonfree/ui/badge";
-import type { Alternativa } from "@/lib/mock-data";
+import type { Alternativa } from "@/lib/queries";
 
 const fmtBRL = (n: number) => n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 

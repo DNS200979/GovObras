@@ -2,9 +2,13 @@ import { AppShell } from "@carbonfree/ui/app-shell";
 import { Card, CardEyebrow } from "@carbonfree/ui/card";
 import { DecisionSimulator } from "@/components/decision-simulator";
 import { obraNav } from "@/lib/nav";
-import { alternativas } from "@/lib/mock-data";
+import { getAlternativasMaterial } from "@/lib/queries";
 
-export default function SimuladorPage() {
+export const dynamic = "force-dynamic";
+
+export default async function SimuladorPage() {
+  const alternativas = await getAlternativasMaterial();
+
   return (
     <AppShell
       productName="CARBONFREE OBRA"

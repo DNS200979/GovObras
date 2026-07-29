@@ -5,22 +5,29 @@ import { CarbonBalanceBar } from "@carbonfree/ui/carbon-balance-bar";
 import { KpiTile } from "@carbonfree/ui/kpi-tile";
 import { TrendChart } from "@carbonfree/ui/trend-chart";
 import { govNav } from "@/lib/nav";
-import {
-  balancoMunicipal,
-  distribuicaoFaixas,
-  kpis,
-  mesaAnalise,
-  riscoTone,
-  serieIntensidade,
-  statusLabel,
-} from "@/lib/mock-data";
+import { getPainelData } from "@/lib/queries";
 
-export default function PainelPage() {
+const riscoTone = { baixo: "ativo", medio: "neutro", alto: "passivo" } as const;
+
+const statusLabel: Record<string, string> = {
+  rascunho: "Rascunho",
+  protocolado: "Protocolado",
+  em_analise: "Em análise",
+  homologado: "Homologado",
+  rejeitado: "Rejeitado",
+};
+
+export const dynamic = "force-dynamic";
+
+export default async function PainelPage() {
+  const { kpis, balancoMunicipal, distribuicaoFaixas, serieIntensidade, mesaAnalise } = await getPainelData();
+  const maxFaixa = Math.max(...distribuicaoFaixas.map((f) => f.obras), 1);
+
   return (
     <AppShell productName="CARBONFREE GOV" productTag="Prefeitura · Secretarias" nav={govNav("/")}>
       <div className="mb-8 flex items-end justify-between">
         <div>
-          <CardEyebrow>Painel do programa</CardEyebrow>
+          <CardEyebrow>Painel do programa · Florianópolis</CardEyebrow>
           <h1 className="mt-1 font-display text-3xl font-extrabold tracking-tight text-ardosia">
             Visão geral
           </h1>
@@ -29,17 +36,12 @@ export default function PainelPage() {
 
       <div className="mb-8 grid grid-cols-2 gap-4 md:grid-cols-4">
         <KpiTile label="Obras ativas licenciadas" value={String(kpis.obrasAtivas)} />
-        <KpiTile
-          label="Dossiês pendentes de análise"
-          value={String(kpis.dossiesPendentes)}
-          delta={{ value: "2 vencendo hoje", positive: false }}
-        />
+        <KpiTile label="Dossiês pendentes de análise" value={String(kpis.dossiesPendentes)} />
         <KpiTile label="Selos homologados" value={String(kpis.selosEmitidos)} />
         <KpiTile
           label="Intensidade média do setor"
           value={String(kpis.intensidadeMediaKgM2)}
           unit="kgCO₂e/m²"
-          delta={{ value: "-14% em 6 meses", positive: true }}
         />
       </div>
 
@@ -49,7 +51,7 @@ export default function PainelPage() {
             passivo={balancoMunicipal.passivo}
             ativo={balancoMunicipal.ativo}
             intensidade={`${kpis.intensidadeMediaKgM2} kgCO₂e/m²`}
-            meta="≤ 200 (faixa B)"
+            meta="≤ 200 (faixa AA)"
           />
         </div>
         <Card className="lg:col-span-2">
@@ -63,7 +65,7 @@ export default function PainelPage() {
                 <div className="h-2 flex-1 overflow-hidden rounded-full bg-concreto">
                   <div
                     className="h-full rounded-full bg-ardosia-2"
-                    style={{ width: `${(f.obras / 14) * 100}%` }}
+                    style={{ width: `${(f.obras / maxFaixa) * 100}%` }}
                   />
                 </div>
                 <span className="w-6 text-right font-mono text-xs text-texto-fraco">
@@ -76,8 +78,14 @@ export default function PainelPage() {
       </div>
 
       <Card className="mb-8">
-        <CardTitle>Intensidade média do setor — últimos 7 meses</CardTitle>
-        <TrendChart data={serieIntensidade} xKey="mes" yKey="intensidade" unit="kgCO₂e/m²" />
+        <CardTitle>Intensidade líquida do setor por mês (dado real)</CardTitle>
+        {serieIntensidade.length > 1 ? (
+          <TrendChart data={serieIntensidade} xKey="mes" yKey="intensidade" unit="kgCO₂e/m²" />
+        ) : (
+          <p className="py-8 text-center text-[13px] text-texto-fraco">
+            Ainda não há histórico suficiente — o gráfico aparece conforme novos inventários entram.
+          </p>
+        )}
       </Card>
 
       <Card id="mesa-analise">
@@ -95,7 +103,7 @@ export default function PainelPage() {
                 <th className="py-2 pr-3 font-display font-bold">Construtora</th>
                 <th className="py-2 pr-3 font-display font-bold">Intensidade</th>
                 <th className="py-2 pr-3 font-display font-bold">Risco</th>
-                <th className="py-2 pr-3 font-display font-bold">Prazo</th>
+                <th className="py-2 pr-3 font-display font-bold">Atualizado</th>
                 <th className="py-2 font-display font-bold">Status</th>
               </tr>
             </thead>
@@ -104,21 +112,28 @@ export default function PainelPage() {
                 <tr key={row.id} className="border-b border-linha/60 last:border-0">
                   <td className="py-2.5 pr-3">
                     <div className="font-medium text-texto">{row.obra}</div>
-                    <div className="font-mono text-[11px] text-texto-fraco">{row.id}</div>
+                    <div className="font-mono text-[11px] text-texto-fraco">{row.alvara}</div>
                   </td>
                   <td className="py-2.5 pr-3 text-texto-fraco">{row.construtora}</td>
                   <td className="py-2.5 pr-3 font-mono">{row.intensidade} kg/m²</td>
                   <td className="py-2.5 pr-3">
                     <Badge tone={riscoTone[row.risco]}>{row.risco}</Badge>
                   </td>
-                  <td className="py-2.5 pr-3 font-mono text-texto-fraco">{row.prazo}</td>
+                  <td className="py-2.5 pr-3 font-mono text-texto-fraco">{row.atualizado}</td>
                   <td className="py-2.5">
-                    <Badge tone={row.status === "pendencia" ? "passivo" : "default"}>
-                      {statusLabel[row.status]}
+                    <Badge tone={row.status === "em_analise" ? "neutro" : "default"}>
+                      {statusLabel[row.status] ?? row.status}
                     </Badge>
                   </td>
                 </tr>
               ))}
+              {mesaAnalise.length === 0 && (
+                <tr>
+                  <td colSpan={6} className="py-6 text-center text-texto-fraco">
+                    Nenhum dossiê pendente.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

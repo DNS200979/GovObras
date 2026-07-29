@@ -37,10 +37,18 @@ packages/
 
 Supabase real provisionado via Vercel Marketplace (projeto `supabase-erin-leaf`,
 time `dns200979s-projects`), conectado tanto a `carbonfree-gov` quanto a
-`carbonfree-obra` — os dois apps compartilham o mesmo banco. O schema completo
-de `packages/database/supabase/migrations/` já está aplicado (13 tabelas +
-RLS), verificado com insert/select/delete reais e com confirmação de que
-acesso anônimo é bloqueado pelas policies.
+`carbonfree-obra` — os dois apps compartilham o mesmo banco. Schema com 14
+tabelas + RLS (`packages/database/supabase/migrations/`), advisor de
+segurança do Supabase limpo, populado com dado de demonstração
+relacionalmente íntegro (`packages/database/scripts/seed.mjs`).
+
+Os dashboards de Gov e Obra já leem direto do banco real (`src/lib/
+queries.ts` em cada app) via `@carbonfree/database/admin` — um cliente
+service-role usado **temporariamente** porque ainda não há login; com RLS
+ativo, um usuário anônimo não vê nenhuma linha (verificado). Quando a
+autenticação existir, trocar essas leituras por `createServerSupabase()`
+(RLS por sessão real). Todas as rotas com dado real são `force-dynamic`
+(sem cache estático de build).
 
 ```bash
 cd apps/gov  # ou apps/obra
@@ -60,14 +68,15 @@ npm start             # Expo Dev Tools — escaneie o QR no Expo Go
 
 ## Próximos passos
 
-1. Trocar as queries mock (`src/lib/mock-data.ts` no Gov, `src/data/mock.ts`
-   no Obra) por chamadas reais ao Supabase (`@carbonfree/database`) — o
-   banco já existe e tem dado nenhum ainda, só o schema.
-2. Gerar os tipos do banco: requer Docker/Podman local (`supabase gen types
+1. Gerar os tipos do banco: requer Docker/Podman local (`supabase gen types
    --db-url ...`) ou `supabase login` + `supabase link --project-ref
    sidkrwbzbfkbjyqnurgp` seguido de `pnpm --filter @carbonfree/database
    gen:types` — nenhum dos dois disponível neste ambiente de execução.
-3. Trocar os ícones placeholder de `apps/obra/public/manifest.webmanifest`
+2. Trocar os ícones placeholder de `apps/obra/public/manifest.webmanifest`
    e `apps/fiscal/assets/` pela identidade visual definitiva.
-4. Autenticação (gov.br / ICP-Brasil para assinatura, e-mail+MFA para
-   perfis administrativos) — hoje as telas não têm login nem criam `perfis`.
+3. Autenticação (gov.br / ICP-Brasil para assinatura, e-mail+MFA para
+   perfis administrativos) — hoje as telas usam o cliente admin (service
+   role) porque não há sessão; ver nota em "Banco de dados" acima.
+4. `apps/obra` hoje é fixo numa única obra de demonstração (`ALV-2025-1042`
+   em `src/lib/queries.ts`) porque não há como saber "qual construtora
+   está logada" sem autenticação — resolve junto com o item 3.

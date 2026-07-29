@@ -12,6 +12,9 @@ dist/
 .turbo/
 *.tsbuildinfo
 
+# vercel
+.vercel/
+
 # env
 .env
 .env*.local

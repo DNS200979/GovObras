@@ -1,0 +1,11 @@
+node_modules
+.next
+out
+dist
+.turbo
+.expo
+apps/fiscal
+*.pdf
+*.docx
+/MBV_image.jpg
+/*.html

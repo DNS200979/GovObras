@@ -9,7 +9,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getObrasList } from "@/lib/queries";
+import { getConstrutoras, getObrasList } from "@/lib/queries";
+import { NovaObraSheet } from "./nova-obra-sheet";
 
 export const dynamic = "force-dynamic";
 
@@ -30,14 +31,21 @@ const faseLabel: Record<string, string> = {
 };
 
 export default async function ObrasPage() {
-  const obras = await getObrasList();
+  const [obras, construtoras] = await Promise.all([getObrasList(), getConstrutoras()]);
 
   return (
     <AppShell active="/obras">
-      <p className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground">Cadastro</p>
-      <h1 className="mt-1 mb-6 font-display text-3xl font-extrabold tracking-tight">
-        Obras licenciadas
-      </h1>
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <p className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
+            Cadastro
+          </p>
+          <h1 className="mt-1 font-display text-3xl font-extrabold tracking-tight">
+            Obras licenciadas
+          </h1>
+        </div>
+        <NovaObraSheet construtoras={construtoras} />
+      </div>
 
       <Card>
         <CardContent>
@@ -70,6 +78,13 @@ export default async function ObrasPage() {
                   </TableCell>
                 </TableRow>
               ))}
+              {obras.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={6} className="py-8 text-center text-muted-foreground">
+                    Nenhuma obra cadastrada ainda.
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </CardContent>

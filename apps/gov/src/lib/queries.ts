@@ -206,6 +206,16 @@ export async function getObrasParaSelect() {
   return data ?? [];
 }
 
+export async function getConstrutoras() {
+  const db = await createServerSupabase();
+  const { data, error } = await db
+    .from("construtoras")
+    .select("id, razao_social, cnpj_cpf")
+    .order("razao_social");
+  if (error) throw error;
+  return data ?? [];
+}
+
 export interface RequisitoAuditoria {
   id: string;
   natureza: "passivo" | "ativo";

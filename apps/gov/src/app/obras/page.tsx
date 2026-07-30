@@ -1,3 +1,4 @@
+import { MapPin } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -58,6 +59,7 @@ export default async function ObrasPage() {
                 <TableHead>Fase</TableHead>
                 <TableHead>Intensidade</TableHead>
                 <TableHead>Risco</TableHead>
+                <TableHead>Local</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -76,11 +78,26 @@ export default async function ObrasPage() {
                   <TableCell>
                     <Badge variant={riscoVariant[risco(row.intensidade)]}>{risco(row.intensidade)}</Badge>
                   </TableCell>
+                  <TableCell>
+                    {row.latitude != null && row.longitude != null ? (
+                      <a
+                        href={`https://www.google.com/maps?q=${row.latitude},${row.longitude}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 font-mono text-[11px] text-primary hover:underline"
+                      >
+                        <MapPin className="h-3.5 w-3.5" />
+                        mapa
+                      </a>
+                    ) : (
+                      <span className="text-muted-foreground">—</span>
+                    )}
+                  </TableCell>
                 </TableRow>
               ))}
               {obras.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={6} className="py-8 text-center text-muted-foreground">
+                  <TableCell colSpan={7} className="py-8 text-center text-muted-foreground">
                     Nenhuma obra cadastrada ainda.
                   </TableCell>
                 </TableRow>

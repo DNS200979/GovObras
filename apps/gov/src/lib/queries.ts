@@ -35,7 +35,9 @@ async function obrasComInventarioAtual() {
 
   const { data: obras, error: obrasErr } = await db
     .from("obras")
-    .select("id, nome, alvara_numero, tipologia, area_construida_m2, fase, construtoras(razao_social)");
+    .select(
+      "id, nome, alvara_numero, tipologia, area_construida_m2, fase, latitude, longitude, construtoras(razao_social)",
+    );
   if (obrasErr) throw obrasErr;
 
   const { data: inventarios, error: invErr } = await db
@@ -64,6 +66,8 @@ async function obrasComInventarioAtual() {
       tipologia: obra.tipologia,
       areaM2: obra.area_construida_m2,
       fase: obra.fase,
+      latitude: obra.latitude as number | null,
+      longitude: obra.longitude as number | null,
       passivo,
       ativo,
       intensidade,

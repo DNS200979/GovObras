@@ -55,32 +55,41 @@ rotas com dado real são `force-dynamic` (sem cache estático de build).
 
 **Extensões habilitadas**: `postgis` e `vector` no schema `extensions`,
 `pg_cron` (o Supabase força ele pro `pg_catalog`, independente do `WITH
-SCHEMA` pedido na migration). Nenhuma ainda em uso pelo app — habilitadas
-como infraestrutura pra quando fizer sentido: PostGIS pra virar as colunas
-`point` de `obras.coordenadas`/`mudas.coordenadas`/`fiscalizacoes.
-coordenada_execucao` em `geography(Point,4326)` de verdade, pg_cron pra
-tarefas agendadas (ex.: cobrar checkpoint de sobrevivência de muda em
-12/24/36 meses), pgvector se entrar busca semântica.
+SCHEMA` pedido na migration). PostGIS já em uso em `obras.coordenadas`
+(ver abaixo); `pg_cron` e `pgvector` seguem só como infraestrutura, sem
+nenhuma tarefa/embedding real ainda.
+
+**`obras.coordenadas`** é `geography(Point,4326)` de verdade (migrado de
+`point` puro do Postgres), com índice GIST e colunas geradas `latitude`/
+`longitude` (`stored`, calculadas de `coordenadas` via `st_y`/`st_x`) pra
+o app ler/escrever sem parsing de WKB — grava mandando texto EWKT
+(`SRID=4326;POINT(lng lat)`), lê `latitude`/`longitude` como número puro.
+Testado com consulta geoespacial real (`st_distance` entre duas obras).
+`mudas.coordenadas` e `fiscalizacoes.coordenada_execucao` continuam
+`point` puro — mesmo padrão de migration se/quando fizer sentido.
 
 ## Autenticação (Gov)
 
-Login por **magic link** (sem senha) via Supabase Auth — `shouldCreateUser:
-false`, então só e-mails com `perfis` pré-cadastrado conseguem entrar
-(fechado, não é signup público). Fluxo: `/login` → e-mail → link → `/auth/
-confirm` (Route Handler que troca o token por sessão) → cookies via
-`proxy.ts` (Next.js 16 — antigo `middleware.ts`; **tem que ficar dentro de
-`src/`**, não na raiz do app, senão o Next ignora o arquivo silenciosamente).
+Login por **e-mail + senha** via Supabase Auth (`signInWithPassword`) —
+trocado do magic link original porque o link do Supabase entrega os
+tokens como fragmento da URL (`#access_token=...`), que nunca chega ao
+servidor; em produção isso causava um loop de redirecionamento rápido
+demais pra perceber. Senha evita esse problema inteiramente, já que a
+sessão nasce no mesmo request/response do Server Action, sem salto entre
+domínios. `proxy.ts` (Next.js 16 — antigo `middleware.ts`; **tem que
+ficar dentro de `src/`**, não na raiz do app, senão o Next ignora o
+arquivo silenciosamente) protege todas as rotas.
 
 RLS cobre o fluxo inteiro: `prefeitura_gestor`/`prefeitura_analista` só
 enxergam obras/inventários/fiscalizações do próprio `municipio_id`; a
 policy de `perfis` que lista fiscais para o select do agendamento é
-escopada do mesmo jeito. Testado de ponta a ponta (magic link real gerado
-via admin API → sessão estabelecida → dashboard com dado escopado).
+escopada do mesmo jeito. Testado de ponta a ponta com sessão real (não
+bypass) em cada feature nova.
 
 Criar um novo usuário da prefeitura:
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... \
-  node packages/database/scripts/seed-prefeitura-user.mjs "email@prefeitura.gov.br" "Nome"
+  node packages/database/scripts/seed-prefeitura-user.mjs "email@prefeitura.gov.br" "senha" "Nome" [prefeitura_gestor|prefeitura_analista]
 ```
 
 ```bash
@@ -103,7 +112,12 @@ npm start             # Expo Dev Tools — escaneie o QR no Expo Go
 
 - **Painel** (`/`) — KPIs, balanço de carbono municipal, distribuição por
   faixa do selo, série histórica de intensidade e mesa de análise.
-- **Obras** (`/obras`) — cadastro licenciado com intensidade e risco.
+- **Obras** (`/obras`) — cadastro licenciado com intensidade, risco e
+  local (mapa, quando a obra tem coordenadas). "Nova obra" cadastra a
+  obra e, se preciso, a construtora na hora. Só cria — ainda não tem
+  editar/excluir (nem RLS de UPDATE/DELETE pra prefeitura em `obras`).
+- **Construtoras** (`/construtoras`) — listagem com contagem de obras por
+  construtora e cadastro standalone.
 - **Agendamento** (`/agendamento`) — módulo real de programação de
   vistorias (seção 06 do plano): calendário, criação de vistoria com
   obra/fiscal/data via Server Action, gravando em `fiscalizacoes`.

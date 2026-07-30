@@ -126,6 +126,17 @@ export function NovaObraSheet({ construtoras }: Props) {
               </div>
             </div>
 
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="latitude">Latitude (opcional)</Label>
+                <Input id="latitude" name="latitude" type="number" step="any" placeholder="-27.5969" />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="longitude">Longitude (opcional)</Label>
+                <Input id="longitude" name="longitude" type="number" step="any" placeholder="-48.5482" />
+              </div>
+            </div>
+
             <div className="flex items-center justify-between border-t border-border pt-4">
               <Label htmlFor="novaConstrutora" className="text-sm font-normal">
                 Construtora ainda não cadastrada

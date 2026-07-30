@@ -32,9 +32,21 @@ export async function criarObra(_prev: CriarObraState, formData: FormData): Prom
   const fase = formData.get("fase")?.toString() || "fundacao";
   const cno = formData.get("cno")?.toString().trim() || null;
   const inscricaoImobiliaria = formData.get("inscricaoImobiliaria")?.toString().trim() || null;
+  const latitudeRaw = formData.get("latitude")?.toString().trim();
+  const longitudeRaw = formData.get("longitude")?.toString().trim();
 
   if (!alvaraNumero || !nome || !tipologia || !areaM2 || areaM2 <= 0) {
     return { error: "Preencha alvará, nome, tipologia e área (m²)." };
+  }
+
+  let coordenadas: string | null = null;
+  if (latitudeRaw || longitudeRaw) {
+    const lat = Number(latitudeRaw);
+    const lng = Number(longitudeRaw);
+    if (!latitudeRaw || !longitudeRaw || Number.isNaN(lat) || Number.isNaN(lng) || lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+      return { error: "Latitude/longitude inválidas — preencha as duas ou nenhuma." };
+    }
+    coordenadas = `SRID=4326;POINT(${lng} ${lat})`;
   }
 
   let construtoraId = formData.get("construtoraId")?.toString();
@@ -72,6 +84,7 @@ export async function criarObra(_prev: CriarObraState, formData: FormData): Prom
     fase,
     cno,
     inscricao_imobiliaria: inscricaoImobiliaria,
+    coordenadas,
   });
 
   if (error) {

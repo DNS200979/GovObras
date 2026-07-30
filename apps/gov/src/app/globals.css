@@ -90,33 +90,38 @@
 }
 
 .dark {
-  --background: var(--color-ardosia);
-  --foreground: var(--color-papel);
-  --card: var(--color-ardosia-2);
-  --card-foreground: var(--color-papel);
-  --popover: var(--color-ardosia-2);
-  --popover-foreground: var(--color-papel);
-  --primary: var(--color-verde);
-  --primary-foreground: var(--color-papel);
+  --background: #0E1619;
+  --foreground: #E4E9E7;
+  --card: var(--color-ardosia);
+  --card-foreground: #E4E9E7;
+  --popover: var(--color-ardosia);
+  --popover-foreground: #E4E9E7;
+  --primary: #4FBF9F;
+  --primary-foreground: #0E1619;
   --secondary: var(--color-ardosia-2);
-  --secondary-foreground: var(--color-papel);
+  --secondary-foreground: #E4E9E7;
   --muted: var(--color-ardosia-2);
-  --muted-foreground: var(--color-linha-forte);
-  --accent: var(--color-ardosia-2);
-  --accent-foreground: var(--color-papel);
-  --destructive: #c96a63;
-  --destructive-foreground: var(--color-papel);
-  --border: color-mix(in oklab, var(--color-papel) 12%, transparent);
-  --input: color-mix(in oklab, var(--color-papel) 15%, transparent);
-  --ring: var(--color-verde);
-  --sidebar: var(--color-ardosia);
-  --sidebar-foreground: var(--color-papel);
-  --sidebar-primary: var(--color-verde);
-  --sidebar-primary-foreground: var(--color-papel);
+  --muted-foreground: #8A9995;
+  --accent: color-mix(in oklab, #4FBF9F 16%, var(--color-ardosia-2));
+  --accent-foreground: #7FD9C0;
+  --destructive: #E8756B;
+  --destructive-foreground: #0E1619;
+  --border: color-mix(in oklab, #E4E9E7 10%, transparent);
+  --input: color-mix(in oklab, #E4E9E7 13%, transparent);
+  --ring: #4FBF9F;
+  --chart-1: #4FBF9F;
+  --chart-2: #E8A24E;
+  --chart-3: #5B9BC7;
+  --chart-4: #8A9995;
+  --chart-5: #C96A63;
+  --sidebar: #0B1113;
+  --sidebar-foreground: #E4E9E7;
+  --sidebar-primary: #4FBF9F;
+  --sidebar-primary-foreground: #0E1619;
   --sidebar-accent: var(--color-ardosia-2);
-  --sidebar-accent-foreground: var(--color-papel);
-  --sidebar-border: var(--color-ardosia-2);
-  --sidebar-ring: var(--color-verde);
+  --sidebar-accent-foreground: #E4E9E7;
+  --sidebar-border: color-mix(in oklab, #E4E9E7 8%, transparent);
+  --sidebar-ring: #4FBF9F;
 }
 
 @layer base {
@@ -124,7 +129,6 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
-    font-family: var(--font-body);
+    @apply bg-background text-foreground font-sans;
   }
 }

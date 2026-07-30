@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Search } from "lucide-react";
+import { Flame, Leaf, Search } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -15,8 +15,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { RequisitoAuditoria } from "@/lib/queries";
+import { NovoRequisitoSheet } from "./novo-requisito-sheet";
 
-function Lista({ itens }: { itens: RequisitoAuditoria[] }) {
+function Lista({ itens, natureza }: { itens: RequisitoAuditoria[]; natureza: "passivo" | "ativo" }) {
   return (
     <Table>
       <TableHeader>
@@ -32,7 +33,7 @@ function Lista({ itens }: { itens: RequisitoAuditoria[] }) {
         {itens.map((r) => (
           <TableRow key={r.id}>
             <TableCell>
-              <Badge variant="outline" className="font-mono">
+              <Badge variant={natureza === "passivo" ? "warning" : "success"} className="font-mono">
                 {r.codigo}
               </Badge>
             </TableCell>
@@ -74,25 +75,34 @@ export function RequisitosClient({ requisitos }: { requisitos: RequisitoAuditori
   return (
     <Card>
       <CardContent>
-        <div className="relative mb-4 max-w-sm">
-          <Search className="absolute top-1/2 left-2.5 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            placeholder="Buscar requisito, evidência, código…"
-            value={busca}
-            onChange={(e) => setBusca(e.target.value)}
-            className="pl-8"
-          />
+        <div className="mb-4 flex items-center justify-between gap-4">
+          <div className="relative max-w-sm flex-1">
+            <Search className="absolute top-1/2 left-2.5 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              placeholder="Buscar requisito, evidência, código…"
+              value={busca}
+              onChange={(e) => setBusca(e.target.value)}
+              className="pl-8"
+            />
+          </div>
+          <NovoRequisitoSheet />
         </div>
         <Tabs defaultValue="passivo">
           <TabsList>
-            <TabsTrigger value="passivo">Passivo — o que a obra emite ({passivo.length})</TabsTrigger>
-            <TabsTrigger value="ativo">Ativo — o que reduz ou remove ({ativo.length})</TabsTrigger>
+            <TabsTrigger value="passivo" className="gap-1.5">
+              <Flame className="h-3.5 w-3.5 text-[var(--color-ambar)]" />
+              Passivo — o que a obra emite ({passivo.length})
+            </TabsTrigger>
+            <TabsTrigger value="ativo" className="gap-1.5">
+              <Leaf className="h-3.5 w-3.5 text-primary" />
+              Ativo — o que reduz ou remove ({ativo.length})
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="passivo">
-            <Lista itens={passivo} />
+            <Lista itens={passivo} natureza="passivo" />
           </TabsContent>
           <TabsContent value="ativo">
-            <Lista itens={ativo} />
+            <Lista itens={ativo} natureza="ativo" />
           </TabsContent>
         </Tabs>
       </CardContent>

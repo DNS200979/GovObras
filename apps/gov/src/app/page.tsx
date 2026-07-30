@@ -1,3 +1,4 @@
+import { Award, Building2, ClipboardList, TrendingDown, TrendingUp, Gauge } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,6 +13,7 @@ import {
 } from "@/components/ui/table";
 import { IntensityTrendChart } from "@/components/intensity-trend-chart";
 import { getPainelData } from "@/lib/queries";
+import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -29,128 +31,169 @@ function fmt(n: number) {
   return n.toLocaleString("pt-BR");
 }
 
+function KpiTile({
+  icon: Icon,
+  label,
+  value,
+  unit,
+  accent,
+  delta,
+}: {
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;
+  value: string;
+  unit?: string;
+  accent: string;
+  delta?: { value: string; positive: boolean };
+}) {
+  return (
+    <Card className="relative gap-2 overflow-hidden py-4">
+      <div className="absolute inset-x-0 top-0 h-0.5" style={{ background: accent }} />
+      <CardHeader className="px-4">
+        <div className="flex items-center justify-between">
+          <CardDescription className="text-[11px] tracking-wide uppercase">{label}</CardDescription>
+          <Icon className="h-3.5 w-3.5 text-muted-foreground" />
+        </div>
+      </CardHeader>
+      <CardContent className="px-4">
+        <div className="flex items-baseline gap-1.5">
+          <span className="font-mono text-[28px] leading-none font-semibold tabular-nums">{value}</span>
+          {unit ? <span className="text-xs text-muted-foreground">{unit}</span> : null}
+        </div>
+        {delta ? (
+          <div
+            className={cn(
+              "mt-2 flex items-center gap-1 font-mono text-[11px] tabular-nums",
+              delta.positive ? "text-primary" : "text-[var(--color-ambar)]",
+            )}
+          >
+            {delta.positive ? <TrendingDown className="h-3 w-3" /> : <TrendingUp className="h-3 w-3" />}
+            {delta.value}
+          </div>
+        ) : (
+          <div className="mt-2 h-[15px]" />
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
 export default async function PainelPage() {
   const { kpis, balancoMunicipal, distribuicaoFaixas, serieIntensidade, mesaAnalise } = await getPainelData();
   const maxFaixa = Math.max(...distribuicaoFaixas.map((f) => f.obras), 1);
   const saldo = balancoMunicipal.passivo - balancoMunicipal.ativo;
   const totalBalanco = Math.max(balancoMunicipal.passivo, balancoMunicipal.ativo, 1);
 
+  const primeiraIntensidade = serieIntensidade.at(0)?.intensidade;
+  const ultimaIntensidade = serieIntensidade.at(-1)?.intensidade;
+  const deltaIntensidade =
+    serieIntensidade.length > 1 && primeiraIntensidade
+      ? Math.round(((ultimaIntensidade! - primeiraIntensidade) / primeiraIntensidade) * 100)
+      : null;
+
   return (
     <AppShell active="/">
-      <div className="mb-6">
-        <p className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
-          Painel do programa
-        </p>
-        <h1 className="mt-1 font-display text-3xl font-extrabold tracking-tight">Visão geral</h1>
+      <div className="mb-6 flex items-baseline justify-between">
+        <div>
+          <p className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
+            Painel do programa
+          </p>
+          <h1 className="mt-1 font-display text-3xl font-extrabold tracking-tight">Visão geral</h1>
+        </div>
+        <p className="font-mono text-[11px] text-muted-foreground">Florianópolis · SC</p>
       </div>
 
-      <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardDescription>Obras ativas licenciadas</CardDescription>
-            <CardTitle className="font-mono text-3xl font-semibold tabular-nums">
-              {kpis.obrasAtivas}
-            </CardTitle>
-          </CardHeader>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardDescription>Dossiês pendentes de análise</CardDescription>
-            <CardTitle className="font-mono text-3xl font-semibold tabular-nums">
-              {kpis.dossiesPendentes}
-            </CardTitle>
-          </CardHeader>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardDescription>Selos homologados</CardDescription>
-            <CardTitle className="font-mono text-3xl font-semibold tabular-nums">
-              {kpis.selosEmitidos}
-            </CardTitle>
-          </CardHeader>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardDescription>Intensidade média do setor</CardDescription>
-            <CardTitle className="font-mono text-3xl font-semibold tabular-nums">
-              {kpis.intensidadeMediaKgM2}
-              <span className="ml-1 text-sm font-normal text-muted-foreground">kgCO₂e/m²</span>
-            </CardTitle>
-          </CardHeader>
-        </Card>
+      <div className="mb-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <KpiTile icon={Building2} label="Obras ativas" value={String(kpis.obrasAtivas)} accent="var(--chart-3)" />
+        <KpiTile
+          icon={ClipboardList}
+          label="Dossiês pendentes"
+          value={String(kpis.dossiesPendentes)}
+          accent="var(--color-ambar)"
+        />
+        <KpiTile icon={Award} label="Selos homologados" value={String(kpis.selosEmitidos)} accent="var(--primary)" />
+        <KpiTile
+          icon={Gauge}
+          label="Intensidade média"
+          value={String(kpis.intensidadeMediaKgM2)}
+          unit="kgCO₂e/m²"
+          accent="var(--chart-2)"
+          delta={
+            deltaIntensidade !== null
+              ? { value: `${Math.abs(deltaIntensidade)}% no período`, positive: deltaIntensidade < 0 }
+              : undefined
+          }
+        />
       </div>
 
-      <div className="mb-6 grid grid-cols-1 gap-4 lg:grid-cols-5">
-        <Card className="lg:col-span-3">
-          <CardHeader>
-            <CardTitle>Balanço de carbono municipal</CardTitle>
+      <div className="mb-4 grid grid-cols-1 gap-3 lg:grid-cols-5">
+        <Card className="lg:col-span-3 gap-4 py-4">
+          <CardHeader className="px-4">
+            <CardTitle className="text-sm">Balanço de carbono municipal</CardTitle>
             <CardDescription>Passivo × ativo agregado das obras em andamento</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-5">
+          <CardContent className="space-y-4 px-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="font-mono text-[10px] uppercase tracking-wider text-[var(--color-ambar)]">
                   Passivo · emissões
                 </p>
-                <p className="font-mono text-xl font-semibold text-[var(--color-ambar)]">
+                <p className="font-mono text-lg font-semibold tabular-nums text-[var(--color-ambar)]">
                   {fmt(balancoMunicipal.passivo)} <span className="text-xs font-normal text-muted-foreground">tCO₂e</span>
                 </p>
                 <Progress
                   value={(balancoMunicipal.passivo / totalBalanco) * 100}
-                  className="mt-2 h-1.5 [&>div]:bg-[var(--color-ambar)]"
+                  className="mt-2 h-1 [&>div]:bg-[var(--color-ambar)]"
                 />
               </div>
               <div>
                 <p className="font-mono text-[10px] uppercase tracking-wider text-primary">
                   Ativo · remoções
                 </p>
-                <p className="font-mono text-xl font-semibold text-primary">
+                <p className="font-mono text-lg font-semibold tabular-nums text-primary">
                   {fmt(balancoMunicipal.ativo)} <span className="text-xs font-normal text-muted-foreground">tCO₂e</span>
                 </p>
-                <Progress
-                  value={(balancoMunicipal.ativo / totalBalanco) * 100}
-                  className="mt-2 h-1.5"
-                />
+                <Progress value={(balancoMunicipal.ativo / totalBalanco) * 100} className="mt-2 h-1" />
               </div>
             </div>
-            <div className="flex items-center justify-between rounded-md bg-sidebar px-4 py-3 text-sidebar-foreground">
+            <div className="flex items-center justify-between rounded-md border border-border bg-muted/40 px-4 py-3">
               <div>
                 <p className="font-display text-[11px] font-bold uppercase tracking-wider">Saldo líquido</p>
-                <p className="mt-0.5 font-mono text-[10px] text-sidebar-foreground/60">
+                <p className="mt-0.5 font-mono text-[10px] text-muted-foreground">
                   Intensidade: {kpis.intensidadeMediaKgM2} kgCO₂e/m² · Meta ≤ 200 (faixa AA)
                 </p>
               </div>
-              <p className="font-mono text-2xl font-semibold text-[#E8A24E]">
-                {fmt(saldo)} <span className="text-xs text-sidebar-foreground/60">tCO₂e</span>
+              <p className="font-mono text-xl font-semibold tabular-nums text-[var(--color-ambar)]">
+                {fmt(saldo)} <span className="text-xs text-muted-foreground">tCO₂e</span>
               </p>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle>Distribuição por faixa do selo</CardTitle>
+        <Card className="lg:col-span-2 gap-4 py-4">
+          <CardHeader className="px-4">
+            <CardTitle className="text-sm">Distribuição por faixa do selo</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
+          <CardContent className="space-y-2.5 px-4">
             {distribuicaoFaixas.map((f) => (
               <div key={f.faixa} className="flex items-center gap-3">
                 <Badge variant={f.tone === "ativo" ? "success" : f.tone === "passivo" ? "warning" : "secondary"} className="w-10 justify-center">
                   {f.faixa}
                 </Badge>
-                <Progress value={(f.obras / maxFaixa) * 100} className="h-2 flex-1" />
-                <span className="w-6 text-right font-mono text-xs text-muted-foreground">{f.obras}</span>
+                <Progress value={(f.obras / maxFaixa) * 100} className="h-1.5 flex-1" />
+                <span className="w-6 text-right font-mono text-xs tabular-nums text-muted-foreground">{f.obras}</span>
               </div>
             ))}
           </CardContent>
         </Card>
       </div>
 
-      <Card className="mb-6">
-        <CardHeader>
-          <CardTitle>Intensidade líquida do setor por mês</CardTitle>
+      <Card className="mb-4 gap-3 py-4">
+        <CardHeader className="px-4">
+          <CardTitle className="text-sm">Intensidade líquida do setor por mês</CardTitle>
           <CardDescription>Dado real — cresce conforme novos inventários entram</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-4">
           {serieIntensidade.length > 1 ? (
             <IntensityTrendChart data={serieIntensidade} />
           ) : (
@@ -161,17 +204,17 @@ export default async function PainelPage() {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0">
+      <Card className="gap-3 py-4">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 px-4">
           <div>
-            <CardTitle>Mesa de análise</CardTitle>
+            <CardTitle className="text-sm">Mesa de análise</CardTitle>
             <CardDescription>Dossiês aguardando decisão da prefeitura</CardDescription>
           </div>
           <span className="font-mono text-[11px] text-muted-foreground">
             {mesaAnalise.length} na fila
           </span>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-4">
           <Table>
             <TableHeader>
               <TableRow>
@@ -185,13 +228,13 @@ export default async function PainelPage() {
             </TableHeader>
             <TableBody>
               {mesaAnalise.map((row) => (
-                <TableRow key={row.id}>
+                <TableRow key={row.id} className="hover:bg-muted/40">
                   <TableCell>
                     <div className="font-medium">{row.obra}</div>
                     <div className="font-mono text-[11px] text-muted-foreground">{row.alvara}</div>
                   </TableCell>
                   <TableCell className="text-muted-foreground">{row.construtora}</TableCell>
-                  <TableCell className="font-mono">{row.intensidade} kg/m²</TableCell>
+                  <TableCell className="font-mono tabular-nums">{row.intensidade} kg/m²</TableCell>
                   <TableCell>
                     <Badge variant={riscoVariant[row.risco]}>{row.risco}</Badge>
                   </TableCell>

@@ -93,19 +93,26 @@ export async function AppShell({
         </SidebarContent>
       </Sidebar>
       <SidebarInset>
-        <header className="flex h-14 shrink-0 items-center gap-2 border-b border-border bg-card px-4">
+        <header className="flex h-12 shrink-0 items-center gap-2 border-b border-border bg-card px-4">
           <SidebarTrigger />
           <Separator orientation="vertical" className="h-5" />
           <span className="font-mono text-[11px] uppercase tracking-wide text-muted-foreground">
             Prefeitura · Secretarias
           </span>
-          <div className="ml-auto flex items-center gap-3">
+          <div className="ml-auto flex items-center gap-4">
+            <span className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
+              </span>
+              ao vivo
+            </span>
             {user && perfil ? (
               <UserMenu nome={perfil.nome} email={user.email ?? ""} papel={perfil.papel} />
             ) : null}
           </div>
         </header>
-        <main className="flex-1 p-6 md:p-8">{children}</main>
+        <main className="flex-1 p-5 md:p-6">{children}</main>
       </SidebarInset>
     </SidebarProvider>
   );

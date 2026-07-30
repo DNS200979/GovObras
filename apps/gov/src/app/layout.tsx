@@ -20,7 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="pt-BR"
-      className={`${archivo.variable} ${sourceSerif.variable} ${plexMono.variable} antialiased`}
+      className={`dark ${archivo.variable} ${sourceSerif.variable} ${plexMono.variable} antialiased`}
     >
       <body>
         <TooltipProvider>{children}</TooltipProvider>

@@ -5,6 +5,7 @@ import {
   CalendarCheck,
   ClipboardCheck,
 } from "lucide-react";
+import { createServerSupabase } from "@carbonfree/database/server";
 import {
   Sidebar,
   SidebarContent,
@@ -20,6 +21,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
+import { UserMenu } from "@/components/user-menu";
 
 const nav = [
   { href: "/", label: "Painel", icon: LayoutDashboard },
@@ -28,15 +30,24 @@ const nav = [
   { href: "/requisitos", label: "Requisitos auditáveis", icon: ClipboardCheck },
 ];
 
-export function AppShell({
+export async function AppShell({
   active,
   children,
-  headerRight,
 }: {
   active: string;
   children: React.ReactNode;
-  headerRight?: React.ReactNode;
 }) {
+  const supabase = await createServerSupabase();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  let perfil: { nome: string; papel: string } | null = null;
+  if (user) {
+    const { data } = await supabase.from("perfis").select("nome, papel").eq("id", user.id).single();
+    perfil = data;
+  }
+
   return (
     <SidebarProvider>
       <Sidebar collapsible="icon">
@@ -86,7 +97,11 @@ export function AppShell({
           <span className="font-mono text-[11px] uppercase tracking-wide text-muted-foreground">
             Prefeitura · Secretarias
           </span>
-          <div className="ml-auto flex items-center gap-3">{headerRight}</div>
+          <div className="ml-auto flex items-center gap-3">
+            {user && perfil ? (
+              <UserMenu nome={perfil.nome} email={user.email ?? ""} papel={perfil.papel} />
+            ) : null}
+          </div>
         </header>
         <main className="flex-1 p-6 md:p-8">{children}</main>
       </SidebarInset>

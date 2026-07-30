@@ -47,13 +47,32 @@ tabelas + RLS (`packages/database/supabase/migrations/`), advisor de
 segurança do Supabase limpo, populado com dado de demonstração
 relacionalmente íntegro (`packages/database/scripts/seed.mjs`).
 
-Os dashboards de Gov e Obra já leem direto do banco real (`src/lib/
-queries.ts` em cada app) via `@carbonfree/database/admin` — um cliente
-service-role usado **temporariamente** porque ainda não há login; com RLS
-ativo, um usuário anônimo não vê nenhuma linha (verificado). Quando a
-autenticação existir, trocar essas leituras por `createServerSupabase()`
-(RLS por sessão real). Todas as rotas com dado real são `force-dynamic`
-(sem cache estático de build).
+**Gov** já tem autenticação real (ver seção abaixo) e lê tudo via
+`createServerSupabase()` — RLS por sessão de verdade, não bypass. **Obra**
+ainda usa `@carbonfree/database/admin` (service role) temporariamente,
+porque não tem login ainda — mesmo padrão que o Gov tinha antes. Todas as
+rotas com dado real são `force-dynamic` (sem cache estático de build).
+
+## Autenticação (Gov)
+
+Login por **magic link** (sem senha) via Supabase Auth — `shouldCreateUser:
+false`, então só e-mails com `perfis` pré-cadastrado conseguem entrar
+(fechado, não é signup público). Fluxo: `/login` → e-mail → link → `/auth/
+confirm` (Route Handler que troca o token por sessão) → cookies via
+`proxy.ts` (Next.js 16 — antigo `middleware.ts`; **tem que ficar dentro de
+`src/`**, não na raiz do app, senão o Next ignora o arquivo silenciosamente).
+
+RLS cobre o fluxo inteiro: `prefeitura_gestor`/`prefeitura_analista` só
+enxergam obras/inventários/fiscalizações do próprio `municipio_id`; a
+policy de `perfis` que lista fiscais para o select do agendamento é
+escopada do mesmo jeito. Testado de ponta a ponta (magic link real gerado
+via admin API → sessão estabelecida → dashboard com dado escopado).
+
+Criar um novo usuário da prefeitura:
+```bash
+NEXT_PUBLIC_SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... \
+  node packages/database/scripts/seed-prefeitura-user.mjs "email@prefeitura.gov.br" "Nome"
+```
 
 ```bash
 cd apps/gov  # ou apps/obra
@@ -92,12 +111,16 @@ npm start             # Expo Dev Tools — escaneie o QR no Expo Go
    gen:types` — nenhum dos dois disponível neste ambiente de execução.
 2. Trocar os ícones placeholder de `apps/obra/public/manifest.webmanifest`
    e `apps/fiscal/assets/` pela identidade visual definitiva.
-3. Autenticação (gov.br / ICP-Brasil para assinatura, e-mail+MFA para
-   perfis administrativos) — hoje as telas usam o cliente admin (service
-   role) porque não há sessão; ver nota em "Banco de dados" acima.
-4. `apps/obra` hoje é fixo numa única obra de demonstração (`ALV-2025-1042`
-   em `src/lib/queries.ts`) porque não há como saber "qual construtora
-   está logada" sem autenticação — resolve junto com o item 3.
+3. Levar a mesma autenticação pro **Obra** — hoje é fixo numa única obra
+   de demonstração (`ALV-2025-1042` em `src/lib/queries.ts`) porque não há
+   como saber "qual construtora está logada" sem sessão real.
+4. MFA obrigatório para perfis administrativos (citado no plano) — o login
+   atual é só magic link, sem segundo fator.
 5. Módulo de fiscalização de campo (autos, sanção, TAC) ainda não tem tela
    própria no Gov — hoje só o agendamento existe; recebimento dos autos
    enviados pelo app Fiscal é o próximo passo natural.
+6. Advisor do Supabase aponta ~25 warnings de performance (não segurança)
+   nas policies de RLS — `auth.<fn>()` deveria virar `(select auth.<fn>())`
+   e algumas tabelas têm policies permissivas duplicadas pra consolidar.
+   Não afeta corretude, só escala mal com muitas linhas; não é urgente
+   com o volume de dado atual.

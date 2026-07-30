@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createAdminClient } from "@carbonfree/database/admin";
+import { createServerSupabase } from "@carbonfree/database/server";
 
 export interface CriarVistoriaState {
   error?: string;
@@ -26,7 +26,7 @@ export async function criarVistoria(
     return { error: "Data inválida." };
   }
 
-  const db = createAdminClient();
+  const db = await createServerSupabase();
   const { error } = await db.from("fiscalizacoes").insert({
     obra_id: obraId,
     fiscal_id: fiscalId,
@@ -43,7 +43,7 @@ export async function criarVistoria(
 }
 
 export async function cancelarVistoria(id: string) {
-  const db = createAdminClient();
+  const db = await createServerSupabase();
   await db.from("fiscalizacoes").update({ status: "cancelada" }).eq("id", id);
   revalidatePath("/agendamento");
 }

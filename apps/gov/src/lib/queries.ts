@@ -1,9 +1,10 @@
-import { createAdminClient } from "@carbonfree/database/admin";
+import { createServerSupabase } from "@carbonfree/database/server";
 
 /**
- * Leituras server-side com service role (bypassa RLS) — ver nota em
- * @carbonfree/database/admin. Substituir por client com sessão quando o
- * login existir.
+ * Leituras com o cliente de sessão real — RLS aplica o escopo do
+ * município do usuário logado (ver proxy.ts e a policy "obras: prefeitura
+ * vê as do município"). Sem sessão, a página nem chega aqui (proxy.ts
+ * redireciona para /login antes).
  */
 
 const TIERS = ["AAA", "AA", "A", "B", "C"] as const;
@@ -30,7 +31,7 @@ function relativo(iso: string) {
 }
 
 async function obrasComInventarioAtual() {
-  const db = createAdminClient();
+  const db = await createServerSupabase();
 
   const { data: obras, error: obrasErr } = await db
     .from("obras")
@@ -73,7 +74,7 @@ async function obrasComInventarioAtual() {
 }
 
 export async function getPainelData() {
-  const db = createAdminClient();
+  const db = await createServerSupabase();
   const obras = await obrasComInventarioAtual();
 
   const { count: selosEmitidos } = await db.from("selos").select("*", { count: "exact", head: true });
@@ -166,7 +167,7 @@ export interface Fiscalizacao {
 }
 
 export async function getFiscalizacoes(): Promise<Fiscalizacao[]> {
-  const db = createAdminClient();
+  const db = await createServerSupabase();
   const { data, error } = await db
     .from("fiscalizacoes")
     .select("id, obra_id, agendado_para, status, obras(nome, construtoras(razao_social)), perfis(nome)")
@@ -189,14 +190,14 @@ export async function getFiscalizacoes(): Promise<Fiscalizacao[]> {
 }
 
 export async function getFiscais() {
-  const db = createAdminClient();
+  const db = await createServerSupabase();
   const { data, error } = await db.from("perfis").select("id, nome").eq("papel", "fiscal").order("nome");
   if (error) throw error;
   return data ?? [];
 }
 
 export async function getObrasParaSelect() {
-  const db = createAdminClient();
+  const db = await createServerSupabase();
   const { data, error } = await db
     .from("obras")
     .select("id, nome, alvara_numero")
@@ -216,7 +217,7 @@ export interface RequisitoAuditoria {
 }
 
 export async function getRequisitosAuditoria(): Promise<RequisitoAuditoria[]> {
-  const db = createAdminClient();
+  const db = await createServerSupabase();
   const { data, error } = await db
     .from("requisitos_auditoria")
     .select("id, natureza, codigo, requisito, unidade, evidencia_primaria, teste_verificacao")

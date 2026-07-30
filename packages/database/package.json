@@ -7,6 +7,7 @@
     ".": "./src/index.ts",
     "./server": "./src/server.ts",
     "./admin": "./src/admin.ts",
+    "./middleware": "./src/middleware.ts",
     "./types": "./src/types.ts"
   },
   "scripts": {
@@ -17,6 +18,8 @@
     "@supabase/supabase-js": "^2.48.0"
   },
   "devDependencies": {
-    "supabase": "^2.5.0"
+    "next": "^16.0.0",
+    "supabase": "^2.5.0",
+    "typescript": "^5.7.0"
   }
 }

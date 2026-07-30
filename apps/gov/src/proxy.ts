@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createMiddlewareSupabase } from "@carbonfree/database/middleware";
 
-const PUBLIC_PATHS = ["/login", "/auth/confirm"];
+const PUBLIC_PATHS = ["/login"];
 
 export async function proxy(request: NextRequest) {
   const { supabase, response } = createMiddlewareSupabase(request);

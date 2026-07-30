@@ -1,41 +1,27 @@
 "use server";
 
-import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import { createServerSupabase } from "@carbonfree/database/server";
 
-export interface EnviarLinkState {
+export interface LoginState {
   error?: string;
-  enviado?: boolean;
 }
 
-export async function enviarLink(
-  _prev: EnviarLinkState,
-  formData: FormData,
-): Promise<EnviarLinkState> {
+export async function entrar(_prev: LoginState, formData: FormData): Promise<LoginState> {
   const email = formData.get("email")?.toString().trim();
+  const password = formData.get("password")?.toString();
   const next = formData.get("next")?.toString() || "/";
 
-  if (!email) {
-    return { error: "Informe um e-mail." };
+  if (!email || !password) {
+    return { error: "Informe e-mail e senha." };
   }
 
   const supabase = await createServerSupabase();
-  const headerList = await headers();
-  const host = headerList.get("host") ?? "localhost:3000";
-  const protocol = headerList.get("x-forwarded-proto") ?? (host.startsWith("localhost") ? "http" : "https");
-  const origin = `${protocol}://${host}`;
-
-  const { error } = await supabase.auth.signInWithOtp({
-    email,
-    options: {
-      shouldCreateUser: false,
-      emailRedirectTo: `${origin}/auth/confirm?next=${encodeURIComponent(next)}`,
-    },
-  });
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
-    return { error: error.message };
+    return { error: "E-mail ou senha incorretos." };
   }
 
-  return { enviado: true };
+  redirect(next);
 }

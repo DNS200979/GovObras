@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { Archivo, IBM_Plex_Mono, Source_Serif_4 } from "next/font/google";
 import "./globals.css";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const archivo = Archivo({ variable: "--font-display", subsets: ["latin"] });
 const sourceSerif = Source_Serif_4({ variable: "--font-body", subsets: ["latin"] });
 const plexMono = IBM_Plex_Mono({
-  variable: "--font-mono",
+  variable: "--font-mono-src",
   subsets: ["latin"],
   weight: ["400", "500", "600"],
 });
@@ -21,7 +22,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       lang="pt-BR"
       className={`${archivo.variable} ${sourceSerif.variable} ${plexMono.variable} antialiased`}
     >
-      <body>{children}</body>
+      <body>
+        <TooltipProvider>{children}</TooltipProvider>
+      </body>
     </html>
   );
 }

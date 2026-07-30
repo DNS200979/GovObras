@@ -2,6 +2,7 @@
   "expo": {
     "name": "CarbonFree Fiscal",
     "slug": "carbonfree-fiscal",
+    "owner": "dns200979",
     "scheme": "carbonfreefiscal",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -15,14 +16,14 @@
       }
     },
     "android": {
+      "package": "dev.carbonfree.fiscal",
       "adaptiveIcon": {
         "backgroundColor": "#16232A",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false,
-      "permissions": ["CAMERA", "ACCESS_FINE_LOCATION"]
+      "predictiveBackGestureEnabled": false
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -42,6 +43,12 @@
           "locationWhenInUsePermission": "Usada para registrar a coordenada da vistoria no auto de constatação/infração."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "48656d50-603b-4ae1-a30c-8110558afea6"
+      }
+    }
   }
 }

@@ -15,9 +15,14 @@ apps/
 
 packages/
   design-tokens/  paleta, tipografia e tema Tailwind compartilhados (Gov + Obra)
-  ui/             design system compartilhado (AppShell, KpiTile, CarbonBalanceBar, TrendChart...)
+  ui/             design system compartilhado com Obra (AppShell, KpiTile, CarbonBalanceBar, TrendChart...)
   database/       schema Supabase (SQL + RLS) e cliente tipado
 ```
+
+`apps/gov` usa **shadcn/ui** (não o `packages/ui` compartilhado) — desktop-only por
+decisão do produto, com os tokens de cor mapeados para a marca CarbonFree
+(ardósia/verde/âmbar) em vez da paleta cinza padrão. `apps/obra` continua no
+design system artesanal de `packages/ui`.
 
 ## Decisões de arquitetura
 
@@ -66,6 +71,19 @@ cd apps/fiscal
 npm start             # Expo Dev Tools — escaneie o QR no Expo Go
 ```
 
+## Módulos do Gov
+
+- **Painel** (`/`) — KPIs, balanço de carbono municipal, distribuição por
+  faixa do selo, série histórica de intensidade e mesa de análise.
+- **Obras** (`/obras`) — cadastro licenciado com intensidade e risco.
+- **Agendamento** (`/agendamento`) — módulo real de programação de
+  vistorias (seção 06 do plano): calendário, criação de vistoria com
+  obra/fiscal/data via Server Action, gravando em `fiscalizacoes`.
+- **Requisitos auditáveis** (`/requisitos`) — catálogo das 19 linhas reais
+  das seções 5.1/5.2 do plano (o que é passivo, o que é ativo, evidência
+  primária e teste de verificação de cada um), na tabela
+  `requisitos_auditoria` (`packages/database/scripts/seed-requisitos.mjs`).
+
 ## Próximos passos
 
 1. Gerar os tipos do banco: requer Docker/Podman local (`supabase gen types
@@ -80,3 +98,6 @@ npm start             # Expo Dev Tools — escaneie o QR no Expo Go
 4. `apps/obra` hoje é fixo numa única obra de demonstração (`ALV-2025-1042`
    em `src/lib/queries.ts`) porque não há como saber "qual construtora
    está logada" sem autenticação — resolve junto com o item 3.
+5. Módulo de fiscalização de campo (autos, sanção, TAC) ainda não tem tela
+   própria no Gov — hoje só o agendamento existe; recebimento dos autos
+   enviados pelo app Fiscal é o próximo passo natural.

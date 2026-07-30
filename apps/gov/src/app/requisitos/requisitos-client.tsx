@@ -6,52 +6,44 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import type { RequisitoAuditoria } from "@/lib/queries";
 import { NovoRequisitoSheet } from "./novo-requisito-sheet";
 
 function Lista({ itens, natureza }: { itens: RequisitoAuditoria[]; natureza: "passivo" | "ativo" }) {
+  if (itens.length === 0) {
+    return <p className="py-8 text-center text-sm text-muted-foreground">Nenhum requisito encontrado.</p>;
+  }
+
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-24">Código</TableHead>
-          <TableHead className="w-64">Requisito</TableHead>
-          <TableHead className="w-28">Unidade</TableHead>
-          <TableHead className="w-72">Evidência primária</TableHead>
-          <TableHead>Teste de verificação</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {itens.map((r) => (
-          <TableRow key={r.id}>
-            <TableCell>
+    <div className="divide-y divide-border">
+      {itens.map((r) => (
+        <div key={r.id} className="grid gap-3 py-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+          <div className="min-w-0">
+            <div className="mb-1.5 flex flex-wrap items-center gap-2">
               <Badge variant={natureza === "passivo" ? "warning" : "success"} className="font-mono">
                 {r.codigo}
               </Badge>
-            </TableCell>
-            <TableCell className="font-medium">{r.requisito}</TableCell>
-            <TableCell className="font-mono text-muted-foreground">{r.unidade}</TableCell>
-            <TableCell className="text-muted-foreground">{r.evidenciaPrimaria}</TableCell>
-            <TableCell className="text-muted-foreground">{r.testeVerificacao}</TableCell>
-          </TableRow>
-        ))}
-        {itens.length === 0 && (
-          <TableRow>
-            <TableCell colSpan={5} className="py-8 text-center text-muted-foreground">
-              Nenhum requisito encontrado.
-            </TableCell>
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+              <span className="font-mono text-[11px] text-muted-foreground">{r.unidade}</span>
+            </div>
+            <p className="text-sm font-medium break-words">{r.requisito}</p>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div className="min-w-0">
+              <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+                Evidência primária
+              </p>
+              <p className="mt-1 text-sm break-words text-muted-foreground">{r.evidenciaPrimaria}</p>
+            </div>
+            <div className="min-w-0">
+              <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+                Teste de verificação
+              </p>
+              <p className="mt-1 text-sm break-words text-muted-foreground">{r.testeVerificacao}</p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }
 

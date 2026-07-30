@@ -53,6 +53,15 @@ ainda usa `@carbonfree/database/admin` (service role) temporariamente,
 porque não tem login ainda — mesmo padrão que o Gov tinha antes. Todas as
 rotas com dado real são `force-dynamic` (sem cache estático de build).
 
+**Extensões habilitadas**: `postgis` e `vector` no schema `extensions`,
+`pg_cron` (o Supabase força ele pro `pg_catalog`, independente do `WITH
+SCHEMA` pedido na migration). Nenhuma ainda em uso pelo app — habilitadas
+como infraestrutura pra quando fizer sentido: PostGIS pra virar as colunas
+`point` de `obras.coordenadas`/`mudas.coordenadas`/`fiscalizacoes.
+coordenada_execucao` em `geography(Point,4326)` de verdade, pg_cron pra
+tarefas agendadas (ex.: cobrar checkpoint de sobrevivência de muda em
+12/24/36 meses), pgvector se entrar busca semântica.
+
 ## Autenticação (Gov)
 
 Login por **magic link** (sem senha) via Supabase Auth — `shouldCreateUser:

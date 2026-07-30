@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/table";
 import { getConstrutoras, getObrasList } from "@/lib/queries";
 import { NovaObraSheet } from "./nova-obra-sheet";
+import { ObraRowActions } from "./obra-row-actions";
 
 export const dynamic = "force-dynamic";
 
@@ -60,6 +61,7 @@ export default async function ObrasPage() {
                 <TableHead>Intensidade</TableHead>
                 <TableHead>Risco</TableHead>
                 <TableHead>Local</TableHead>
+                <TableHead className="w-10" />
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -93,11 +95,30 @@ export default async function ObrasPage() {
                       <span className="text-muted-foreground">—</span>
                     )}
                   </TableCell>
+                  <TableCell>
+                    <ObraRowActions
+                      obraId={row.obraId}
+                      obraNome={row.nome}
+                      construtoras={construtoras}
+                      defaultValues={{
+                        alvaraNumero: row.alvara,
+                        nome: row.nome,
+                        tipologia: row.tipologia,
+                        areaM2: row.areaM2,
+                        fase: row.fase,
+                        cno: row.cno,
+                        inscricaoImobiliaria: row.inscricaoImobiliaria,
+                        latitude: row.latitude,
+                        longitude: row.longitude,
+                        construtoraId: row.construtoraId,
+                      }}
+                    />
+                  </TableCell>
                 </TableRow>
               ))}
               {obras.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={7} className="py-8 text-center text-muted-foreground">
+                  <TableCell colSpan={8} className="py-8 text-center text-muted-foreground">
                     Nenhuma obra cadastrada ainda.
                   </TableCell>
                 </TableRow>

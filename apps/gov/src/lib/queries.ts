@@ -36,7 +36,7 @@ async function obrasComInventarioAtual() {
   const { data: obras, error: obrasErr } = await db
     .from("obras")
     .select(
-      "id, nome, alvara_numero, tipologia, area_construida_m2, fase, latitude, longitude, construtoras(razao_social)",
+      "id, nome, alvara_numero, tipologia, area_construida_m2, fase, latitude, longitude, cno, inscricao_imobiliaria, construtora_id, construtoras(razao_social)",
     );
   if (obrasErr) throw obrasErr;
 
@@ -62,12 +62,15 @@ async function obrasComInventarioAtual() {
       obraId: obra.id,
       nome: obra.nome,
       alvara: obra.alvara_numero,
+      construtoraId: obra.construtora_id as string,
       construtora: (obra.construtoras as unknown as { razao_social: string } | null)?.razao_social ?? "—",
       tipologia: obra.tipologia,
       areaM2: obra.area_construida_m2,
       fase: obra.fase,
       latitude: obra.latitude as number | null,
       longitude: obra.longitude as number | null,
+      cno: obra.cno as string | null,
+      inscricaoImobiliaria: obra.inscricao_imobiliaria as string | null,
       passivo,
       ativo,
       intensidade,

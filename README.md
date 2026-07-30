@@ -114,8 +114,10 @@ npm start             # Expo Dev Tools — escaneie o QR no Expo Go
   faixa do selo, série histórica de intensidade e mesa de análise.
 - **Obras** (`/obras`) — cadastro licenciado com intensidade, risco e
   local (mapa, quando a obra tem coordenadas). "Nova obra" cadastra a
-  obra e, se preciso, a construtora na hora. Só cria — ainda não tem
-  editar/excluir (nem RLS de UPDATE/DELETE pra prefeitura em `obras`).
+  obra e, se preciso, a construtora na hora. Editar/excluir por linha
+  (menu "..."); excluir é restrito a `prefeitura_gestor` e só funciona em
+  obra "vazia" — as FKs (sem `ON DELETE CASCADE`) bloqueiam exclusão de
+  obra com inventário/fiscalização/selo vinculado, com mensagem amigável.
 - **Construtoras** (`/construtoras`) — listagem com contagem de obras por
   construtora e cadastro standalone.
 - **Agendamento** (`/agendamento`) — módulo real de programação de

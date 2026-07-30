@@ -1,5 +1,6 @@
 "use server";
 
+import { headers } from "next/headers";
 import { createServerSupabase } from "@carbonfree/database/server";
 
 export interface EnviarLinkState {
@@ -19,7 +20,10 @@ export async function enviarLink(
   }
 
   const supabase = await createServerSupabase();
-  const origin = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const headerList = await headers();
+  const host = headerList.get("host") ?? "localhost:3000";
+  const protocol = headerList.get("x-forwarded-proto") ?? (host.startsWith("localhost") ? "http" : "https");
+  const origin = `${protocol}://${host}`;
 
   const { error } = await supabase.auth.signInWithOtp({
     email,

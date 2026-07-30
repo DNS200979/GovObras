@@ -2,6 +2,7 @@ import Link from "next/link";
 import {
   LayoutDashboard,
   Building2,
+  Factory,
   CalendarCheck,
   ClipboardCheck,
 } from "lucide-react";
@@ -26,6 +27,7 @@ import { UserMenu } from "@/components/user-menu";
 const nav = [
   { href: "/", label: "Painel", icon: LayoutDashboard },
   { href: "/obras", label: "Obras", icon: Building2 },
+  { href: "/construtoras", label: "Construtoras", icon: Factory },
   { href: "/agendamento", label: "Agendamento", icon: CalendarCheck },
   { href: "/requisitos", label: "Requisitos auditáveis", icon: ClipboardCheck },
 ];

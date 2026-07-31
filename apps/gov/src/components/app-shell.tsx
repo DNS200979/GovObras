@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import {
   LayoutDashboard,
@@ -55,15 +56,19 @@ export async function AppShell({
       <Sidebar collapsible="icon">
         <SidebarHeader className="px-3 py-4">
           <div className="flex items-center gap-2">
-            <span className="rounded-sm bg-primary px-2 py-1 font-display text-[13px] font-black tracking-wide text-primary-foreground">
-              GOV
-            </span>
+            <Image
+              src="/mbv-logo.png"
+              alt="MBV"
+              width={28}
+              height={28}
+              className="shrink-0 rounded-sm"
+            />
             <div className="flex flex-col group-data-[collapsible=icon]:hidden">
               <span className="font-display text-[13px] font-bold leading-tight text-sidebar-foreground">
                 CarbonFree
               </span>
               <span className="font-mono text-[10px] leading-tight text-sidebar-foreground/60">
-                Florianópolis · SC
+                MBV · Movimento Brasil Verde
               </span>
             </div>
           </div>

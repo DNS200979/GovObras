@@ -93,14 +93,11 @@ export default async function PainelPage() {
 
   return (
     <AppShell active="/">
-      <div className="mb-6 flex items-baseline justify-between">
-        <div>
-          <p className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
-            Painel do programa
-          </p>
-          <h1 className="mt-1 font-display text-3xl font-extrabold tracking-tight">Visão geral</h1>
-        </div>
-        <p className="font-mono text-[11px] text-muted-foreground">Florianópolis · SC</p>
+      <div className="mb-6">
+        <p className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
+          Painel do programa
+        </p>
+        <h1 className="mt-1 font-display text-3xl font-extrabold tracking-tight">Visão geral</h1>
       </div>
 
       <div className="mb-4 grid grid-cols-2 gap-3 lg:grid-cols-4">

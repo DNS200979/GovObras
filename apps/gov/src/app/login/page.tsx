@@ -76,7 +76,7 @@ export default async function LoginPage({
           </div>
 
           <p className="mt-6 text-center font-mono text-[10.5px] tracking-wide text-muted-foreground">
-            CarbonFree Obras · DNS-TI Consultoria · Florianópolis, SC
+            CarbonFree Obras · MBV · Movimento Brasil Verde
           </p>
         </div>
       </div>

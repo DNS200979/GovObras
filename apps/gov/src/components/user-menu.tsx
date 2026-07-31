@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -44,13 +45,15 @@ export function UserMenu({ nome, email, papel }: { nome: string; email: string; 
         }
       />
       <DropdownMenuContent align="end">
-        <DropdownMenuLabel>
-          <div className="font-medium">{nome}</div>
-          <div className="font-mono text-[11px] font-normal text-muted-foreground">{email}</div>
-          <div className="mt-0.5 text-[11px] font-normal text-muted-foreground">
-            {papelLabel[papel] ?? papel}
-          </div>
-        </DropdownMenuLabel>
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>
+            <div className="font-medium">{nome}</div>
+            <div className="font-mono text-[11px] font-normal text-muted-foreground">{email}</div>
+            <div className="mt-0.5 text-[11px] font-normal text-muted-foreground">
+              {papelLabel[papel] ?? papel}
+            </div>
+          </DropdownMenuLabel>
+        </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <form action={sair}>
           <DropdownMenuItem

@@ -3,6 +3,7 @@ import { Card, CardEyebrow, CardTitle } from "@carbonfree/ui/card";
 import { CarbonBalanceBar } from "@carbonfree/ui/carbon-balance-bar";
 import { KpiTile } from "@carbonfree/ui/kpi-tile";
 import { TrendChart } from "@carbonfree/ui/trend-chart";
+import { HeaderUser } from "@/components/header-user";
 import { obraNav } from "@/lib/nav";
 import { getObraAtual } from "@/lib/queries";
 
@@ -26,6 +27,7 @@ export default async function PainelPage() {
       productName="CARBONFREE OBRA"
       productTag="Construtora · Engenharia"
       nav={obraNav("/")}
+      headerRight={<HeaderUser />}
     >
       <div className="mb-8">
         <CardEyebrow>

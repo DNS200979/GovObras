@@ -1,23 +1,23 @@
 import { createAdminClient } from "@carbonfree/database/admin";
+import { createServerSupabase } from "@carbonfree/database/server";
 
 /**
- * Leituras server-side com service role (bypassa RLS) — mesmo motivo do
- * apps/gov/src/lib/queries.ts.
- *
- * Sem autenticação ainda, não há como saber "qual construtora está
- * logada" — então esta camada foca numa única obra de demonstração
- * (Residencial Vista Verde). Quando o login existir, trocar por uma
- * consulta escopada por `construtora_id` da sessão.
+ * `getObraAtual` e as consultas de ESG usam o cliente da sessão — RLS
+ * escopa tudo por `construtora_id` do perfil logado (ver
+ * `perfis: obras: construtora vê as próprias` na migration 002). Uma
+ * construtora pode ter mais de uma obra; por ora o painel principal
+ * mostra a mais antiga como "obra em foco" — trocar por um seletor
+ * quando isso virar um problema real.
  */
-const ALVARA_EM_FOCO = "ALV-2025-1042";
 
 export async function getObraAtual() {
-  const db = createAdminClient();
+  const db = await createServerSupabase();
 
   const { data: obra, error: obraErr } = await db
     .from("obras")
     .select("id, nome, area_construida_m2, fase")
-    .eq("alvara_numero", ALVARA_EM_FOCO)
+    .order("created_at", { ascending: true })
+    .limit(1)
     .single();
   if (obraErr) throw obraErr;
 
@@ -83,4 +83,157 @@ export async function getAlternativasMaterial(): Promise<Alternativa[]> {
     custoAdicionalPorUnidade: Number(a.custo_adicional_por_unidade),
     tco2eEvitadoPorUnidade: Number(a.tco2e_evitado_por_unidade),
   }));
+}
+
+// ============================================================
+// ESG — projetos, documentos e processo de desconto fiscal
+// ============================================================
+
+export interface ObraResumo {
+  id: string;
+  nome: string;
+  alvaraNumero: string;
+}
+
+export async function listObrasConstrutora(): Promise<ObraResumo[]> {
+  const db = await createServerSupabase();
+  const { data, error } = await db.from("obras").select("id, nome, alvara_numero").order("nome");
+  if (error) throw error;
+  return (data ?? []).map((o) => ({ id: o.id, nome: o.nome, alvaraNumero: o.alvara_numero }));
+}
+
+const categoriaLabel: Record<string, string> = {
+  ambiental: "Ambiental",
+  social: "Social",
+  governanca: "Governança",
+};
+
+const statusLabel: Record<string, string> = {
+  rascunho: "Rascunho",
+  enviado: "Enviado",
+  em_analise: "Em análise",
+  aprovado: "Aprovado",
+  rejeitado: "Rejeitado",
+};
+
+export { categoriaLabel, statusLabel };
+
+export interface ProjetoEsgResumo {
+  id: string;
+  titulo: string;
+  categoria: string;
+  status: string;
+  obraId: string;
+  obraNome: string;
+  createdAt: string;
+}
+
+interface ProjetoEsgRow {
+  id: string;
+  titulo: string;
+  categoria: string;
+  status: string;
+  created_at: string;
+  obras: { id: string; nome: string } | null;
+}
+
+export async function listProjetosEsg(): Promise<ProjetoEsgResumo[]> {
+  const db = await createServerSupabase();
+  const { data, error } = await db
+    .from("projetos_esg")
+    .select("id, titulo, categoria, status, created_at, obras(id, nome)")
+    .order("created_at", { ascending: false })
+    .returns<ProjetoEsgRow[]>();
+  if (error) throw error;
+
+  return (data ?? []).map((p) => ({
+    id: p.id,
+    titulo: p.titulo,
+    categoria: p.categoria,
+    status: p.status,
+    obraId: p.obras?.id ?? "",
+    obraNome: p.obras?.nome ?? "",
+    createdAt: p.created_at,
+  }));
+}
+
+export interface ProjetoEsgDocumento {
+  id: string;
+  nomeArquivo: string;
+  storagePath: string;
+  tamanhoBytes: number | null;
+  createdAt: string;
+  url: string | null;
+}
+
+export interface ProjetoEsgDetalhe {
+  id: string;
+  titulo: string;
+  descricao: string;
+  categoria: string;
+  status: string;
+  obraId: string;
+  obraNome: string;
+  createdAt: string;
+  motivoDecisao: string | null;
+  documentos: ProjetoEsgDocumento[];
+}
+
+interface ProjetoEsgDetalheRow {
+  id: string;
+  titulo: string;
+  descricao: string;
+  categoria: string;
+  status: string;
+  created_at: string;
+  motivo_decisao: string | null;
+  obras: { id: string; nome: string } | null;
+  projeto_esg_documentos: {
+    id: string;
+    nome_arquivo: string;
+    storage_path: string;
+    tamanho_bytes: number | null;
+    created_at: string;
+  }[];
+}
+
+export async function getProjetoEsg(id: string): Promise<ProjetoEsgDetalhe | null> {
+  const db = await createServerSupabase();
+  const { data, error } = await db
+    .from("projetos_esg")
+    .select(
+      "id, titulo, descricao, categoria, status, created_at, motivo_decisao, obras(id, nome), projeto_esg_documentos(id, nome_arquivo, storage_path, tamanho_bytes, created_at)",
+    )
+    .eq("id", id)
+    .single<ProjetoEsgDetalheRow>();
+  if (error) return null;
+
+  const documentos = await Promise.all(
+    (data.projeto_esg_documentos ?? []).map(async (doc) => {
+      const { data: signed } = await db.storage
+        .from("projetos-esg-docs")
+        .createSignedUrl(doc.storage_path, 60 * 10);
+      return {
+        id: doc.id,
+        nomeArquivo: doc.nome_arquivo,
+        storagePath: doc.storage_path,
+        tamanhoBytes: doc.tamanho_bytes,
+        createdAt: doc.created_at,
+        url: signed?.signedUrl ?? null,
+      };
+    }),
+  );
+
+  return {
+    id: data.id,
+    titulo: data.titulo,
+    descricao: data.descricao,
+    categoria: data.categoria,
+    status: data.status,
+    obraId: data.obras?.id ?? "",
+    obraNome: data.obras?.nome ?? "",
+    createdAt: data.created_at,
+    motivoDecisao: data.motivo_decisao,
+    documentos,
+  };
 }

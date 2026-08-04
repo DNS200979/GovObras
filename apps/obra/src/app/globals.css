@@ -1,6 +1,10 @@
 @import "tailwindcss";
 @import "@carbonfree/design-tokens/theme.css";
 
+/* packages/ui vive fora da raiz de varredura automática do Tailwind v4 —
+   sem isto, classes só usadas lá (ex.: md:flex do AppShell) nunca são geradas. */
+@source "../../../../packages/ui/src/**/*.{ts,tsx}";
+
 @theme inline {
   --color-background: var(--color-concreto);
   --color-foreground: var(--color-texto);

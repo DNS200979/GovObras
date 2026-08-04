@@ -1,6 +1,7 @@
 import { AppShell } from "@carbonfree/ui/app-shell";
 import { Badge } from "@carbonfree/ui/badge";
 import { Card, CardEyebrow, CardTitle } from "@carbonfree/ui/card";
+import { HeaderUser } from "@/components/header-user";
 import { obraNav } from "@/lib/nav";
 import { getObraAtual } from "@/lib/queries";
 
@@ -24,6 +25,7 @@ export default async function DossiePage() {
       productName="CARBONFREE OBRA"
       productTag="Construtora · Engenharia"
       nav={obraNav("/dossie")}
+      headerRight={<HeaderUser />}
     >
       <CardEyebrow>{obra.nome}</CardEyebrow>
       <h1 className="mt-1 mb-6 font-display text-3xl font-extrabold tracking-tight text-ardosia">

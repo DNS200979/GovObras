@@ -7,6 +7,7 @@ export function obraNav(active: string): NavItem[] {
     { label: "Simulador de decisão", href: "/simulador" },
     { label: "Plano de compensação", href: "/#compensacao" },
     { label: "Dossiê e assinatura", href: "/dossie" },
+    { label: "Projetos ESG", href: "/esg" },
   ];
   return items.map((item) => ({ ...item, active: item.href === active }));
 }

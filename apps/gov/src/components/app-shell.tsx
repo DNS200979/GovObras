@@ -6,6 +6,7 @@ import {
   Factory,
   CalendarCheck,
   ClipboardCheck,
+  Leaf,
 } from "lucide-react";
 import { createServerSupabase } from "@carbonfree/database/server";
 import {
@@ -31,6 +32,7 @@ const nav = [
   { href: "/construtoras", label: "Construtoras", icon: Factory },
   { href: "/agendamento", label: "Agendamento", icon: CalendarCheck },
   { href: "/requisitos", label: "Requisitos auditáveis", icon: ClipboardCheck },
+  { href: "/esg", label: "Projetos ESG", icon: Leaf },
 ];
 
 export async function AppShell({

@@ -61,6 +61,11 @@ export default async function ProjetoEsgPage({ params }: { params: Promise<{ id:
             <p className="whitespace-pre-wrap text-[13.5px] leading-relaxed text-texto">
               {projeto.descricao}
             </p>
+            {projeto.requisito ? (
+              <p className="mt-3 border-t border-linha/60 pt-3 font-mono text-[11px] text-texto-fraco">
+                Requisito auditável: {projeto.requisito.codigo} — {projeto.requisito.requisito}
+              </p>
+            ) : null}
           </Card>
 
           <Card>

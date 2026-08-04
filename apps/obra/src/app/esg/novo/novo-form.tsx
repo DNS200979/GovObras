@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useRef, useState, useTransition } from "react";
-import type { ObraResumo } from "@/lib/queries";
+import type { ObraResumo, RequisitoResumo } from "@/lib/queries";
 
 const categorias = [
   { value: "ambiental", label: "Ambiental" },
@@ -10,7 +10,15 @@ const categorias = [
   { value: "governanca", label: "Governança" },
 ];
 
-export function NovoProjetoForm({ obras }: { obras: ObraResumo[] }) {
+const naturezaLabel: Record<string, string> = { passivo: "Passivo", ativo: "Ativo" };
+
+export function NovoProjetoForm({
+  obras,
+  requisitos,
+}: {
+  obras: ObraResumo[];
+  requisitos: RequisitoResumo[];
+}) {
   const formRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
   const [pending, startTransition] = useTransition();
@@ -77,6 +85,28 @@ export function NovoProjetoForm({ obras }: { obras: ObraResumo[] }) {
             </option>
           ))}
         </select>
+      </div>
+
+      <div className="grid gap-1.5">
+        <label htmlFor="requisito_id" className="font-display text-[12px] font-semibold text-texto">
+          Requisito auditável relacionado (opcional)
+        </label>
+        <select
+          id="requisito_id"
+          name="requisito_id"
+          defaultValue=""
+          className="rounded-sm border border-linha bg-papel px-3 py-2 text-[14px] text-texto outline-none focus:border-verde"
+        >
+          <option value="">Nenhum</option>
+          {requisitos.map((r) => (
+            <option key={r.id} value={r.id}>
+              {naturezaLabel[r.natureza]} · {r.codigo} — {r.requisito}
+            </option>
+          ))}
+        </select>
+        <p className="font-mono text-[10.5px] text-texto-fraco">
+          Ajuda a prefeitura a entender a qual item do checklist esse projeto se refere.
+        </p>
       </div>
 
       <div className="grid gap-1.5">

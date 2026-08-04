@@ -61,6 +61,7 @@ export default async function EsgPage() {
                     </div>
                     <p className="mt-1 font-mono text-[11px] text-texto-fraco">
                       {p.obraNome} · {new Date(p.createdAt).toLocaleDateString("pt-BR")}
+                      {p.requisitoCodigo ? ` · requisito ${p.requisitoCodigo}` : ""}
                     </p>
                   </div>
                   <Badge tone={statusTone[p.status] ?? "default"}>

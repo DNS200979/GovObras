@@ -51,6 +51,11 @@ export default async function ProjetoEsgGovPage({ params }: { params: Promise<{ 
             <CardContent>
               <Badge variant="outline">{categoriaEsgLabel[projeto.categoria] ?? projeto.categoria}</Badge>
               <p className="mt-4 text-sm whitespace-pre-wrap">{projeto.descricao}</p>
+              {projeto.requisito ? (
+                <p className="mt-3 border-t border-border pt-3 font-mono text-[11px] text-muted-foreground">
+                  Requisito auditável: {projeto.requisito.codigo} — {projeto.requisito.requisito}
+                </p>
+              ) : null}
             </CardContent>
           </Card>
 

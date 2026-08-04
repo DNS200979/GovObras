@@ -310,6 +310,7 @@ export interface ProjetoEsgResumo {
   construtora: string;
   enviadoEm: string | null;
   createdAt: string;
+  requisitoCodigo: string | null;
 }
 
 interface ProjetoEsgListRow {
@@ -320,6 +321,7 @@ interface ProjetoEsgListRow {
   enviado_em: string | null;
   created_at: string;
   obras: { nome: string; construtoras: { razao_social: string } | null } | null;
+  requisitos_auditoria: { codigo: string } | null;
 }
 
 export async function listProjetosEsg(): Promise<ProjetoEsgResumo[]> {
@@ -327,7 +329,7 @@ export async function listProjetosEsg(): Promise<ProjetoEsgResumo[]> {
   const { data, error } = await db
     .from("projetos_esg")
     .select(
-      "id, titulo, categoria, status, enviado_em, created_at, obras(nome, construtoras(razao_social))",
+      "id, titulo, categoria, status, enviado_em, created_at, obras(nome, construtoras(razao_social)), requisitos_auditoria(codigo)",
     )
     .neq("status", "rascunho")
     .order("enviado_em", { ascending: false, nullsFirst: false })
@@ -343,6 +345,7 @@ export async function listProjetosEsg(): Promise<ProjetoEsgResumo[]> {
     construtora: p.obras?.construtoras?.razao_social ?? "—",
     enviadoEm: p.enviado_em,
     createdAt: p.created_at,
+    requisitoCodigo: p.requisitos_auditoria?.codigo ?? null,
   }));
 }
 
@@ -366,6 +369,7 @@ export interface ProjetoEsgDetalheGov {
   enviadoEm: string | null;
   decidoEm: string | null;
   motivoDecisao: string | null;
+  requisito: { codigo: string; requisito: string; natureza: string } | null;
   documentos: ProjetoEsgDocumentoGov[];
 }
 
@@ -379,6 +383,7 @@ interface ProjetoEsgDetalheRow {
   decidido_em: string | null;
   motivo_decisao: string | null;
   obras: { nome: string; alvara_numero: string; construtoras: { razao_social: string } | null } | null;
+  requisitos_auditoria: { codigo: string; requisito: string; natureza: string } | null;
   projeto_esg_documentos: {
     id: string;
     nome_arquivo: string;
@@ -393,7 +398,7 @@ export async function getProjetoEsgGov(id: string): Promise<ProjetoEsgDetalheGov
   const { data, error } = await db
     .from("projetos_esg")
     .select(
-      "id, titulo, descricao, categoria, status, enviado_em, decidido_em, motivo_decisao, obras(nome, alvara_numero, construtoras(razao_social)), projeto_esg_documentos(id, nome_arquivo, storage_path, tamanho_bytes, created_at)",
+      "id, titulo, descricao, categoria, status, enviado_em, decidido_em, motivo_decisao, obras(nome, alvara_numero, construtoras(razao_social)), requisitos_auditoria(codigo, requisito, natureza), projeto_esg_documentos(id, nome_arquivo, storage_path, tamanho_bytes, created_at)",
     )
     .eq("id", id)
     .single<ProjetoEsgDetalheRow>();
@@ -426,6 +431,7 @@ export async function getProjetoEsgGov(id: string): Promise<ProjetoEsgDetalheGov
     enviadoEm: data.enviado_em,
     decidoEm: data.decidido_em,
     motivoDecisao: data.motivo_decisao,
+    requisito: data.requisitos_auditoria,
     documentos,
   };
 }

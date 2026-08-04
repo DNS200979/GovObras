@@ -102,6 +102,30 @@ export async function listObrasConstrutora(): Promise<ObraResumo[]> {
   return (data ?? []).map((o) => ({ id: o.id, nome: o.nome, alvaraNumero: o.alvara_numero }));
 }
 
+export interface RequisitoResumo {
+  id: string;
+  codigo: string;
+  requisito: string;
+  natureza: "passivo" | "ativo";
+}
+
+/** Catálogo cadastrado pela prefeitura em "Requisitos auditáveis" — leitura liberada pra qualquer autenticado. */
+export async function listRequisitosAuditoria(): Promise<RequisitoResumo[]> {
+  const db = await createServerSupabase();
+  const { data, error } = await db
+    .from("requisitos_auditoria")
+    .select("id, codigo, requisito, natureza")
+    .order("natureza")
+    .order("ordem");
+  if (error) throw error;
+  return (data ?? []).map((r) => ({
+    id: r.id,
+    codigo: r.codigo,
+    requisito: r.requisito,
+    natureza: r.natureza,
+  }));
+}
+
 const categoriaLabel: Record<string, string> = {
   ambiental: "Ambiental",
   social: "Social",
@@ -126,6 +150,7 @@ export interface ProjetoEsgResumo {
   obraId: string;
   obraNome: string;
   createdAt: string;
+  requisitoCodigo: string | null;
 }
 
 interface ProjetoEsgRow {
@@ -135,13 +160,14 @@ interface ProjetoEsgRow {
   status: string;
   created_at: string;
   obras: { id: string; nome: string } | null;
+  requisitos_auditoria: { codigo: string } | null;
 }
 
 export async function listProjetosEsg(): Promise<ProjetoEsgResumo[]> {
   const db = await createServerSupabase();
   const { data, error } = await db
     .from("projetos_esg")
-    .select("id, titulo, categoria, status, created_at, obras(id, nome)")
+    .select("id, titulo, categoria, status, created_at, obras(id, nome), requisitos_auditoria(codigo)")
     .order("created_at", { ascending: false })
     .returns<ProjetoEsgRow[]>();
   if (error) throw error;
@@ -154,6 +180,7 @@ export async function listProjetosEsg(): Promise<ProjetoEsgResumo[]> {
     obraId: p.obras?.id ?? "",
     obraNome: p.obras?.nome ?? "",
     createdAt: p.created_at,
+    requisitoCodigo: p.requisitos_auditoria?.codigo ?? null,
   }));
 }
 
@@ -176,6 +203,7 @@ export interface ProjetoEsgDetalhe {
   obraNome: string;
   createdAt: string;
   motivoDecisao: string | null;
+  requisito: { codigo: string; requisito: string } | null;
   documentos: ProjetoEsgDocumento[];
 }
 
@@ -188,6 +216,7 @@ interface ProjetoEsgDetalheRow {
   created_at: string;
   motivo_decisao: string | null;
   obras: { id: string; nome: string } | null;
+  requisitos_auditoria: { codigo: string; requisito: string } | null;
   projeto_esg_documentos: {
     id: string;
     nome_arquivo: string;
@@ -202,7 +231,7 @@ export async function getProjetoEsg(id: string): Promise<ProjetoEsgDetalhe | nul
   const { data, error } = await db
     .from("projetos_esg")
     .select(
-      "id, titulo, descricao, categoria, status, created_at, motivo_decisao, obras(id, nome), projeto_esg_documentos(id, nome_arquivo, storage_path, tamanho_bytes, created_at)",
+      "id, titulo, descricao, categoria, status, created_at, motivo_decisao, obras(id, nome), requisitos_auditoria(codigo, requisito), projeto_esg_documentos(id, nome_arquivo, storage_path, tamanho_bytes, created_at)",
     )
     .eq("id", id)
     .single<ProjetoEsgDetalheRow>();
@@ -234,6 +263,7 @@ export async function getProjetoEsg(id: string): Promise<ProjetoEsgDetalhe | nul
     obraNome: data.obras?.nome ?? "",
     createdAt: data.created_at,
     motivoDecisao: data.motivo_decisao,
+    requisito: data.requisitos_auditoria,
     documentos,
   };
 }

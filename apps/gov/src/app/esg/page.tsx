@@ -47,6 +47,7 @@ export default async function EsgGovPage() {
                 <TableHead>Obra</TableHead>
                 <TableHead>Construtora</TableHead>
                 <TableHead>Categoria</TableHead>
+                <TableHead>Requisito</TableHead>
                 <TableHead>Enviado</TableHead>
                 <TableHead>Status</TableHead>
               </TableRow>
@@ -65,6 +66,9 @@ export default async function EsgGovPage() {
                     <Badge variant="outline">{categoriaEsgLabel[p.categoria] ?? p.categoria}</Badge>
                   </TableCell>
                   <TableCell className="font-mono text-muted-foreground">
+                    {p.requisitoCodigo ?? "—"}
+                  </TableCell>
+                  <TableCell className="font-mono text-muted-foreground">
                     {p.enviadoEm ? new Date(p.enviadoEm).toLocaleDateString("pt-BR") : "—"}
                   </TableCell>
                   <TableCell>
@@ -76,7 +80,7 @@ export default async function EsgGovPage() {
               ))}
               {projetos.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={6} className="py-8 text-center text-muted-foreground">
+                  <TableCell colSpan={7} className="py-8 text-center text-muted-foreground">
                     Nenhum projeto ESG enviado ainda.
                   </TableCell>
                 </TableRow>

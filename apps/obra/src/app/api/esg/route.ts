@@ -14,6 +14,7 @@ export async function POST(request: Request) {
   const titulo = formData.get("titulo")?.toString().trim();
   const descricao = formData.get("descricao")?.toString().trim();
   const categoria = formData.get("categoria")?.toString();
+  const requisitoId = formData.get("requisito_id")?.toString() || null;
 
   if (!obraId || !titulo || !descricao || !categoria) {
     return NextResponse.json({ error: "Preencha todos os campos." }, { status: 400 });
@@ -27,6 +28,7 @@ export async function POST(request: Request) {
       titulo,
       descricao,
       categoria,
+      requisito_id: requisitoId,
       criado_por: sessao.userId,
     })
     .select("id")

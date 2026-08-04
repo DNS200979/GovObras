@@ -2,13 +2,13 @@ import { AppShell } from "@carbonfree/ui/app-shell";
 import { Card, CardEyebrow } from "@carbonfree/ui/card";
 import { HeaderUser } from "@/components/header-user";
 import { obraNav } from "@/lib/nav";
-import { listObrasConstrutora } from "@/lib/queries";
+import { listObrasConstrutora, listRequisitosAuditoria } from "@/lib/queries";
 import { NovoProjetoForm } from "./novo-form";
 
 export const dynamic = "force-dynamic";
 
 export default async function NovoProjetoEsgPage() {
-  const obras = await listObrasConstrutora();
+  const [obras, requisitos] = await Promise.all([listObrasConstrutora(), listRequisitosAuditoria()]);
 
   return (
     <AppShell
@@ -29,7 +29,7 @@ export default async function NovoProjetoEsgPage() {
             prefeitura antes de enviar um projeto ESG.
           </p>
         ) : (
-          <NovoProjetoForm obras={obras} />
+          <NovoProjetoForm obras={obras} requisitos={requisitos} />
         )}
       </Card>
     </AppShell>

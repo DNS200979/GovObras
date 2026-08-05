@@ -3,6 +3,12 @@ import { createMiddlewareSupabase } from "@carbonfree/database/middleware";
 
 const PUBLIC_PATHS = ["/login"];
 
+/**
+ * Papéis que podem operar o CarbonFree Obra — espelha o gate do Gov:
+ * cada app só aceita o seu próprio tipo de conta.
+ */
+const PAPEIS_PERMITIDOS = ["construtora_lancador", "construtora_rt", "admin_plataforma"];
+
 export async function proxy(request: NextRequest) {
   const { supabase, response } = createMiddlewareSupabase(request);
 
@@ -19,11 +25,30 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  if (user && request.nextUrl.pathname === "/login") {
-    const url = request.nextUrl.clone();
-    url.pathname = "/";
-    url.search = "";
-    return NextResponse.redirect(url);
+  if (user) {
+    const { data: perfil } = await supabase.from("perfis").select("papel").eq("id", user.id).single();
+
+    if (!perfil || !PAPEIS_PERMITIDOS.includes(perfil.papel)) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/login";
+      url.search = "";
+      url.searchParams.set("erro", "papel");
+      const redirecionamento = NextResponse.redirect(url);
+      // supabase.auth.signOut() escreveria os cookies limpos no `response`
+      // interno do createMiddlewareSupabase — que é descartado ao retornar
+      // outra resposta. Limpar aqui é o que de fato encerra a sessão.
+      for (const cookie of request.cookies.getAll()) {
+        if (cookie.name.startsWith("sb-")) redirecionamento.cookies.delete(cookie.name);
+      }
+      return redirecionamento;
+    }
+
+    if (request.nextUrl.pathname === "/login") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/";
+      url.search = "";
+      return NextResponse.redirect(url);
+    }
   }
 
   return response;

@@ -7,6 +7,9 @@ export interface LoginState {
   error?: string;
 }
 
+/** Espelha PAPEIS_PERMITIDOS do proxy.ts — aqui só para dar a mensagem certa na hora do login. */
+const PAPEIS_PERMITIDOS = ["prefeitura_analista", "prefeitura_gestor", "admin_plataforma"];
+
 export async function entrar(_prev: LoginState, formData: FormData): Promise<LoginState> {
   const email = formData.get("email")?.toString().trim();
   const password = formData.get("password")?.toString();
@@ -17,10 +20,19 @@ export async function entrar(_prev: LoginState, formData: FormData): Promise<Log
   }
 
   const supabase = await createServerSupabase();
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
-  if (error) {
+  if (error || !data.user) {
     return { error: "E-mail ou senha incorretos." };
+  }
+
+  const { data: perfil } = await supabase.from("perfis").select("papel").eq("id", data.user.id).single();
+
+  if (!perfil || !PAPEIS_PERMITIDOS.includes(perfil.papel)) {
+    await supabase.auth.signOut();
+    return {
+      error: "Esta conta não é da prefeitura. Contas de construtora acessam o CarbonFree Obra.",
+    };
   }
 
   redirect(next);

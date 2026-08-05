@@ -4,9 +4,9 @@ import { LoginForm } from "./login-form";
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ next?: string }>;
+  searchParams: Promise<{ next?: string; erro?: string }>;
 }) {
-  const { next } = await searchParams;
+  const { next, erro } = await searchParams;
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-concreto p-6">
@@ -30,6 +30,11 @@ export default async function LoginPage({
           <h2 className="mb-6 font-display text-2xl font-extrabold tracking-tight text-ardosia">
             Entrar no painel
           </h2>
+          {erro === "papel" ? (
+            <p className="mb-4 rounded-sm border border-ambar/40 bg-ambar/10 px-3 py-2 text-[13px] text-ambar">
+              Esta conta não é de construtora. Contas da prefeitura acessam o CarbonFree Gov.
+            </p>
+          ) : null}
           <LoginForm next={next ?? "/"} />
         </div>
 

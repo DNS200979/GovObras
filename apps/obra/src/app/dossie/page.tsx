@@ -10,14 +10,17 @@ const RANK: Record<string, number> = { rascunho: 0, protocolado: 1, em_analise: 
 export const dynamic = "force-dynamic";
 
 export default async function DossiePage() {
-  const { obra, statusInventarioAtual } = await getObraAtual();
+  const { obra, statusInventarioAtual, temInventario } = await getObraAtual();
   const rank = RANK[statusInventarioAtual] ?? 0;
 
   const etapas = [
-    { nome: "Inventário ISO 14064-1 gerado", concluida: rank >= 0 },
-    { nome: "Assinatura do responsável técnico (gov.br)", concluida: rank >= 1 },
-    { nome: "Protocolo na prefeitura", concluida: rank >= 2 },
-    { nome: "Homologação e emissão do selo", concluida: statusInventarioAtual === "homologado" },
+    { nome: "Inventário ISO 14064-1 gerado", concluida: temInventario },
+    { nome: "Assinatura do responsável técnico (gov.br)", concluida: temInventario && rank >= 1 },
+    { nome: "Protocolo na prefeitura", concluida: temInventario && rank >= 2 },
+    {
+      nome: "Homologação e emissão do selo",
+      concluida: temInventario && statusInventarioAtual === "homologado",
+    },
   ];
 
   return (

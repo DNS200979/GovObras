@@ -53,6 +53,7 @@ export async function getObraAtual() {
     },
     balanco: { passivo: atual?.passivo ?? 0, ativo: atual?.ativo ?? 0 },
     statusInventarioAtual: atual?.status ?? "rascunho",
+    temInventario: versoes.length > 0,
     projecaoFechamento: versoes.map((v) => ({ fase: v.label, intensidade: v.intensidade })),
   };
 }

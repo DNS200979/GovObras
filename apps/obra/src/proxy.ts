@@ -45,7 +45,7 @@ export async function proxy(request: NextRequest) {
 
     if (request.nextUrl.pathname === "/login") {
       const url = request.nextUrl.clone();
-      url.pathname = "/";
+      url.pathname = "/esg";
       url.search = "";
       return NextResponse.redirect(url);
     }

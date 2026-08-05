@@ -25,3 +25,7 @@ packages/database/supabase/.temp/
 
 # os/editor
 .DS_Store
+
+# prints de tela usados em depuração
+/erro*.png
+/network_erro*.png

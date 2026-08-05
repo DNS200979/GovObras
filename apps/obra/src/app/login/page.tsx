@@ -15,7 +15,7 @@ export default async function LoginPage({
           <Image src="/mbv-logo.png" alt="MBV" width={32} height={32} className="rounded-sm" />
           <div>
             <div className="font-display text-[14px] font-black tracking-wide text-texto">
-              CarbonFree Obra
+              MBV Construtoras
             </div>
             <div className="font-mono text-[10px] uppercase tracking-wide text-texto-fraco">
               MBV · Movimento Brasil Verde
@@ -40,7 +40,7 @@ export default async function LoginPage({
         </div>
 
         <p className="mt-6 text-center font-mono text-[10.5px] tracking-wide text-texto-fraco">
-          CarbonFree Obras · Construtoras e profissionais independentes
+          MBV · Movimento Brasil Verde · Construtoras e profissionais independentes
         </p>
       </div>
     </div>

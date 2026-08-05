@@ -1,7 +1,5 @@
-import { AppShell } from "@carbonfree/ui/app-shell";
+import { ObraShell } from "@/components/obra-shell";
 import { Card, CardEyebrow } from "@carbonfree/ui/card";
-import { HeaderActions } from "@/components/header-actions";
-import { obraNav } from "@/lib/nav";
 import { listMunicipios } from "@/lib/queries";
 import { NovaObraForm } from "./nova-obra-form";
 
@@ -11,12 +9,7 @@ export default async function NovaObraPage() {
   const municipios = await listMunicipios();
 
   return (
-    <AppShell
-      productName="CARBONFREE OBRA"
-      productTag="Construtora · Engenharia"
-      nav={obraNav("/obras")}
-      headerRight={<HeaderActions />}
-    >
+    <ObraShell active="/obras">
       <CardEyebrow>Obras · novo cadastro</CardEyebrow>
       <h1 className="mt-1 mb-1 font-display text-3xl font-extrabold tracking-tight text-texto">
         Cadastrar obra
@@ -35,6 +28,6 @@ export default async function NovaObraPage() {
           <NovaObraForm municipios={municipios} />
         )}
       </Card>
-    </AppShell>
+    </ObraShell>
   );
 }

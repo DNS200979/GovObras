@@ -11,8 +11,8 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CarbonFree Obra",
-  description: "Escrituração do balanço de carbono da obra.",
+  title: "MBV Construtoras",
+  description: "Documentação ESG, obras e balanço de carbono da construtora.",
   manifest: "/manifest.webmanifest",
 };
 

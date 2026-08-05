@@ -1,10 +1,8 @@
-import { AppShell } from "@carbonfree/ui/app-shell";
+import { ObraShell } from "@/components/obra-shell";
 import { Card, CardEyebrow, CardTitle } from "@carbonfree/ui/card";
 import { CarbonBalanceBar } from "@carbonfree/ui/carbon-balance-bar";
 import { KpiTile } from "@carbonfree/ui/kpi-tile";
 import { TrendChart } from "@carbonfree/ui/trend-chart";
-import { HeaderActions } from "@/components/header-actions";
-import { obraNav } from "@/lib/nav";
 import { getObraAtual } from "@/lib/queries";
 
 const faseLabel: Record<string, string> = {
@@ -23,12 +21,7 @@ export default async function PainelPage() {
   const intensidadeAtual = atual?.intensidade ?? 0;
 
   return (
-    <AppShell
-      productName="CARBONFREE OBRA"
-      productTag="Construtora · Engenharia"
-      nav={obraNav("/painel")}
-      headerRight={<HeaderActions />}
-    >
+    <ObraShell active="/painel">
       <div className="mb-8">
         <CardEyebrow>
           {faseLabel[obra.fase] ?? obra.fase} · {obra.areaM2.toLocaleString("pt-BR")} m²
@@ -90,6 +83,6 @@ export default async function PainelPage() {
           Ir para o simulador
         </a>
       </Card>
-    </AppShell>
+    </ObraShell>
   );
 }

@@ -1,9 +1,7 @@
 import Link from "next/link";
-import { AppShell } from "@carbonfree/ui/app-shell";
 import { Badge } from "@carbonfree/ui/badge";
+import { ObraShell } from "@/components/obra-shell";
 import { Card, CardEyebrow } from "@carbonfree/ui/card";
-import { HeaderActions } from "@/components/header-actions";
-import { obraNav } from "@/lib/nav";
 import { listObras } from "@/lib/queries";
 import { tipoDocumentoLabel } from "@/lib/documentos";
 
@@ -21,12 +19,7 @@ export default async function ObrasPage() {
   const obras = await listObras();
 
   return (
-    <AppShell
-      productName="CARBONFREE OBRA"
-      productTag="Construtora · Engenharia"
-      nav={obraNav("/obras")}
-      headerRight={<HeaderActions />}
-    >
+    <ObraShell active="/obras">
       <div className="mb-6 flex items-center justify-between gap-4">
         <div>
           <CardEyebrow>Cadastro · alvará e documentação</CardEyebrow>
@@ -84,6 +77,6 @@ export default async function ObrasPage() {
           ))}
         </div>
       )}
-    </AppShell>
+    </ObraShell>
   );
 }

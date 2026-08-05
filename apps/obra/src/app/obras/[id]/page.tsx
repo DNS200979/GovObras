@@ -1,10 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { AppShell } from "@carbonfree/ui/app-shell";
 import { Badge } from "@carbonfree/ui/badge";
+import { ObraShell } from "@/components/obra-shell";
 import { Card, CardEyebrow, CardTitle } from "@carbonfree/ui/card";
-import { HeaderActions } from "@/components/header-actions";
-import { obraNav } from "@/lib/nav";
 import { getObra } from "@/lib/queries";
 import { tipoDocumentoLabel } from "@/lib/documentos";
 import { RemoverDocumentoObra, UploadDocumentoObra } from "./documentos";
@@ -43,12 +41,7 @@ export default async function ObraPage({ params }: { params: Promise<{ id: strin
   const temCoordenada = obra.latitude !== null && obra.longitude !== null;
 
   return (
-    <AppShell
-      productName="CARBONFREE OBRA"
-      productTag="Construtora · Engenharia"
-      nav={obraNav("/obras")}
-      headerRight={<HeaderActions />}
-    >
+    <ObraShell active="/obras">
       <div className="mb-6">
         <Link href="/obras" className="font-mono text-[11px] text-texto-fraco hover:text-verde">
           ← Obras
@@ -159,6 +152,6 @@ export default async function ObraPage({ params }: { params: Promise<{ id: strin
           </Card>
         </div>
       </div>
-    </AppShell>
+    </ObraShell>
   );
 }

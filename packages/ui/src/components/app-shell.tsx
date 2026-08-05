@@ -11,22 +11,37 @@ export interface NavItem {
 interface AppShellProps {
   productName: string;
   productTag: string;
+  /** Marca opcional ao lado do nome — o app passa o próprio <Image>, para
+      não amarrar este pacote compartilhado ao next/image. */
+  logo?: ReactNode;
   nav: NavItem[];
   children: ReactNode;
   headerRight?: ReactNode;
 }
 
 /** Casca de aplicação padrão: sidebar de navegação + área de conteúdo. */
-export function AppShell({ productName, productTag, nav, children, headerRight }: AppShellProps) {
+export function AppShell({
+  productName,
+  productTag,
+  logo,
+  nav,
+  children,
+  headerRight,
+}: AppShellProps) {
   return (
     <div className="flex min-h-screen bg-concreto text-texto">
       {/* A sidebar é escura nos dois temas, então suas cores de texto são fixas:
           tokens como `papel`/`linha-forte` invertem no tema escuro e deixariam
           o item ativo ilegível (texto escuro sobre fundo escuro). */}
       <aside className="hidden w-60 shrink-0 flex-col border-r border-linha bg-ardosia px-4 py-6 text-[#f8f9f6] md:flex">
+        {/* Nome ao lado do logo e etiqueta em linha própria: com nomes mais
+            longos a etiqueta quebrava e desalinhava o conjunto. */}
         <div className="mb-8">
-          <div className="font-display text-[13px] font-black tracking-wide">
-            <span className="rounded-sm bg-verde px-2 py-1 text-[#0e1619]">{productName}</span>
+          <div className="flex items-center gap-2">
+            {logo}
+            <div className="font-display text-[13px] font-black tracking-wide text-[#f8f9f6]">
+              {productName}
+            </div>
           </div>
           <div className="mt-2 font-mono text-[10px] uppercase tracking-[0.12em] text-[#9aa69c]">
             {productTag}

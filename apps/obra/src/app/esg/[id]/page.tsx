@@ -1,9 +1,7 @@
 import { notFound } from "next/navigation";
-import { AppShell } from "@carbonfree/ui/app-shell";
 import { Badge } from "@carbonfree/ui/badge";
+import { ObraShell } from "@/components/obra-shell";
 import { Card, CardEyebrow, CardTitle } from "@carbonfree/ui/card";
-import { HeaderActions } from "@/components/header-actions";
-import { obraNav } from "@/lib/nav";
 import { categoriaLabel, getProjetoEsg, statusLabel } from "@/lib/queries";
 import { EnviarParaAnaliseButton, ExcluirRascunhoButton, RemoverDocumentoButton } from "./acoes";
 import { UploadDocumentoForm } from "./upload-form";
@@ -34,12 +32,7 @@ export default async function ProjetoEsgPage({ params }: { params: Promise<{ id:
   const podeAnexar = projeto.status === "rascunho" || projeto.status === "enviado";
 
   return (
-    <AppShell
-      productName="CARBONFREE OBRA"
-      productTag="Construtora · Engenharia"
-      nav={obraNav("/esg")}
-      headerRight={<HeaderActions />}
-    >
+    <ObraShell active="/esg">
       <div className="mb-6 flex items-start justify-between gap-4">
         <div>
           <CardEyebrow>
@@ -149,6 +142,6 @@ export default async function ProjetoEsgPage({ params }: { params: Promise<{ id:
           </Card>
         </div>
       </div>
-    </AppShell>
+    </ObraShell>
   );
 }

@@ -1,10 +1,16 @@
 {
-  "name": "CarbonFree Obra",
-  "short_name": "CF Obra",
-  "description": "Escrituração do balanço de carbono da obra.",
+  "name": "MBV Construtoras",
+  "short_name": "MBV Construtoras",
+  "description": "Documentação ESG, obras e balanço de carbono da construtora.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#16232A",
   "theme_color": "#16232A",
-  "icons": []
+  "icons": [
+    {
+      "src": "/mbv-logo.png",
+      "sizes": "168x185",
+      "type": "image/png"
+    }
+  ]
 }

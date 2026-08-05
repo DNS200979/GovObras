@@ -1,8 +1,6 @@
-import { AppShell } from "@carbonfree/ui/app-shell";
 import { Badge } from "@carbonfree/ui/badge";
+import { ObraShell } from "@/components/obra-shell";
 import { Card, CardEyebrow, CardTitle } from "@carbonfree/ui/card";
-import { HeaderActions } from "@/components/header-actions";
-import { obraNav } from "@/lib/nav";
 import { faixaDe, getDossie, type FaixaRegua } from "@/lib/queries";
 import { Composicao, EvolucaoIntensidade, PassivoAtivoPorVersao } from "./graficos";
 
@@ -195,12 +193,7 @@ export default async function DossiePage() {
   const acimaDoTeto = compensacaoPct > tetoCompensacaoPct;
 
   return (
-    <AppShell
-      productName="CARBONFREE OBRA"
-      productTag="Construtora · Engenharia"
-      nav={obraNav("/dossie")}
-      headerRight={<HeaderActions />}
-    >
+    <ObraShell active="/dossie">
       <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
         <div>
           <CardEyebrow>
@@ -295,6 +288,6 @@ export default async function DossiePage() {
           <ReguaSelo intensidade={atual.intensidade} regua={regua} />
         </div>
       )}
-    </AppShell>
+    </ObraShell>
   );
 }

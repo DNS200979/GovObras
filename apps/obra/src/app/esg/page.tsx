@@ -1,9 +1,7 @@
 import Link from "next/link";
-import { AppShell } from "@carbonfree/ui/app-shell";
 import { Badge } from "@carbonfree/ui/badge";
+import { ObraShell } from "@/components/obra-shell";
 import { Card, CardEyebrow } from "@carbonfree/ui/card";
-import { HeaderActions } from "@/components/header-actions";
-import { obraNav } from "@/lib/nav";
 import { categoriaLabel, listProjetosEsg, statusLabel } from "@/lib/queries";
 
 export const dynamic = "force-dynamic";
@@ -20,12 +18,7 @@ export default async function EsgPage() {
   const projetos = await listProjetosEsg();
 
   return (
-    <AppShell
-      productName="CARBONFREE OBRA"
-      productTag="Construtora · Engenharia"
-      nav={obraNav("/esg")}
-      headerRight={<HeaderActions />}
-    >
+    <ObraShell active="/esg">
       <div className="mb-6 flex items-center justify-between">
         <div>
           <CardEyebrow>ESG · Documentação e desconto fiscal</CardEyebrow>
@@ -73,6 +66,6 @@ export default async function EsgPage() {
           ))}
         </div>
       )}
-    </AppShell>
+    </ObraShell>
   );
 }

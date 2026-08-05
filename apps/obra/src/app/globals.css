@@ -12,6 +12,26 @@
   --font-mono: var(--font-mono);
 }
 
+/* Tema escuro: em vez de reescrever cada classe (bg-papel, text-texto…), a
+   própria paleta é redefinida sob .dark, então todo o app acompanha. Fica
+   restrito ao app Obra de propósito — o design-tokens é compartilhado com o
+   Gov, que já tem o dark mode próprio dele. */
+.dark {
+  --color-concreto: #0e1619;
+  --color-papel: #16232a;
+  --color-ardosia: #0a1114;
+  --color-ardosia-2: #1f323b;
+  --color-linha: #26383f;
+  --color-linha-forte: #3d545d;
+  --color-texto: #e4e9e7;
+  --color-texto-fraco: #93a5a0;
+  --color-verde: #4fbf9f;
+  --color-verde-claro: #14332c;
+  --color-ambar: #e8a24e;
+  --color-ambar-claro: #33261a;
+  --color-azul: #6fa8c9;
+}
+
 body {
   background: var(--color-concreto);
   color: var(--color-texto);

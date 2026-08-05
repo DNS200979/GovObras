@@ -14,7 +14,7 @@ export default async function LoginPage({
         <div className="mb-8 flex items-center gap-2">
           <Image src="/mbv-logo.png" alt="MBV" width={32} height={32} className="rounded-sm" />
           <div>
-            <div className="font-display text-[14px] font-black tracking-wide text-ardosia">
+            <div className="font-display text-[14px] font-black tracking-wide text-texto">
               CarbonFree Obra
             </div>
             <div className="font-mono text-[10px] uppercase tracking-wide text-texto-fraco">
@@ -27,7 +27,7 @@ export default async function LoginPage({
           <p className="mb-1 font-mono text-[11px] uppercase tracking-wider text-texto-fraco">
             Acesso restrito
           </p>
-          <h2 className="mb-6 font-display text-2xl font-extrabold tracking-tight text-ardosia">
+          <h2 className="mb-6 font-display text-2xl font-extrabold tracking-tight text-texto">
             Entrar no painel
           </h2>
           {erro === "papel" ? (

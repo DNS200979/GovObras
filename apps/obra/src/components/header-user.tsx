@@ -8,7 +8,7 @@ export async function HeaderUser() {
   return (
     <div className="flex items-center gap-3">
       <div className="text-right">
-        <div className="font-display text-[12px] font-semibold leading-tight text-ardosia">{sessao.nome}</div>
+        <div className="font-display text-[12px] font-semibold leading-tight text-texto">{sessao.nome}</div>
         <div className="font-mono text-[10px] leading-tight text-texto-fraco">{sessao.construtoraNome}</div>
       </div>
       <form action={sair}>

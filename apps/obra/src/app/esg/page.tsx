@@ -2,7 +2,7 @@ import Link from "next/link";
 import { AppShell } from "@carbonfree/ui/app-shell";
 import { Badge } from "@carbonfree/ui/badge";
 import { Card, CardEyebrow } from "@carbonfree/ui/card";
-import { HeaderUser } from "@/components/header-user";
+import { HeaderActions } from "@/components/header-actions";
 import { obraNav } from "@/lib/nav";
 import { categoriaLabel, listProjetosEsg, statusLabel } from "@/lib/queries";
 
@@ -24,12 +24,12 @@ export default async function EsgPage() {
       productName="CARBONFREE OBRA"
       productTag="Construtora · Engenharia"
       nav={obraNav("/esg")}
-      headerRight={<HeaderUser />}
+      headerRight={<HeaderActions />}
     >
       <div className="mb-6 flex items-center justify-between">
         <div>
           <CardEyebrow>ESG · Documentação e desconto fiscal</CardEyebrow>
-          <h1 className="mt-1 font-display text-3xl font-extrabold tracking-tight text-ardosia">
+          <h1 className="mt-1 font-display text-3xl font-extrabold tracking-tight text-texto">
             Projetos ESG
           </h1>
         </div>

@@ -56,20 +56,21 @@ export function CarbonBalanceBar({ passivo, ativo, intensidade, meta }: CarbonBa
         />
       </div>
 
-      <div className="mt-4 flex flex-wrap items-center justify-between gap-2 rounded-md bg-ardosia px-4 py-3 text-papel">
+      {/* Faixa escura nos dois temas — cores fixas, senão o texto some no escuro. */}
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-2 rounded-md bg-ardosia px-4 py-3 text-[#f8f9f6]">
         <div>
           <div className="font-display text-[11px] font-bold uppercase tracking-[0.1em]">
             Saldo líquido
           </div>
           {intensidade ? (
-            <div className="mt-0.5 font-mono text-[10px] text-linha-forte">
+            <div className="mt-0.5 font-mono text-[10px] text-[#9aa69c]">
               Intensidade: {intensidade}
               {meta ? ` · Meta: ${meta}` : ""}
             </div>
           ) : null}
         </div>
         <div className="font-mono text-2xl font-semibold text-[#E8A24E]">
-          {fmt(saldo)} <span className="text-xs text-linha-forte">tCO₂e</span>
+          {fmt(saldo)} <span className="text-xs text-[#9aa69c]">tCO₂e</span>
         </div>
       </div>
     </div>

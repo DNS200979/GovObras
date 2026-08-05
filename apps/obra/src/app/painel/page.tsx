@@ -3,7 +3,7 @@ import { Card, CardEyebrow, CardTitle } from "@carbonfree/ui/card";
 import { CarbonBalanceBar } from "@carbonfree/ui/carbon-balance-bar";
 import { KpiTile } from "@carbonfree/ui/kpi-tile";
 import { TrendChart } from "@carbonfree/ui/trend-chart";
-import { HeaderUser } from "@/components/header-user";
+import { HeaderActions } from "@/components/header-actions";
 import { obraNav } from "@/lib/nav";
 import { getObraAtual } from "@/lib/queries";
 
@@ -27,13 +27,13 @@ export default async function PainelPage() {
       productName="CARBONFREE OBRA"
       productTag="Construtora · Engenharia"
       nav={obraNav("/painel")}
-      headerRight={<HeaderUser />}
+      headerRight={<HeaderActions />}
     >
       <div className="mb-8">
         <CardEyebrow>
           {faseLabel[obra.fase] ?? obra.fase} · {obra.areaM2.toLocaleString("pt-BR")} m²
         </CardEyebrow>
-        <h1 className="mt-1 font-display text-3xl font-extrabold tracking-tight text-ardosia">
+        <h1 className="mt-1 font-display text-3xl font-extrabold tracking-tight text-texto">
           {obra.nome}
         </h1>
       </div>
@@ -57,7 +57,13 @@ export default async function PainelPage() {
         <Card className="lg:col-span-2">
           <CardTitle>Histórico de inventário (dado real)</CardTitle>
           {projecaoFechamento.length > 1 ? (
-            <TrendChart data={projecaoFechamento} xKey="fase" yKey="intensidade" color="#B4661A" unit="kg/m²" />
+            <TrendChart
+              data={projecaoFechamento}
+              xKey="fase"
+              yKey="intensidade"
+              color="var(--color-ambar)"
+              unit="kg/m²"
+            />
           ) : (
             <p className="py-8 text-center text-[13px] text-texto-fraco">
               Só existe um inventário até agora — o histórico aparece a partir da segunda versão.

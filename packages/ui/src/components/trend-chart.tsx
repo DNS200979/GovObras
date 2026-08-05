@@ -18,8 +18,12 @@ interface TrendChartProps {
   unit?: string;
 }
 
-/** Gráfico de série temporal (ex.: intensidade de carbono por período, inventário municipal). */
-export function TrendChart({ data, xKey, yKey, color = "#1F6F5C", unit }: TrendChartProps) {
+/**
+ * Gráfico de série temporal (ex.: intensidade de carbono por período).
+ * Grade, eixos e tooltip usam as variáveis da paleta para acompanhar o
+ * tema claro/escuro sem precisar saber qual está ativo.
+ */
+export function TrendChart({ data, xKey, yKey, color = "var(--color-verde)", unit }: TrendChartProps) {
   return (
     <ResponsiveContainer width="100%" height={220}>
       <AreaChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
@@ -29,15 +33,15 @@ export function TrendChart({ data, xKey, yKey, color = "#1F6F5C", unit }: TrendC
             <stop offset="95%" stopColor={color} stopOpacity={0} />
           </linearGradient>
         </defs>
-        <CartesianGrid strokeDasharray="3 3" stroke="#C4CBC3" vertical={false} />
+        <CartesianGrid strokeDasharray="3 3" stroke="var(--color-linha)" vertical={false} />
         <XAxis
           dataKey={xKey}
-          tick={{ fontFamily: "IBM Plex Mono", fontSize: 11, fill: "#5C6B66" }}
-          axisLine={{ stroke: "#C4CBC3" }}
+          tick={{ fontFamily: "IBM Plex Mono", fontSize: 11, fill: "var(--color-texto-fraco)" }}
+          axisLine={{ stroke: "var(--color-linha)" }}
           tickLine={false}
         />
         <YAxis
-          tick={{ fontFamily: "IBM Plex Mono", fontSize: 11, fill: "#5C6B66" }}
+          tick={{ fontFamily: "IBM Plex Mono", fontSize: 11, fill: "var(--color-texto-fraco)" }}
           axisLine={false}
           tickLine={false}
           width={40}
@@ -47,8 +51,10 @@ export function TrendChart({ data, xKey, yKey, color = "#1F6F5C", unit }: TrendC
           contentStyle={{
             fontFamily: "IBM Plex Mono",
             fontSize: 12,
-            border: "1px solid #C4CBC3",
+            background: "var(--color-papel)",
+            border: "1px solid var(--color-linha)",
             borderRadius: 5,
+            color: "var(--color-texto)",
           }}
           labelStyle={{ fontFamily: "Archivo", fontWeight: 700 }}
         />

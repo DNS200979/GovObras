@@ -1,6 +1,6 @@
 import { AppShell } from "@carbonfree/ui/app-shell";
 import { Card, CardEyebrow } from "@carbonfree/ui/card";
-import { HeaderUser } from "@/components/header-user";
+import { HeaderActions } from "@/components/header-actions";
 import { obraNav } from "@/lib/nav";
 import { listObrasConstrutora, listRequisitosAuditoria } from "@/lib/queries";
 import { NovoProjetoForm } from "./novo-form";
@@ -15,10 +15,10 @@ export default async function NovoProjetoEsgPage() {
       productName="CARBONFREE OBRA"
       productTag="Construtora · Engenharia"
       nav={obraNav("/esg")}
-      headerRight={<HeaderUser />}
+      headerRight={<HeaderActions />}
     >
       <CardEyebrow>ESG · Novo projeto</CardEyebrow>
-      <h1 className="mt-1 mb-6 font-display text-3xl font-extrabold tracking-tight text-ardosia">
+      <h1 className="mt-1 mb-6 font-display text-3xl font-extrabold tracking-tight text-texto">
         Novo projeto ESG
       </h1>
 

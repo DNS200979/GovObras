@@ -49,7 +49,7 @@ export function DecisionSimulator({ alternativas }: { alternativas: Alternativa[
                 </div>
               </div>
               <div className="text-right">
-                <div className="font-mono text-sm font-semibold text-ardosia">
+                <div className="font-mono text-sm font-semibold text-texto">
                   {l.tco2eTotal > 0 ? fmtBRL(l.custoPorTco2e) : "—"}
                   <span className="ml-1 text-[11px] font-normal text-texto-fraco">/tCO₂e</span>
                 </div>
@@ -81,18 +81,19 @@ export function DecisionSimulator({ alternativas }: { alternativas: Alternativa[
         ))}
       </div>
 
-      <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-md bg-ardosia px-5 py-4 text-papel">
+      {/* Faixa escura nos dois temas — cores fixas, senão o texto some no escuro. */}
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-md bg-ardosia px-5 py-4 text-[#f8f9f6]">
         <div>
           <div className="font-display text-[11px] font-bold uppercase tracking-[0.1em]">
             Total do plano simulado
           </div>
-          <div className="mt-0.5 font-mono text-[10px] text-linha-forte">
+          <div className="mt-0.5 font-mono text-[10px] text-[#9aa69c]">
             {fmtBRL(totalCusto)} de investimento adicional
           </div>
         </div>
         <div className="font-mono text-2xl font-semibold text-[#5FBFA3]">
           {totalEvitado.toLocaleString("pt-BR", { maximumFractionDigits: 1 })}{" "}
-          <span className="text-xs text-linha-forte">tCO₂e evitado</span>
+          <span className="text-xs text-[#9aa69c]">tCO₂e evitado</span>
         </div>
       </div>
     </div>

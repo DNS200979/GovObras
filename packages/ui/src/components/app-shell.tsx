@@ -20,12 +20,15 @@ interface AppShellProps {
 export function AppShell({ productName, productTag, nav, children, headerRight }: AppShellProps) {
   return (
     <div className="flex min-h-screen bg-concreto text-texto">
-      <aside className="hidden w-60 shrink-0 flex-col border-r border-linha bg-ardosia px-4 py-6 text-papel md:flex">
+      {/* A sidebar é escura nos dois temas, então suas cores de texto são fixas:
+          tokens como `papel`/`linha-forte` invertem no tema escuro e deixariam
+          o item ativo ilegível (texto escuro sobre fundo escuro). */}
+      <aside className="hidden w-60 shrink-0 flex-col border-r border-linha bg-ardosia px-4 py-6 text-[#f8f9f6] md:flex">
         <div className="mb-8">
           <div className="font-display text-[13px] font-black tracking-wide">
-            <span className="rounded-sm bg-verde px-2 py-1 text-papel">{productName}</span>
+            <span className="rounded-sm bg-verde px-2 py-1 text-[#0e1619]">{productName}</span>
           </div>
-          <div className="mt-2 font-mono text-[10px] uppercase tracking-[0.12em] text-linha-forte">
+          <div className="mt-2 font-mono text-[10px] uppercase tracking-[0.12em] text-[#9aa69c]">
             {productTag}
           </div>
         </div>
@@ -35,8 +38,8 @@ export function AppShell({ productName, productTag, nav, children, headerRight }
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-2.5 rounded-sm px-3 py-2 font-display text-[13px] font-medium text-linha-forte transition-colors hover:bg-ardosia-2 hover:text-papel",
-                item.active && "bg-ardosia-2 text-papel",
+                "flex items-center gap-2.5 rounded-sm px-3 py-2 font-display text-[13px] font-medium text-[#9aa69c] transition-colors hover:bg-ardosia-2 hover:text-[#f8f9f6]",
+                item.active && "bg-ardosia-2 text-[#f8f9f6]",
               )}
             >
               {item.icon}

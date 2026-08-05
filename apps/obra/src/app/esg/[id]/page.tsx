@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { AppShell } from "@carbonfree/ui/app-shell";
 import { Badge } from "@carbonfree/ui/badge";
 import { Card, CardEyebrow, CardTitle } from "@carbonfree/ui/card";
-import { HeaderUser } from "@/components/header-user";
+import { HeaderActions } from "@/components/header-actions";
 import { obraNav } from "@/lib/nav";
 import { categoriaLabel, getProjetoEsg, statusLabel } from "@/lib/queries";
 import { EnviarParaAnaliseButton, ExcluirRascunhoButton, RemoverDocumentoButton } from "./acoes";
@@ -38,14 +38,14 @@ export default async function ProjetoEsgPage({ params }: { params: Promise<{ id:
       productName="CARBONFREE OBRA"
       productTag="Construtora · Engenharia"
       nav={obraNav("/esg")}
-      headerRight={<HeaderUser />}
+      headerRight={<HeaderActions />}
     >
       <div className="mb-6 flex items-start justify-between gap-4">
         <div>
           <CardEyebrow>
             {projeto.obraNome} · {categoriaLabel[projeto.categoria] ?? projeto.categoria}
           </CardEyebrow>
-          <h1 className="mt-1 font-display text-3xl font-extrabold tracking-tight text-ardosia">
+          <h1 className="mt-1 font-display text-3xl font-extrabold tracking-tight text-texto">
             {projeto.titulo}
           </h1>
         </div>

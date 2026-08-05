@@ -16,12 +16,22 @@ export const metadata: Metadata = {
   manifest: "/manifest.webmanifest",
 };
 
+/**
+ * Aplica o tema salvo antes da primeira pintura — sem isso a tela pisca em
+ * claro antes do React assumir. Roda inline, então precede a hidratação.
+ */
+const aplicarTema = `(function(){try{var t=localStorage.getItem('cf-tema');if(t==='escuro'||(!t&&matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark')}}catch(e){}})()`;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="pt-BR"
       className={`${archivo.variable} ${sourceSerif.variable} ${plexMono.variable} antialiased`}
+      suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: aplicarTema }} />
+      </head>
       <body>{children}</body>
     </html>
   );

@@ -12,7 +12,7 @@ interface KpiTileProps {
 export function KpiTile({ label, value, unit, delta, className }: KpiTileProps) {
   return (
     <div className={cn("rounded-md border border-linha bg-papel p-4", className)}>
-      <div className="font-mono text-2xl font-semibold leading-none text-ardosia">
+      <div className="font-mono text-2xl font-semibold leading-none text-texto">
         {value}
         {unit ? <span className="ml-1 text-xs font-normal text-texto-fraco">{unit}</span> : null}
       </div>

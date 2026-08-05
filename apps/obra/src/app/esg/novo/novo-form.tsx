@@ -24,6 +24,9 @@ export function NovoProjetoForm({
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
 
+  // `[&>div]:min-w-0` + `w-full` nos controles: sem isso a opção mais longa do
+  // select (nome de requisito) define o min-content da coluna do grid e os
+  // campos estouram a largura do card.
   return (
     <form
       ref={formRef}
@@ -41,7 +44,7 @@ export function NovoProjetoForm({
           router.push(`/esg/${json.id}`);
         });
       }}
-      className="grid gap-4"
+      className="grid gap-4 [&>div]:min-w-0"
     >
       <div className="grid gap-1.5">
         <label htmlFor="obra_id" className="font-display text-[12px] font-semibold text-texto">
@@ -52,7 +55,7 @@ export function NovoProjetoForm({
           name="obra_id"
           required
           defaultValue=""
-          className="rounded-sm border border-linha bg-papel px-3 py-2 text-[14px] text-texto outline-none focus:border-verde"
+          className="w-full rounded-sm border border-linha bg-papel px-3 py-2 text-[14px] text-texto outline-none focus:border-verde"
         >
           <option value="" disabled>
             Selecione a obra
@@ -74,7 +77,7 @@ export function NovoProjetoForm({
           name="categoria"
           required
           defaultValue=""
-          className="rounded-sm border border-linha bg-papel px-3 py-2 text-[14px] text-texto outline-none focus:border-verde"
+          className="w-full rounded-sm border border-linha bg-papel px-3 py-2 text-[14px] text-texto outline-none focus:border-verde"
         >
           <option value="" disabled>
             Selecione a categoria
@@ -95,7 +98,7 @@ export function NovoProjetoForm({
           id="requisito_id"
           name="requisito_id"
           defaultValue=""
-          className="rounded-sm border border-linha bg-papel px-3 py-2 text-[14px] text-texto outline-none focus:border-verde"
+          className="w-full rounded-sm border border-linha bg-papel px-3 py-2 text-[14px] text-texto outline-none focus:border-verde"
         >
           <option value="">Nenhum</option>
           {requisitos.map((r) => (
@@ -119,7 +122,7 @@ export function NovoProjetoForm({
           type="text"
           required
           placeholder="Ex.: Reaproveitamento de água pluvial no canteiro"
-          className="rounded-sm border border-linha bg-papel px-3 py-2 text-[14px] text-texto outline-none focus:border-verde"
+          className="w-full rounded-sm border border-linha bg-papel px-3 py-2 text-[14px] text-texto outline-none focus:border-verde"
         />
       </div>
 
@@ -133,7 +136,7 @@ export function NovoProjetoForm({
           required
           rows={5}
           placeholder="Descreva o projeto, seu impacto e a documentação que será anexada."
-          className="rounded-sm border border-linha bg-papel px-3 py-2 text-[14px] text-texto outline-none focus:border-verde"
+          className="w-full rounded-sm border border-linha bg-papel px-3 py-2 text-[14px] text-texto outline-none focus:border-verde"
         />
       </div>
 

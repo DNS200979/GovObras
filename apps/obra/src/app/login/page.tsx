@@ -35,8 +35,8 @@ export default async function LoginPage({
               Esta conta não é de construtora. Contas da prefeitura acessam o CarbonFree Gov.
             </p>
           ) : null}
-          {/* direto para /esg: encadear com o redirect de "/" quebra o Server Action de login */}
-          <LoginForm next={next ?? "/esg"} />
+          {/* direto para a rota final: encadear com o redirect de "/" quebra o Server Action de login */}
+          <LoginForm next={next ?? "/painel"} />
         </div>
 
         <p className="mt-6 text-center font-mono text-[10.5px] tracking-wide text-texto-fraco">

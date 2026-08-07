@@ -17,6 +17,30 @@ interface CamposObra {
   cno: string | null;
   inscricao_imobiliaria: string | null;
   coordenadas: string | null;
+  // campos exigidos pelo SisobraPref (Receita Federal)
+  data_alvara: string | null;
+  data_inicio_obra: string | null;
+  data_final_obra: string | null;
+  tipo_alvara: string | null;
+  responsavel_exec_obra: string | null;
+  cep: string | null;
+  tipo_logradouro: string | null;
+  logradouro: string | null;
+  numero_imovel: string | null;
+  complemento: string | null;
+  bairro: string | null;
+  area_categoria: string | null;
+  area_destinacao: string | null;
+  area_tipo_obra: string | null;
+  resp_tecnico_tipo: string | null;
+  resp_tecnico_nome: string | null;
+  resp_tecnico_registro: string | null;
+  resp_tecnico_documento: string | null;
+}
+
+/** Texto do formulário → null quando vazio, que é o que o banco espera. */
+function opcional(formData: FormData, campo: string): string | null {
+  return formData.get(campo)?.toString().trim() || null;
 }
 
 function parseCamposObra(formData: FormData): { campos: CamposObra } | { error: string } {
@@ -54,6 +78,24 @@ function parseCamposObra(formData: FormData): { campos: CamposObra } | { error: 
       cno,
       inscricao_imobiliaria: inscricaoImobiliaria,
       coordenadas,
+      data_alvara: opcional(formData, "dataAlvara"),
+      data_inicio_obra: opcional(formData, "dataInicioObra"),
+      data_final_obra: opcional(formData, "dataFinalObra"),
+      tipo_alvara: opcional(formData, "tipoAlvara"),
+      responsavel_exec_obra: opcional(formData, "responsavelExecObra"),
+      cep: opcional(formData, "cep"),
+      tipo_logradouro: opcional(formData, "tipoLogradouro"),
+      logradouro: opcional(formData, "logradouro"),
+      numero_imovel: opcional(formData, "numeroImovel"),
+      complemento: opcional(formData, "complemento"),
+      bairro: opcional(formData, "bairro"),
+      area_categoria: opcional(formData, "areaCategoria"),
+      area_destinacao: opcional(formData, "areaDestinacao"),
+      area_tipo_obra: opcional(formData, "areaTipoObra"),
+      resp_tecnico_tipo: opcional(formData, "respTecnicoTipo"),
+      resp_tecnico_nome: opcional(formData, "respTecnicoNome"),
+      resp_tecnico_registro: opcional(formData, "respTecnicoRegistro"),
+      resp_tecnico_documento: opcional(formData, "respTecnicoDocumento"),
     },
   };
 }

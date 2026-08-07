@@ -38,7 +38,77 @@ export interface ObraDefaultValues {
   latitude?: number | null;
   longitude?: number | null;
   construtoraId?: string;
+  // SisobraPref
+  dataAlvara?: string | null;
+  dataInicioObra?: string | null;
+  dataFinalObra?: string | null;
+  tipoAlvara?: string | null;
+  responsavelExecObra?: string | null;
+  cep?: string | null;
+  tipoLogradouro?: string | null;
+  logradouro?: string | null;
+  numeroImovel?: string | null;
+  complemento?: string | null;
+  bairro?: string | null;
+  areaCategoria?: string | null;
+  areaDestinacao?: string | null;
+  areaTipoObra?: string | null;
+  respTecnicoTipo?: string | null;
+  respTecnicoNome?: string | null;
+  respTecnicoRegistro?: string | null;
+  respTecnicoDocumento?: string | null;
 }
+
+/* Listas do leiaute SisobraPref (Manual Web Service, schemas v1.03). */
+const tiposAlvara = [
+  { value: "inicial", label: "Inicial" },
+  { value: "retificado", label: "Retificado" },
+];
+
+const responsaveisExecucao = [
+  { value: "proprietario_do_imovel", label: "Proprietário do imóvel" },
+  { value: "dono_da_obra", label: "Dono da obra" },
+  { value: "incorporador_construcao_civil", label: "Incorporador" },
+  { value: "empresa_construtora", label: "Empresa construtora" },
+  { value: "empresa_lider_consorcio", label: "Empresa líder de consórcio" },
+  { value: "consorcio", label: "Consórcio" },
+  { value: "construcao_nome_coletivo", label: "Construção em nome coletivo" },
+];
+
+const categoriasArea = [
+  { value: "obra_nova", label: "Obra nova" },
+  { value: "acrescimo", label: "Acréscimo" },
+  { value: "reforma", label: "Reforma" },
+  { value: "demolicao", label: "Demolição" },
+  { value: "existente", label: "Existente" },
+];
+
+const destinacoesArea = [
+  { value: "residencial_unifamiliar", label: "Residencial unifamiliar" },
+  { value: "residencial_multifamiliar", label: "Residencial multifamiliar" },
+  { value: "comercial_salas_lojas", label: "Comercial (salas/lojas)" },
+  { value: "edificio_garagens", label: "Edifício garagens" },
+  { value: "galpao_industrial", label: "Galpão industrial" },
+  { value: "casa_popular", label: "Casa popular" },
+  { value: "conjunto_habitacional_popular", label: "Conjunto habitacional popular" },
+];
+
+const tiposObra = [
+  { value: "alvenaria", label: "Alvenaria" },
+  { value: "madeira", label: "Madeira" },
+  { value: "mista", label: "Mista" },
+];
+
+const tiposRespTecnico = [
+  { value: "engenheiro", label: "Engenheiro (CREA/ART)" },
+  { value: "arquiteto", label: "Arquiteto (CAU/RRT)" },
+  { value: "tecnologo", label: "Tecnólogo" },
+  { value: "tecnico_industrial", label: "Técnico industrial" },
+];
+
+const tiposLogradouro = [
+  "Rua", "Avenida", "Alameda", "Travessa", "Praça", "Rodovia", "Estrada", "Beco", "Outros",
+];
 
 interface Props {
   construtoras: { id: string; razao_social: string; cnpj_cpf: string }[];
@@ -225,6 +295,144 @@ export function ObraCamposForm({
           </Select>
         </div>
       )}
+
+      {/* ---- SisobraPref: o que a Receita exige no envio mensal ---- */}
+      <div className="mt-2 border-t border-border pt-4">
+        <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+          Dados do alvará · SisobraPref (Receita Federal)
+        </p>
+        <p className="mt-1 text-[12px] text-muted-foreground">
+          Sem a data do alvará a obra não entra no envio mensal.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-3 gap-4">
+        <div className="grid gap-2">
+          <Label htmlFor="dataAlvara">Data do alvará</Label>
+          <Input id="dataAlvara" name="dataAlvara" type="date" defaultValue={defaultValues?.dataAlvara ?? ""} />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="dataInicioObra">Início da obra</Label>
+          <Input id="dataInicioObra" name="dataInicioObra" type="date" defaultValue={defaultValues?.dataInicioObra ?? ""} />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="dataFinalObra">Fim previsto</Label>
+          <Input id="dataFinalObra" name="dataFinalObra" type="date" defaultValue={defaultValues?.dataFinalObra ?? ""} />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div className="grid gap-2">
+          <Label htmlFor="tipoAlvara">Tipo do alvará</Label>
+          <Select name="tipoAlvara" defaultValue={defaultValues?.tipoAlvara ?? "inicial"}>
+            <SelectTrigger id="tipoAlvara" className="w-full"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              {tiposAlvara.map((o) => (<SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="responsavelExecObra">Responsável pela execução</Label>
+          <Select name="responsavelExecObra" defaultValue={defaultValues?.responsavelExecObra ?? "empresa_construtora"}>
+            <SelectTrigger id="responsavelExecObra" className="w-full"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              {responsaveisExecucao.map((o) => (<SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-4 gap-4">
+        <div className="grid gap-2">
+          <Label htmlFor="cep">CEP</Label>
+          <Input id="cep" name="cep" placeholder="88010-000" defaultValue={defaultValues?.cep ?? ""} />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="tipoLogradouro">Tipo</Label>
+          <Select name="tipoLogradouro" defaultValue={defaultValues?.tipoLogradouro ?? "Rua"}>
+            <SelectTrigger id="tipoLogradouro" className="w-full"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              {tiposLogradouro.map((o) => (<SelectItem key={o} value={o}>{o}</SelectItem>))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="col-span-2 grid gap-2">
+          <Label htmlFor="logradouro">Logradouro</Label>
+          <Input id="logradouro" name="logradouro" defaultValue={defaultValues?.logradouro ?? ""} />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-3 gap-4">
+        <div className="grid gap-2">
+          <Label htmlFor="numeroImovel">Número</Label>
+          <Input id="numeroImovel" name="numeroImovel" defaultValue={defaultValues?.numeroImovel ?? ""} />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="complemento">Complemento</Label>
+          <Input id="complemento" name="complemento" defaultValue={defaultValues?.complemento ?? ""} />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="bairro">Bairro</Label>
+          <Input id="bairro" name="bairro" defaultValue={defaultValues?.bairro ?? ""} />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-3 gap-4">
+        <div className="grid gap-2">
+          <Label htmlFor="areaCategoria">Categoria da área</Label>
+          <Select name="areaCategoria" defaultValue={defaultValues?.areaCategoria ?? "obra_nova"}>
+            <SelectTrigger id="areaCategoria" className="w-full"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              {categoriasArea.map((o) => (<SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="areaDestinacao">Destinação</Label>
+          <Select name="areaDestinacao" defaultValue={defaultValues?.areaDestinacao ?? ""}>
+            <SelectTrigger id="areaDestinacao" className="w-full"><SelectValue placeholder="Selecione" /></SelectTrigger>
+            <SelectContent>
+              {destinacoesArea.map((o) => (<SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="areaTipoObra">Tipo da obra</Label>
+          <Select name="areaTipoObra" defaultValue={defaultValues?.areaTipoObra ?? "alvenaria"}>
+            <SelectTrigger id="areaTipoObra" className="w-full"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              {tiposObra.map((o) => (<SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div className="grid gap-2">
+          <Label htmlFor="respTecnicoTipo">Responsável técnico</Label>
+          <Select name="respTecnicoTipo" defaultValue={defaultValues?.respTecnicoTipo ?? ""}>
+            <SelectTrigger id="respTecnicoTipo" className="w-full"><SelectValue placeholder="Opcional" /></SelectTrigger>
+            <SelectContent>
+              {tiposRespTecnico.map((o) => (<SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="respTecnicoNome">Nome do profissional</Label>
+          <Input id="respTecnicoNome" name="respTecnicoNome" defaultValue={defaultValues?.respTecnicoNome ?? ""} />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div className="grid gap-2">
+          <Label htmlFor="respTecnicoRegistro">Registro no conselho (CREA/CAU)</Label>
+          <Input id="respTecnicoRegistro" name="respTecnicoRegistro" defaultValue={defaultValues?.respTecnicoRegistro ?? ""} />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="respTecnicoDocumento">Documento (ART/RRT)</Label>
+          <Input id="respTecnicoDocumento" name="respTecnicoDocumento" defaultValue={defaultValues?.respTecnicoDocumento ?? ""} />
+        </div>
+      </div>
 
       {error ? (
         <Alert variant="destructive">

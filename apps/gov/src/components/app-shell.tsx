@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
+  Landmark,
   LayoutDashboard,
   Building2,
   Factory,
@@ -35,6 +36,7 @@ const nav = [
   { href: "/requisitos", label: "Requisitos auditáveis", icon: ClipboardCheck },
   { href: "/esg", label: "Projetos ESG", icon: Leaf },
   { href: "/obrigacoes", label: "SisobraPref", icon: FileCheck2 },
+  { href: "/financiamento", label: "Financiamento climático", icon: Landmark },
 ];
 
 export async function AppShell({

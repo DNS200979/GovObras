@@ -184,7 +184,7 @@ export function ObraCamposForm({
         </div>
         <div className="grid gap-2">
           <Label htmlFor="fase">Fase atual</Label>
-          <Select name="fase" defaultValue={defaultValues?.fase ?? "fundacao"}>
+          <Select name="fase" items={fases} defaultValue={defaultValues?.fase ?? "fundacao"}>
             <SelectTrigger id="fase" className="w-full">
               <SelectValue />
             </SelectTrigger>
@@ -281,7 +281,12 @@ export function ObraCamposForm({
       ) : (
         <div className="grid gap-2">
           <Label htmlFor="construtoraId">Construtora</Label>
-          <Select name="construtoraId" defaultValue={defaultValues?.construtoraId} required={!novaConstrutora}>
+          <Select
+            name="construtoraId"
+            items={construtoras.map((c) => ({ value: c.id, label: c.razao_social }))}
+            defaultValue={defaultValues?.construtoraId}
+            required={!novaConstrutora}
+          >
             <SelectTrigger id="construtoraId" className="w-full">
               <SelectValue placeholder="Selecione a construtora" />
             </SelectTrigger>
@@ -324,7 +329,7 @@ export function ObraCamposForm({
       <div className="grid grid-cols-2 gap-4">
         <div className="grid gap-2">
           <Label htmlFor="tipoAlvara">Tipo do alvará</Label>
-          <Select name="tipoAlvara" defaultValue={defaultValues?.tipoAlvara ?? "inicial"}>
+          <Select name="tipoAlvara" items={tiposAlvara} defaultValue={defaultValues?.tipoAlvara ?? "inicial"}>
             <SelectTrigger id="tipoAlvara" className="w-full"><SelectValue /></SelectTrigger>
             <SelectContent>
               {tiposAlvara.map((o) => (<SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>))}
@@ -333,7 +338,7 @@ export function ObraCamposForm({
         </div>
         <div className="grid gap-2">
           <Label htmlFor="responsavelExecObra">Responsável pela execução</Label>
-          <Select name="responsavelExecObra" defaultValue={defaultValues?.responsavelExecObra ?? "empresa_construtora"}>
+          <Select name="responsavelExecObra" items={responsaveisExecucao} defaultValue={defaultValues?.responsavelExecObra ?? "empresa_construtora"}>
             <SelectTrigger id="responsavelExecObra" className="w-full"><SelectValue /></SelectTrigger>
             <SelectContent>
               {responsaveisExecucao.map((o) => (<SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>))}
@@ -380,7 +385,7 @@ export function ObraCamposForm({
       <div className="grid grid-cols-3 gap-4">
         <div className="grid gap-2">
           <Label htmlFor="areaCategoria">Categoria da área</Label>
-          <Select name="areaCategoria" defaultValue={defaultValues?.areaCategoria ?? "obra_nova"}>
+          <Select name="areaCategoria" items={categoriasArea} defaultValue={defaultValues?.areaCategoria ?? "obra_nova"}>
             <SelectTrigger id="areaCategoria" className="w-full"><SelectValue /></SelectTrigger>
             <SelectContent>
               {categoriasArea.map((o) => (<SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>))}
@@ -389,7 +394,7 @@ export function ObraCamposForm({
         </div>
         <div className="grid gap-2">
           <Label htmlFor="areaDestinacao">Destinação</Label>
-          <Select name="areaDestinacao" defaultValue={defaultValues?.areaDestinacao ?? ""}>
+          <Select name="areaDestinacao" items={destinacoesArea} defaultValue={defaultValues?.areaDestinacao ?? ""}>
             <SelectTrigger id="areaDestinacao" className="w-full"><SelectValue placeholder="Selecione" /></SelectTrigger>
             <SelectContent>
               {destinacoesArea.map((o) => (<SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>))}
@@ -398,7 +403,7 @@ export function ObraCamposForm({
         </div>
         <div className="grid gap-2">
           <Label htmlFor="areaTipoObra">Tipo da obra</Label>
-          <Select name="areaTipoObra" defaultValue={defaultValues?.areaTipoObra ?? "alvenaria"}>
+          <Select name="areaTipoObra" items={tiposObra} defaultValue={defaultValues?.areaTipoObra ?? "alvenaria"}>
             <SelectTrigger id="areaTipoObra" className="w-full"><SelectValue /></SelectTrigger>
             <SelectContent>
               {tiposObra.map((o) => (<SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>))}
@@ -410,7 +415,7 @@ export function ObraCamposForm({
       <div className="grid grid-cols-2 gap-4">
         <div className="grid gap-2">
           <Label htmlFor="respTecnicoTipo">Responsável técnico</Label>
-          <Select name="respTecnicoTipo" defaultValue={defaultValues?.respTecnicoTipo ?? ""}>
+          <Select name="respTecnicoTipo" items={tiposRespTecnico} defaultValue={defaultValues?.respTecnicoTipo ?? ""}>
             <SelectTrigger id="respTecnicoTipo" className="w-full"><SelectValue placeholder="Opcional" /></SelectTrigger>
             <SelectContent>
               {tiposRespTecnico.map((o) => (<SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>))}

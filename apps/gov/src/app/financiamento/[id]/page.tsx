@@ -50,6 +50,12 @@ export default async function ProjetoCaptacaoPage({
           <div className="flex items-center gap-2">
             <Badge variant="outline">{rotulo(SITUACOES, projeto.situacao)}</Badge>
             <Link
+              href={`/financiamento/oportunidades?projeto=${projeto.id}`}
+              className="rounded-sm border border-border px-3 py-1.5 text-[12.5px] transition-colors hover:border-primary/40 hover:text-primary"
+            >
+              Oportunidades →
+            </Link>
+            <Link
               href={`/financiamento/${projeto.id}/documentos`}
               className="rounded-sm border border-border px-3 py-1.5 text-[12.5px] transition-colors hover:border-primary/40 hover:text-primary"
             >
@@ -112,6 +118,12 @@ export default async function ProjetoCaptacaoPage({
             </CardHeader>
             <CardContent>
               <p className="text-[12.5px] leading-relaxed">{d.faixa.canais}</p>
+              <Link
+                href={`/financiamento/oportunidades?projeto=${projeto.id}`}
+                className="mt-2 inline-block font-mono text-[11px] text-primary hover:underline"
+              >
+                ver esses canais no catálogo →
+              </Link>
               <p className="mt-3 border-t border-border pt-3 text-[11.5px] leading-relaxed text-muted-foreground">
                 GCF, GEF e Fundo de Adaptação exigem entidade acreditada e anuência nacional — a
                 prefeitura não submete sozinha. Crédito externo passa por COFIEX, análise fiscal e

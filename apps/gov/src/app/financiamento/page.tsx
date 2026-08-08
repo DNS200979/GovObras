@@ -39,7 +39,15 @@ export default async function FinanciamentoPage() {
             assistência técnica de preparação a crédito multilateral.
           </p>
         </div>
-        <NovoProjetoSheet />
+        <div className="flex shrink-0 items-center gap-2">
+          <Link
+            href="/financiamento/oportunidades"
+            className="rounded-sm border border-border px-3 py-1.5 text-[12.5px] transition-colors hover:border-primary/40 hover:text-primary"
+          >
+            Catálogo de oportunidades
+          </Link>
+          <NovoProjetoSheet />
+        </div>
       </div>
 
       <Card>

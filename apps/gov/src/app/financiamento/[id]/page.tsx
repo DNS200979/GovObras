@@ -47,7 +47,15 @@ export default async function ProjetoCaptacaoPage({
               {projeto.nome}
             </h1>
           </div>
-          <Badge variant="outline">{rotulo(SITUACOES, projeto.situacao)}</Badge>
+          <div className="flex items-center gap-2">
+            <Badge variant="outline">{rotulo(SITUACOES, projeto.situacao)}</Badge>
+            <Link
+              href={`/financiamento/${projeto.id}/documentos`}
+              className="rounded-sm border border-border px-3 py-1.5 text-[12.5px] transition-colors hover:border-primary/40 hover:text-primary"
+            >
+              Plano documental →
+            </Link>
+          </div>
         </div>
         <p className="mt-2 max-w-3xl text-sm text-muted-foreground">{projeto.descricao}</p>
       </div>

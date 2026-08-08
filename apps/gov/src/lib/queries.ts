@@ -1,7 +1,7 @@
 import { createServerSupabase } from "@carbonfree/database/server";
 import type { AlvaraSisobra } from "./sisobrapref";
 import { competenciaDeReferencia, pendenciasDoAlvara } from "./sisobrapref";
-import type { Resposta } from "./financiamento";
+import type { Resposta, SituacaoDoc } from "./financiamento";
 import { calcularDiagnostico } from "./financiamento";
 
 /**
@@ -716,4 +716,38 @@ export async function getProjetoCaptacao(id: string): Promise<ProjetoCaptacaoDet
     respostas,
     diagnostico: calcularDiagnostico(mapa),
   };
+}
+
+export interface DocumentoProjeto {
+  documentoId: number;
+  situacao: SituacaoDoc;
+  observacao: string | null;
+  nomeArquivo: string | null;
+  storagePath: string | null;
+  updatedAt: string;
+}
+
+export async function listDocumentosProjeto(projetoId: string): Promise<DocumentoProjeto[]> {
+  const db = await createServerSupabase();
+  const { data, error } = await db
+    .from("projeto_documentos")
+    .select("documento_id, situacao, observacao, nome_arquivo, storage_path, updated_at")
+    .eq("projeto_id", projetoId);
+  if (error) throw error;
+
+  return (data ?? []).map((d) => ({
+    documentoId: d.documento_id,
+    situacao: d.situacao as SituacaoDoc,
+    observacao: d.observacao,
+    nomeArquivo: d.nome_arquivo,
+    storagePath: d.storage_path,
+    updatedAt: d.updated_at,
+  }));
+}
+
+/** URL temporária para baixar o anexo; o bucket é privado. */
+export async function urlDoAnexo(storagePath: string): Promise<string | null> {
+  const db = await createServerSupabase();
+  const { data } = await db.storage.from("captacao-docs").createSignedUrl(storagePath, 60 * 10);
+  return data?.signedUrl ?? null;
 }

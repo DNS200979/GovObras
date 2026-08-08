@@ -152,3 +152,148 @@ export const SITUACOES: { value: string; label: string }[] = [
   { value: "contratado", label: "Contratado" },
   { value: "arquivado", label: "Arquivado" },
 ];
+
+// ============================================================
+// Matriz documental por rota de captação
+// ============================================================
+
+export type Rota = "doacao" | "assistencia_tecnica" | "credito_externo";
+
+/**
+ * Exigência de um documento numa rota. A planilha usa rótulos livres
+ * ("Sim", "Conforme edital", "Pode ser produto"…); aqui eles viram três
+ * níveis para o filtro funcionar, guardando o rótulo original como nota,
+ * porque a diferença entre "obrigatório" e "conforme edital" muda o que a
+ * prefeitura faz na prática.
+ */
+export type Nivel = "exigido" | "conforme" | "nao_se_aplica";
+
+export interface ExigenciaRota {
+  nivel: Nivel;
+  nota: string;
+}
+
+export interface DocumentoMatriz {
+  id: number;
+  documento: string;
+  doacao: ExigenciaRota;
+  assistenciaTecnica: ExigenciaRota;
+  creditoExterno: ExigenciaRota;
+  prioridade: string;
+  responsavel: string;
+  observacao: string;
+}
+
+const ex = (nivel: Nivel, nota: string): ExigenciaRota => ({ nivel, nota });
+const SIM = ex("exigido", "Sim");
+const NAO = ex("nao_se_aplica", "Não");
+const ALTA = ex("exigido", "Alta");
+const DES = ex("conforme", "Desejável");
+const PRE = ex("conforme", "Preliminar");
+
+export const DOCUMENTOS: DocumentoMatriz[] = [
+  { id: 1, documento: "Ofício de manifestação de interesse", doacao: SIM, assistenciaTecnica: SIM, creditoExterno: SIM, prioridade: "Obrigatório", responsavel: "Gabinete/Planejamento", observacao: "Registrar autoridade signatária e protocolo" },
+  { id: 2, documento: "Lei municipal autorizativa", doacao: ex("conforme", "Conforme edital"), assistenciaTecnica: NAO, creditoExterno: SIM, prioridade: "Obrigatório no crédito", responsavel: "Procuradoria/Câmara", observacao: "Controlar número, publicação e vigência" },
+  { id: 3, documento: "PPA, LDO e LOA com projeto/contrapartida", doacao: SIM, assistenciaTecnica: DES, creditoExterno: SIM, prioridade: "Obrigatório", responsavel: "Planejamento/Fazenda", observacao: "Validar exercício e rubrica" },
+  { id: 4, documento: "CAPAG e prévia fiscal", doacao: NAO, assistenciaTecnica: NAO, creditoExterno: SIM, prioridade: "Crítico", responsavel: "Fazenda", observacao: "Consultar situação e registrar data" },
+  { id: 5, documento: "Limites de endividamento e garantias", doacao: NAO, assistenciaTecnica: NAO, creditoExterno: SIM, prioridade: "Crítico", responsavel: "Fazenda", observacao: "Checklist LRF/STN" },
+  { id: 6, documento: "Inventário municipal de GEE", doacao: DES, assistenciaTecnica: DES, creditoExterno: DES, prioridade: "Alta", responsavel: "Meio Ambiente", observacao: "Metodologia, ano-base e escopos" },
+  { id: 7, documento: "Plano municipal de mitigação/adaptação", doacao: ALTA, assistenciaTecnica: ALTA, creditoExterno: ALTA, prioridade: "Alta", responsavel: "Meio Ambiente/Planejamento", observacao: "Relacionar metas e ações" },
+  { id: 8, documento: "Mapa de riscos e vulnerabilidade climática", doacao: ALTA, assistenciaTecnica: ALTA, creditoExterno: ALTA, prioridade: "Alta", responsavel: "Defesa Civil/Planejamento", observacao: "Camadas geográficas e população exposta" },
+  { id: 9, documento: "Nota conceitual do projeto", doacao: SIM, assistenciaTecnica: SIM, creditoExterno: SIM, prioridade: "Obrigatório", responsavel: "Equipe do projeto", observacao: "Problema, solução, custos e resultados" },
+  { id: 10, documento: "Estudo de pré-viabilidade", doacao: DES, assistenciaTecnica: ex("conforme", "Pode ser produto"), creditoExterno: SIM, prioridade: "Alta", responsavel: "Infraestrutura/Consultoria", observacao: "Alternativas, demanda e custos" },
+  { id: 11, documento: "Estudo de viabilidade técnico-econômica", doacao: ex("conforme", "Conforme fundo"), assistenciaTecnica: ex("conforme", "Pode ser produto"), creditoExterno: SIM, prioridade: "Crítico", responsavel: "Infraestrutura/Fazenda", observacao: "VPL/TIR quando aplicável e custo do ciclo de vida" },
+  { id: 12, documento: "Projeto básico/executivo", doacao: ex("conforme", "Conforme estágio"), assistenciaTecnica: NAO, creditoExterno: SIM, prioridade: "Alta", responsavel: "Infraestrutura", observacao: "Versão, ART/RRT e orçamento" },
+  { id: 13, documento: "Orçamento detalhado e cronograma físico-financeiro", doacao: SIM, assistenciaTecnica: PRE, creditoExterno: SIM, prioridade: "Obrigatório", responsavel: "Infraestrutura/Fazenda", observacao: "Moeda, câmbio, contingência e data-base" },
+  { id: 14, documento: "Plano de aquisições", doacao: SIM, assistenciaTecnica: NAO, creditoExterno: SIM, prioridade: "Alta", responsavel: "Licitações/UGP", observacao: "Regras nacionais e do financiador" },
+  { id: 15, documento: "Licenças e estratégia de licenciamento", doacao: SIM, assistenciaTecnica: PRE, creditoExterno: SIM, prioridade: "Crítico", responsavel: "Meio Ambiente", observacao: "Órgão, fase, condicionantes e validade" },
+  { id: 16, documento: "Situação fundiária e dominial", doacao: SIM, assistenciaTecnica: PRE, creditoExterno: SIM, prioridade: "Crítico", responsavel: "Patrimônio/Procuradoria", observacao: "Matrículas, desapropriações e servidões" },
+  { id: 17, documento: "Avaliação ambiental e social / salvaguardas", doacao: SIM, assistenciaTecnica: PRE, creditoExterno: SIM, prioridade: "Crítico", responsavel: "Meio Ambiente/Social", observacao: "Padrão do financiador e plano de gestão" },
+  { id: 18, documento: "Consulta e participação social", doacao: SIM, assistenciaTecnica: DES, creditoExterno: SIM, prioridade: "Alta", responsavel: "Social/Gabinete", observacao: "Públicos afetados, atas e respostas" },
+  { id: 19, documento: "Plano de gênero e inclusão", doacao: ex("conforme", "Frequente"), assistenciaTecnica: DES, creditoExterno: ex("conforme", "Frequente"), prioridade: "Alta", responsavel: "Social/Planejamento", observacao: "Indicadores desagregados" },
+  { id: 20, documento: "Matriz de resultados e MRV", doacao: SIM, assistenciaTecnica: SIM, creditoExterno: SIM, prioridade: "Obrigatório", responsavel: "Meio Ambiente/UGP", observacao: "Linha de base, metas, fontes e frequência" },
+  { id: 21, documento: "Cálculo de emissões evitadas/adaptação", doacao: SIM, assistenciaTecnica: SIM, creditoExterno: DES, prioridade: "Alta", responsavel: "Meio Ambiente", observacao: "Premissas, fatores e metodologia" },
+  { id: 22, documento: "Plano de operação e manutenção", doacao: SIM, assistenciaTecnica: DES, creditoExterno: SIM, prioridade: "Crítico", responsavel: "Secretaria executora", observacao: "Custos e fonte após implantação" },
+  { id: 23, documento: "Estrutura e regimento da UGP", doacao: DES, assistenciaTecnica: DES, creditoExterno: SIM, prioridade: "Alta", responsavel: "Gabinete/Planejamento", observacao: "Papéis, equipe e dedicação" },
+  { id: 24, documento: "Certidões e regularidade do ente", doacao: ex("conforme", "Conforme fundo"), assistenciaTecnica: NAO, creditoExterno: SIM, prioridade: "Crítico", responsavel: "Fazenda/Procuradoria", observacao: "Validade e pendências" },
+  { id: 25, documento: "Carta de cofinanciamento/contrapartida", doacao: SIM, assistenciaTecnica: DES, creditoExterno: SIM, prioridade: "Alta", responsavel: "Fazenda/Parceiros", observacao: "Valor, fonte, condição e prazo" },
+];
+
+export const ROTAS: { value: Rota; label: string; descricao: string }[] = [
+  {
+    value: "doacao",
+    label: "Doação / fundo",
+    descricao: "Recurso não reembolsável — Fundo Amazônia, GCF, GEF, IKI",
+  },
+  {
+    value: "assistencia_tecnica",
+    label: "Assistência técnica",
+    descricao: "Prepara o projeto para ser financiável; não paga a obra",
+  },
+  {
+    value: "credito_externo",
+    label: "Crédito externo",
+    descricao: "BID, CAF, NDB, Banco Mundial — exige COFIEX e rito fiscal",
+  },
+];
+
+export function exigenciaNaRota(doc: DocumentoMatriz, rota: Rota): ExigenciaRota {
+  if (rota === "doacao") return doc.doacao;
+  if (rota === "assistencia_tecnica") return doc.assistenciaTecnica;
+  return doc.creditoExterno;
+}
+
+/** Documentos que a rota pede, do mais crítico para o menos. */
+export function documentosDaRota(rota: Rota): DocumentoMatriz[] {
+  const ordem: Record<string, number> = {
+    Crítico: 0,
+    Obrigatório: 1,
+    "Obrigatório no crédito": 1,
+    Alta: 2,
+  };
+  return DOCUMENTOS.filter((d) => exigenciaNaRota(d, rota).nivel !== "nao_se_aplica").sort(
+    (a, b) => (ordem[a.prioridade] ?? 3) - (ordem[b.prioridade] ?? 3) || a.id - b.id,
+  );
+}
+
+export type SituacaoDoc = "pendente" | "em_elaboracao" | "pronto" | "nao_aplicavel";
+
+export const SITUACOES_DOC: { value: SituacaoDoc; label: string }[] = [
+  { value: "pendente", label: "Pendente" },
+  { value: "em_elaboracao", label: "Em elaboração" },
+  { value: "pronto", label: "Pronto" },
+  { value: "nao_aplicavel", label: "Não se aplica" },
+];
+
+export interface ProgressoDocumental {
+  total: number;
+  prontos: number;
+  emElaboracao: number;
+  pendentes: number;
+  /** Não conta os marcados como não aplicáveis — senão o denominador mente. */
+  percentual: number;
+  criticosPendentes: DocumentoMatriz[];
+}
+
+export function progressoDocumental(
+  rota: Rota,
+  situacoes: Map<number, SituacaoDoc>,
+): ProgressoDocumental {
+  const docs = documentosDaRota(rota);
+  const aplicaveis = docs.filter((d) => situacoes.get(d.id) !== "nao_aplicavel");
+  const prontos = aplicaveis.filter((d) => situacoes.get(d.id) === "pronto").length;
+  const emElaboracao = aplicaveis.filter((d) => situacoes.get(d.id) === "em_elaboracao").length;
+
+  return {
+    total: aplicaveis.length,
+    prontos,
+    emElaboracao,
+    pendentes: aplicaveis.length - prontos - emElaboracao,
+    percentual: aplicaveis.length === 0 ? 0 : Math.round((prontos / aplicaveis.length) * 100),
+    criticosPendentes: aplicaveis.filter(
+      (d) =>
+        (d.prioridade === "Crítico" || d.prioridade.startsWith("Obrigatório")) &&
+        situacoes.get(d.id) !== "pronto",
+    ),
+  };
+}

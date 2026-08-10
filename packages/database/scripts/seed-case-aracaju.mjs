@@ -25,33 +25,14 @@
  *   na evidência a base que a sustenta, e onde a base é inferência isso está
  *   escrito. Ninguém deve ler isto como auditoria do que Aracaju fez.
  *
- * O projeto entra no município da instância (Florianópolis) porque as
- * políticas de RLS enxergam pelo município do perfil; o nome carrega o prefixo
- * CASE para não se confundir com um projeto real da prefeitura.
+ * O projeto entra no município da instância porque as políticas de RLS
+ * enxergam pelo município do perfil; o prefixo CASE evita confusão com um
+ * projeto real da prefeitura.
  *
  * Uso: node packages/database/scripts/seed-case-aracaju.mjs
  */
 
-import { readFileSync } from "node:fs";
-
-const env = Object.fromEntries(
-  readFileSync(new URL("../../../apps/gov/.env.local", import.meta.url), "utf8")
-    .split("\n")
-    .filter((l) => l.includes("=") && !l.trim().startsWith("#"))
-    .map((l) => {
-      const i = l.indexOf("=");
-      return [l.slice(0, i).trim(), l.slice(i + 1).trim().replace(/^["']|["']$/g, "")];
-    }),
-);
-
-const URL_BASE = env.NEXT_PUBLIC_SUPABASE_URL;
-const CHAVE = env.SUPABASE_SERVICE_ROLE_KEY;
-const H = {
-  apikey: CHAVE,
-  Authorization: `Bearer ${CHAVE}`,
-  "Content-Type": "application/json",
-  Prefer: "return=representation",
-};
+import { carregarCase } from "./lib/captacao.mjs";
 
 const NOME = "[CASE] Aracaju Cidade do Futuro — drenagem e saneamento";
 
@@ -118,78 +99,16 @@ const DOCUMENTOS = [
   [25, "pronto", "Contrapartida municipal comprometida na estrutura da operação."],
 ];
 
-async function api(caminho, opcoes = {}) {
-  const r = await fetch(`${URL_BASE}/rest/v1/${caminho}`, { headers: H, ...opcoes });
-  const corpo = await r.text();
-  if (!r.ok) throw new Error(`${caminho} → ${r.status} ${corpo}`);
-  return corpo ? JSON.parse(corpo) : null;
-}
-
-async function main() {
-  const [municipio] = await api("municipios?select=id,nome&limit=1");
-  const [gestor] = await api("perfis?select=id&papel=eq.prefeitura_gestor&limit=1");
-  if (!municipio || !gestor) throw new Error("Município ou gestor não encontrados.");
-
-  // Idempotente: recarregar o case não deve empilhar cópias.
-  const existentes = await api(`projetos_captacao?nome=eq.${encodeURIComponent(NOME)}&select=id`);
-  for (const p of existentes) {
-    await api(`projetos_captacao?id=eq.${p.id}`, { method: "DELETE" });
-  }
-
-  const [projeto] = await api("projetos_captacao", {
-    method: "POST",
-    body: JSON.stringify({
-      municipio_id: municipio.id,
-      nome: NOME,
-      descricao: DESCRICAO,
-      tema: "drenagem",
-      // US$ 84 mi ≈ R$ 435 milhões na conversão informada pelo NDB à época
-      valor_estimado_brl: 435000000,
-      situacao: "preparacao",
-      criado_por: gestor.id,
-    }),
-  });
-
-  await api("diagnostico_respostas", {
-    method: "POST",
-    body: JSON.stringify(
-      RESPOSTAS.map(([questao_id, resposta, evidencia]) => ({
-        projeto_id: projeto.id,
-        questao_id,
-        resposta,
-        evidencia,
-        origem: "manual",
-        respondido_por: gestor.id,
-      })),
-    ),
-  });
-
-  await api("projeto_documentos", {
-    method: "POST",
-    body: JSON.stringify(
-      DOCUMENTOS.map(([documento_id, situacao, observacao]) => ({
-        projeto_id: projeto.id,
-        documento_id,
-        situacao,
-        observacao,
-        atualizado_por: gestor.id,
-      })),
-    ),
-  });
-
-  const pesos = [5, 7, 5, 6, 5, 6, 6, 5, 6, 5, 4, 4, 3, 5, 6, 5, 5, 4, 3, 4];
-  const pontos = RESPOSTAS.reduce((s, [id, r]) => {
-    const peso = pesos[id - 1];
-    return s + (r === "sim" ? peso : r === "parcial" ? peso / 2 : 0);
-  }, 0);
-
-  console.log(`case carregado em ${municipio.nome}`);
-  console.log(`  projeto:    ${projeto.id}`);
-  console.log(`  diagnóstico ${pontos} de 99 pontos → ${Math.round((pontos / 99) * 100)}%`);
-  console.log(`  documentos: ${DOCUMENTOS.filter(([, s]) => s === "pronto").length} prontos de 25`);
-}
-
-main().catch((e) => {
+carregarCase({
+  nome: NOME,
+  descricao: DESCRICAO,
+  tema: "drenagem",
+  // US$ 84 mi ≈ R$ 435 milhões na conversão informada pelo NDB à época
+  valorBrl: 435000000,
+  situacao: "preparacao",
+  respostas: RESPOSTAS,
+  documentos: DOCUMENTOS,
+}).catch((e) => {
   console.error(e.message);
   process.exit(1);
 });

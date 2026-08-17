@@ -1,12 +1,12 @@
 import { ConcreteiraShell } from "@/components/concreteira-shell";
 import { Card, CardEyebrow } from "@carbonfree/ui/card";
-import { listObrasVinculadasAtivas } from "@/lib/queries";
+import { listFatoresEmissao, listObrasVinculadasAtivas } from "@/lib/queries";
 import { NovaEntregaForm } from "./nova-form";
 
 export const dynamic = "force-dynamic";
 
 export default async function NovaEntregaPage() {
-  const obras = await listObrasVinculadasAtivas();
+  const [obras, fatores] = await Promise.all([listObrasVinculadasAtivas(), listFatoresEmissao()]);
 
   return (
     <ConcreteiraShell active="/entregas">
@@ -22,7 +22,7 @@ export default async function NovaEntregaPage() {
             dela. Assim que ela vincular sua concreteira a uma obra, ela aparece aqui.
           </p>
         ) : (
-          <NovaEntregaForm obras={obras} />
+          <NovaEntregaForm obras={obras} fatores={fatores} />
         )}
       </Card>
     </ConcreteiraShell>

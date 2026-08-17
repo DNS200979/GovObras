@@ -561,7 +561,9 @@ export interface EntregaConcretoResumo {
   traco: string | null;
   dataEntrega: string;
   status: string;
-  composicao: { insumo: string; quantidade: number; unidade: string }[];
+  temEvidencia: boolean;
+  materializadoEm: string | null;
+  composicao: { insumo: string; quantidade: number; unidade: string; fatorCategoria: string | null }[];
 }
 
 export interface ConcreteiraEsgPublicado {
@@ -588,7 +590,14 @@ interface EntregaConcretoRow {
   traco: string | null;
   data_entrega: string;
   status: string;
-  entrega_composicao: { insumo: string; quantidade: number; unidade: string }[];
+  evidencia_id: string | null;
+  materializado_em: string | null;
+  entrega_composicao: {
+    insumo: string;
+    quantidade: number;
+    unidade: string;
+    fatores_emissao: { categoria: string } | null;
+  }[];
 }
 
 /** Detalhe de um vínculo obra×concreteira — `id` é o de `obra_concreteiras`. */
@@ -610,7 +619,9 @@ export async function getConcreteiraNaObra(id: string): Promise<ConcreteiraNaObr
   const [{ data: entregas }, { data: esg }] = await Promise.all([
     db
       .from("entregas_concreto")
-      .select("id, volume_m3, traco, data_entrega, status, entrega_composicao(insumo, quantidade, unidade)")
+      .select(
+        "id, volume_m3, traco, data_entrega, status, evidencia_id, materializado_em, entrega_composicao(insumo, quantidade, unidade, fatores_emissao(categoria))",
+      )
       .eq("obra_concreteira_id", id)
       .order("data_entrega", { ascending: false })
       .returns<EntregaConcretoRow[]>(),
@@ -634,10 +645,13 @@ export async function getConcreteiraNaObra(id: string): Promise<ConcreteiraNaObr
       traco: e.traco,
       dataEntrega: e.data_entrega,
       status: e.status,
+      temEvidencia: e.evidencia_id !== null,
+      materializadoEm: e.materializado_em,
       composicao: (e.entrega_composicao ?? []).map((c) => ({
         insumo: c.insumo,
         quantidade: Number(c.quantidade),
         unidade: c.unidade,
+        fatorCategoria: c.fatores_emissao?.categoria ?? null,
       })),
     })),
     esgPublicados: (esg ?? []).map((p) => ({

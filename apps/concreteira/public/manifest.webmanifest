@@ -1,0 +1,16 @@
+{
+  "name": "MBV Concreteiras",
+  "short_name": "MBV Concreteiras",
+  "description": "Rastreabilidade de mistura e ESG das concreteiras que fornecem para obras MBV.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#16232A",
+  "theme_color": "#16232A",
+  "icons": [
+    {
+      "src": "/mbv-logo.png",
+      "sizes": "168x185",
+      "type": "image/png"
+    }
+  ]
+}

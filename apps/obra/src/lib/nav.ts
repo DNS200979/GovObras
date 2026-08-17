@@ -4,6 +4,7 @@ export function obraNav(active: string): NavItem[] {
   const items = [
     { label: "Painel de carbono", href: "/painel" },
     { label: "Obras", href: "/obras" },
+    { label: "Concreteiras", href: "/concreteiras" },
     { label: "Projetos ESG", href: "/esg" },
     { label: "Simulador de decisão", href: "/simulador" },
     { label: "Dossiê e assinatura", href: "/dossie" },

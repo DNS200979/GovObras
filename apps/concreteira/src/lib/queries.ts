@@ -46,6 +46,33 @@ export async function listObrasVinculadasAtivas(): Promise<ObraVinculada[]> {
 }
 
 // ============================================================
+// Fatores de emissão — catálogo pra vincular à composição declarada
+// ============================================================
+
+export interface FatorEmissao {
+  id: string;
+  categoria: string;
+  valor: number;
+  unidade: string;
+}
+
+/** Catálogo global (fatores_emissao) — leitura liberada pra qualquer autenticado. */
+export async function listFatoresEmissao(): Promise<FatorEmissao[]> {
+  const db = await createServerSupabase();
+  const { data, error } = await db
+    .from("fatores_emissao")
+    .select("id, categoria, valor, unidade")
+    .order("categoria");
+  if (error) throw error;
+  return (data ?? []).map((f) => ({
+    id: f.id,
+    categoria: f.categoria,
+    valor: Number(f.valor),
+    unidade: f.unidade,
+  }));
+}
+
+// ============================================================
 // Entregas — rastreabilidade de mistura por carga
 // ============================================================
 
@@ -56,6 +83,7 @@ export interface EntregaListItem {
   dataEntrega: string;
   status: string;
   totalInsumos: number;
+  materializadoEm: string | null;
 }
 
 interface EntregaListRow {
@@ -63,6 +91,7 @@ interface EntregaListRow {
   volume_m3: number;
   data_entrega: string;
   status: string;
+  materializado_em: string | null;
   obras: { nome: string } | null;
   entrega_composicao: { id: string }[];
 }
@@ -71,7 +100,7 @@ export async function listEntregas(): Promise<EntregaListItem[]> {
   const db = await createServerSupabase();
   const { data, error } = await db
     .from("entregas_concreto")
-    .select("id, volume_m3, data_entrega, status, obras(nome), entrega_composicao(id)")
+    .select("id, volume_m3, data_entrega, status, materializado_em, obras(nome), entrega_composicao(id)")
     .order("data_entrega", { ascending: false })
     .returns<EntregaListRow[]>();
   if (error) throw error;
@@ -83,6 +112,7 @@ export async function listEntregas(): Promise<EntregaListItem[]> {
     dataEntrega: e.data_entrega,
     status: e.status,
     totalInsumos: (e.entrega_composicao ?? []).length,
+    materializadoEm: e.materializado_em,
   }));
 }
 
@@ -93,7 +123,9 @@ export interface EntregaDetalhe {
   traco: string | null;
   dataEntrega: string;
   status: string;
-  composicao: { id: string; insumo: string; quantidade: number; unidade: string }[];
+  temEvidencia: boolean;
+  materializadoEm: string | null;
+  composicao: { id: string; insumo: string; quantidade: number; unidade: string; fatorCategoria: string | null }[];
 }
 
 interface EntregaDetalheRow {
@@ -102,15 +134,25 @@ interface EntregaDetalheRow {
   traco: string | null;
   data_entrega: string;
   status: string;
+  evidencia_id: string | null;
+  materializado_em: string | null;
   obras: { nome: string } | null;
-  entrega_composicao: { id: string; insumo: string; quantidade: number; unidade: string }[];
+  entrega_composicao: {
+    id: string;
+    insumo: string;
+    quantidade: number;
+    unidade: string;
+    fatores_emissao: { categoria: string } | null;
+  }[];
 }
 
 export async function getEntrega(id: string): Promise<EntregaDetalhe | null> {
   const db = await createServerSupabase();
   const { data, error } = await db
     .from("entregas_concreto")
-    .select("id, volume_m3, traco, data_entrega, status, obras(nome), entrega_composicao(id, insumo, quantidade, unidade)")
+    .select(
+      "id, volume_m3, traco, data_entrega, status, evidencia_id, materializado_em, obras(nome), entrega_composicao(id, insumo, quantidade, unidade, fatores_emissao(categoria))",
+    )
     .eq("id", id)
     .single<EntregaDetalheRow>();
   if (error) return null;
@@ -122,11 +164,14 @@ export async function getEntrega(id: string): Promise<EntregaDetalhe | null> {
     traco: data.traco,
     dataEntrega: data.data_entrega,
     status: data.status,
+    temEvidencia: data.evidencia_id !== null,
+    materializadoEm: data.materializado_em,
     composicao: (data.entrega_composicao ?? []).map((c) => ({
       id: c.id,
       insumo: c.insumo,
       quantidade: Number(c.quantidade),
       unidade: c.unidade,
+      fatorCategoria: c.fatores_emissao?.categoria ?? null,
     })),
   };
 }

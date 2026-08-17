@@ -60,6 +60,7 @@ export default async function EntregasPage() {
                       {e.volumeM3.toLocaleString("pt-BR")} m³ ·{" "}
                       {new Date(e.dataEntrega).toLocaleDateString("pt-BR")} · {e.totalInsumos}{" "}
                       {e.totalInsumos === 1 ? "insumo declarado" : "insumos declarados"}
+                      {e.materializadoEm ? " · lançada no inventário" : ""}
                     </p>
                   </div>
                   <Badge tone={statusTone[e.status] ?? "default"}>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import type { ObraVinculada } from "@/lib/queries";
+import type { FatorEmissao, ObraVinculada } from "@/lib/queries";
 import { criarEntrega, type CriarEntregaState } from "../actions";
 
 const campo =
@@ -15,15 +15,16 @@ interface LinhaComposicao {
   insumo: string;
   quantidade: string;
   unidade: string;
+  fatorId: string;
 }
 
 let proximaChave = 0;
 function linhaVazia(): LinhaComposicao {
   proximaChave += 1;
-  return { key: proximaChave, insumo: "", quantidade: "", unidade: "" };
+  return { key: proximaChave, insumo: "", quantidade: "", unidade: "", fatorId: "" };
 }
 
-export function NovaEntregaForm({ obras }: { obras: ObraVinculada[] }) {
+export function NovaEntregaForm({ obras, fatores }: { obras: ObraVinculada[]; fatores: FatorEmissao[] }) {
   const [state, formAction, pending] = useActionState<CriarEntregaState, FormData>(criarEntrega, {});
   const [linhas, setLinhas] = useState<LinhaComposicao[]>([linhaVazia()]);
 
@@ -94,7 +95,7 @@ export function NovaEntregaForm({ obras }: { obras: ObraVinculada[] }) {
         </p>
 
         {linhas.map((l) => (
-          <div key={l.key} className="grid grid-cols-[1fr_100px_90px_28px] items-center gap-2">
+          <div key={l.key} className="grid grid-cols-[1fr_90px_80px_1fr_28px] items-center gap-2">
             <input
               name="insumo"
               value={l.insumo}
@@ -114,9 +115,22 @@ export function NovaEntregaForm({ obras }: { obras: ObraVinculada[] }) {
               name="unidade"
               value={l.unidade}
               onChange={(e) => atualizarLinha(l.key, "unidade", e.target.value)}
-              placeholder="kg, m³…"
+              placeholder="t, kg, m³…"
               className={campoSm}
             />
+            <select
+              name="fator_id"
+              value={l.fatorId}
+              onChange={(e) => atualizarLinha(l.key, "fatorId", e.target.value)}
+              className={campoSm}
+            >
+              <option value="">Fator de emissão (opcional)</option>
+              {fatores.map((f) => (
+                <option key={f.id} value={f.id}>
+                  {f.categoria} · {f.unidade}
+                </option>
+              ))}
+            </select>
             <button
               type="button"
               onClick={() => setLinhas((atual) => (atual.length > 1 ? atual.filter((x) => x.key !== l.key) : atual))}
@@ -128,6 +142,31 @@ export function NovaEntregaForm({ obras }: { obras: ObraVinculada[] }) {
             </button>
           </div>
         ))}
+        <p className="font-mono text-[10.5px] text-texto-fraco">
+          O fator só é usado se a unidade daqui bater exatamente com a que o fator espera (ex.:
+          fator em tCO2e/t exige quantidade em "t") — sem isso a linha entra na entrega mas fica
+          de fora do cálculo de carbono.
+        </p>
+      </div>
+
+      <div className="grid gap-2 border-t border-linha/60 pt-4">
+        <span className={rotulo}>Evidência da entrega (NF-e/CT-e)</span>
+        <p className="font-mono text-[10.5px] text-texto-fraco">
+          Sem esse documento a entrega fica registrada, mas não pode ser materializada no
+          inventário de carbono da obra — o lançamento sempre exige uma evidência.
+        </p>
+        <div className="flex gap-3">
+          <select name="evidencia_tipo" defaultValue="nfe" className={`${campoSm} w-32 shrink-0`}>
+            <option value="nfe">NF-e</option>
+            <option value="cte">CT-e</option>
+          </select>
+          <input
+            type="file"
+            name="evidencia_arquivo"
+            accept=".pdf,.xml,.jpg,.jpeg,.png"
+            className="flex-1 rounded-sm border border-linha bg-papel px-3 py-2 text-[13px] text-texto file:mr-3 file:rounded-sm file:border-0 file:bg-concreto file:px-2.5 file:py-1 file:font-mono file:text-[11px] file:text-texto-fraco"
+          />
+        </div>
       </div>
 
       {state.error ? (

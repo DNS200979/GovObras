@@ -52,7 +52,18 @@ export default async function EntregaPage({ params }: { params: Promise<{ id: st
               <ul className="divide-y divide-linha/60">
                 {entrega.composicao.map((c) => (
                   <li key={c.id} className="flex items-center justify-between py-2.5 text-[13px]">
-                    <span className="text-texto">{c.insumo}</span>
+                    <div>
+                      <span className="text-texto">{c.insumo}</span>
+                      {c.fatorCategoria ? (
+                        <span className="ml-2 font-mono text-[10.5px] text-verde">
+                          fator: {c.fatorCategoria}
+                        </span>
+                      ) : (
+                        <span className="ml-2 font-mono text-[10.5px] text-texto-fraco">
+                          sem fator vinculado
+                        </span>
+                      )}
+                    </div>
                     <span className="font-mono text-[12px] text-texto-fraco">
                       {c.quantidade.toLocaleString("pt-BR")} {c.unidade}
                     </span>
@@ -63,11 +74,29 @@ export default async function EntregaPage({ params }: { params: Promise<{ id: st
           </Card>
         </div>
 
-        <div>
+        <div className="space-y-4">
           <Card>
             <CardTitle>Traço</CardTitle>
             <p className="text-[13.5px] text-texto">
               {entrega.traco || "Não informado."}
+            </p>
+          </Card>
+
+          <Card>
+            <CardTitle>Carbono</CardTitle>
+            <p className="text-[13px] text-texto-fraco">
+              Evidência (NF-e/CT-e):{" "}
+              <span className={entrega.temEvidencia ? "text-verde" : "text-ambar"}>
+                {entrega.temEvidencia ? "anexada" : "faltando"}
+              </span>
+            </p>
+            <p className="mt-1 text-[13px] text-texto-fraco">
+              Lançamento no inventário:{" "}
+              <span className={entrega.materializadoEm ? "text-verde" : "text-texto-fraco"}>
+                {entrega.materializadoEm
+                  ? `feito em ${new Date(entrega.materializadoEm).toLocaleDateString("pt-BR")}`
+                  : "ainda não — a construtora materializa pelo painel dela"}
+              </span>
             </p>
           </Card>
         </div>

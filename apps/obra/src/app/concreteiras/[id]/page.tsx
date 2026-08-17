@@ -3,6 +3,8 @@ import { Badge } from "@carbonfree/ui/badge";
 import { ObraShell } from "@/components/obra-shell";
 import { Card, CardEyebrow, CardTitle } from "@carbonfree/ui/card";
 import { getConcreteiraNaObra } from "@/lib/queries";
+import { getSessaoConstrutora } from "@/lib/sessao";
+import { MaterializarButton } from "./acoes";
 
 export const dynamic = "force-dynamic";
 
@@ -32,8 +34,9 @@ const categoriaLabel: Record<string, string> = {
 
 export default async function ConcreteiraNaObraPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const concreteira = await getConcreteiraNaObra(id);
+  const [concreteira, sessao] = await Promise.all([getConcreteiraNaObra(id), getSessaoConstrutora()]);
   if (!concreteira) notFound();
+  const ehRt = sessao?.papel === "construtora_rt";
 
   return (
     <ObraShell active="/concreteiras">
@@ -87,9 +90,25 @@ export default async function ConcreteiraNaObraPage({ params }: { params: Promis
                             className="rounded-sm bg-concreto px-2 py-0.5 font-mono text-[10.5px] text-texto-fraco"
                           >
                             {c.insumo}: {c.quantidade.toLocaleString("pt-BR")} {c.unidade}
+                            {c.fatorCategoria ? ` · ${c.fatorCategoria}` : ""}
                           </li>
                         ))}
                       </ul>
+                    ) : null}
+                    <p className="mt-2 font-mono text-[10.5px] text-texto-fraco">
+                      Evidência:{" "}
+                      <span className={e.temEvidencia ? "text-verde" : "text-ambar"}>
+                        {e.temEvidencia ? "anexada" : "faltando"}
+                      </span>
+                      {e.materializadoEm ? (
+                        <span className="text-verde">
+                          {" "}
+                          · lançada no inventário em {new Date(e.materializadoEm).toLocaleDateString("pt-BR")}
+                        </span>
+                      ) : null}
+                    </p>
+                    {ehRt && e.status === "validada" && !e.materializadoEm ? (
+                      <MaterializarButton entregaId={e.id} />
                     ) : null}
                   </li>
                 ))}

@@ -12,6 +12,7 @@
     "typecheck": "turbo run typecheck",
     "dev:gov": "turbo run dev --filter=@carbonfree/gov",
     "dev:obra": "turbo run dev --filter=@carbonfree/obra",
+    "dev:concreteira": "turbo run dev --filter=@carbonfree/concreteira",
     "dev:fiscal": "turbo run dev --filter=@carbonfree/fiscal"
   },
   "devDependencies": {

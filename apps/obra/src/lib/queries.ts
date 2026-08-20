@@ -406,6 +406,45 @@ export async function listRequisitosAuditoria(): Promise<RequisitoResumo[]> {
   }));
 }
 
+export interface RequisitoGuia {
+  id: string;
+  codigo: string;
+  requisito: string;
+  natureza: "passivo" | "ativo";
+  unidade: string;
+  evidenciaPrimaria: string;
+  testeVerificacao: string;
+}
+
+/**
+ * Mesmo catálogo de `listRequisitosAuditoria`, mas com o campo de evidência
+ * e verificação — é o que dá conteúdo de verdade pro Guia ESG (o que
+ * exatamente precisa ser anexado pra cada tipo de ação). Exclui o
+ * "TESTE" (dado de desenvolvimento, marcado "(apagar)" no próprio texto —
+ * filtrado aqui em vez de esconder no cadastro da prefeitura, que não é
+ * escopo deste app).
+ */
+export async function listRequisitosParaGuia(): Promise<RequisitoGuia[]> {
+  const db = await createServerSupabase();
+  const { data, error } = await db
+    .from("requisitos_auditoria")
+    .select("id, codigo, requisito, natureza, unidade, evidencia_primaria, teste_verificacao")
+    .order("natureza")
+    .order("ordem");
+  if (error) throw error;
+  return (data ?? [])
+    .filter((r) => r.codigo !== "TESTE")
+    .map((r) => ({
+      id: r.id,
+      codigo: r.codigo,
+      requisito: r.requisito,
+      natureza: r.natureza,
+      unidade: r.unidade,
+      evidenciaPrimaria: r.evidencia_primaria,
+      testeVerificacao: r.teste_verificacao,
+    }));
+}
+
 const categoriaLabel: Record<string, string> = {
   ambiental: "Ambiental",
   social: "Social",

@@ -15,9 +15,12 @@ const naturezaLabel: Record<string, string> = { passivo: "Passivo", ativo: "Ativ
 export function NovoProjetoForm({
   obras,
   requisitos,
+  prefill,
 }: {
   obras: ObraResumo[];
   requisitos: RequisitoResumo[];
+  /** Vem do Guia ESG — quem chega de lá já escolheu um requisito específico. */
+  prefill?: { requisitoId?: string; titulo?: string };
 }) {
   const formRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
@@ -76,7 +79,7 @@ export function NovoProjetoForm({
           id="categoria"
           name="categoria"
           required
-          defaultValue=""
+          defaultValue={prefill?.requisitoId ? "ambiental" : ""}
           className="w-full rounded-sm border border-linha bg-papel px-3 py-2 text-[14px] text-texto outline-none focus:border-verde"
         >
           <option value="" disabled>
@@ -97,7 +100,7 @@ export function NovoProjetoForm({
         <select
           id="requisito_id"
           name="requisito_id"
-          defaultValue=""
+          defaultValue={prefill?.requisitoId ?? ""}
           className="w-full rounded-sm border border-linha bg-papel px-3 py-2 text-[14px] text-texto outline-none focus:border-verde"
         >
           <option value="">Nenhum</option>
@@ -121,6 +124,7 @@ export function NovoProjetoForm({
           name="titulo"
           type="text"
           required
+          defaultValue={prefill?.titulo ?? ""}
           placeholder="Ex.: Reaproveitamento de água pluvial no canteiro"
           className="w-full rounded-sm border border-linha bg-papel px-3 py-2 text-[14px] text-texto outline-none focus:border-verde"
         />

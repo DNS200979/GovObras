@@ -3,6 +3,7 @@ import { ObraShell } from "@/components/obra-shell";
 import { Badge } from "@carbonfree/ui/badge";
 import { Card, CardEyebrow, CardTitle } from "@carbonfree/ui/card";
 import { getAlternativasMaterial, listRequisitosParaGuia } from "@/lib/queries";
+import { EsgSubnav } from "../esg-subnav";
 
 export const dynamic = "force-dynamic";
 
@@ -32,7 +33,9 @@ export default async function GuiaEsgPage() {
   const ativos = requisitos.filter((r) => r.natureza === "ativo");
 
   return (
-    <ObraShell active="/guia-esg">
+    <ObraShell active="/esg">
+      <EsgSubnav ativo="/esg/guia" />
+
       <div className="mb-8">
         <CardEyebrow>Guia ESG</CardEyebrow>
         <h1 className="mt-1 font-display text-3xl font-extrabold tracking-tight text-texto">
@@ -72,12 +75,20 @@ export default async function GuiaEsgPage() {
           <div className="grid gap-3">
             {ativos.map((r) => (
               <div key={r.id} className="rounded-sm border border-linha p-3">
-                <div className="mb-1 flex flex-wrap items-center gap-2">
-                  <Badge tone="ativo">{r.codigo}</Badge>
-                  <span className="font-display text-[13px] font-semibold text-texto">
-                    {r.requisito}
-                  </span>
-                  <span className="font-mono text-[10.5px] text-texto-fraco">({r.unidade})</span>
+                <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Badge tone="ativo">{r.codigo}</Badge>
+                    <span className="font-display text-[13px] font-semibold text-texto">
+                      {r.requisito}
+                    </span>
+                    <span className="font-mono text-[10.5px] text-texto-fraco">({r.unidade})</span>
+                  </div>
+                  <Link
+                    href={`/esg/novo?requisito=${r.id}&titulo=${encodeURIComponent(r.requisito)}`}
+                    className="shrink-0 font-mono text-[10.5px] uppercase tracking-wide text-verde hover:underline"
+                  >
+                    criar projeto com este requisito →
+                  </Link>
                 </div>
                 <p className="text-[12px] leading-relaxed text-texto-fraco">
                   <span className="text-texto">Evidência necessária:</span> {r.evidenciaPrimaria}

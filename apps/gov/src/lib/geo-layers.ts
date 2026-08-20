@@ -124,11 +124,78 @@ export const CAMADAS_WMS: CamadaWms[] = [
 ];
 
 /**
- * Palhoça (4211900) e São José (4216602) ainda não têm camada própria
- * confirmada — geo.palhoca.sc.gov.br existe mas não deu pra verificar se é
- * GeoServer (fora do ar por HTTPS na checagem), e não achei geoportal
- * público de São José. Quando alguém confirmar, é só seguir o padrão
- * acima: baseUrl + layerName reais, abrangencia com o codigo_ibge certo.
+ * Palhoça tem GeoServer público de verdade — a checagem anterior via
+ * WebFetch tinha dado falso-negativo porque a ferramenta força HTTPS e
+ * geo.palhoca.sc.gov.br só responde em HTTP puro (WildFly/Undertow,
+ * plataforma comercial "Geomais Geotecnologia"). Confirmado com `curl`
+ * direto + GetMap real (bytes de conteúdo, não tile vazio) antes de
+ * entrar aqui.
+ */
+
+export const CAMADAS_WMS_PALHOCA: CamadaWms[] = [
+  {
+    id: "palhoca-lotes",
+    titulo: "Lotes urbanos",
+    categoria: "cadastro",
+    tipo: "wms",
+    baseUrl: "http://geo.palhoca.sc.gov.br/geoserver/ows",
+    layerName: "gm_palhoca:st_lote",
+    abrangencia: ["4211900"],
+    atribuicao: "Geoportal/Prefeitura de Palhoça (Geomais)",
+  },
+  {
+    id: "palhoca-inscricao-imobiliaria",
+    titulo: "Inscrição imobiliária",
+    categoria: "cadastro",
+    tipo: "wms",
+    baseUrl: "http://geo.palhoca.sc.gov.br/geoserver/ows",
+    layerName: "gm_palhoca:view_st_camada_inscricao",
+    abrangencia: ["4211900"],
+    atribuicao: "Geoportal/Prefeitura de Palhoça (Geomais)",
+  },
+  {
+    id: "palhoca-zoneamento",
+    titulo: "Zoneamento (Plano Diretor)",
+    categoria: "cadastro",
+    tipo: "wms",
+    baseUrl: "http://geo.palhoca.sc.gov.br/geoserver/ows",
+    layerName: "gm_palhoca:view_st_zoneamento",
+    abrangencia: ["4211900"],
+    atribuicao: "Geoportal/Prefeitura de Palhoça (Geomais)",
+  },
+  {
+    id: "palhoca-vegetacao",
+    titulo: "Vegetação",
+    categoria: "preservacao",
+    tipo: "wms",
+    baseUrl: "http://geo.palhoca.sc.gov.br/geoserver/ows",
+    layerName: "gm_palhoca:st_vegetacao",
+    abrangencia: ["4211900"],
+    atribuicao: "Geoportal/Prefeitura de Palhoça (Geomais)",
+    ativaPorPadrao: true,
+  },
+  {
+    id: "palhoca-hidrografia",
+    titulo: "Hidrografia",
+    categoria: "hidrografia",
+    tipo: "wms",
+    baseUrl: "http://geo.palhoca.sc.gov.br/geoserver/ows",
+    layerName: "gm_palhoca:st_hidrografia",
+    abrangencia: ["4211900"],
+    atribuicao: "Geoportal/Prefeitura de Palhoça (Geomais)",
+  },
+];
+
+/**
+ * São José (4216602) também é cliente Geomais — confirmado por reportagem
+ * no site oficial (equipe da Geomais fazendo o levantamento de campo do
+ * cadastro) — mas não achei o hostname público do geoportal: nenhuma das
+ * variantes óbvias (geo.saojose.sc.gov.br, sig.saojose.sc.gov.br,
+ * *.geomais.com.br etc.) resolve, e a página do site sobre "mapas em
+ * arquivo vetorial" não linka pra nenhum serviço externo. Provavelmente
+ * existe mas com um nome não-óbvio, ou não está exposto publicamente
+ * ainda. Quando alguém souber a URL certa, é só replicar o padrão de
+ * Palhoça acima.
  *
  * Mapa do Registro de Imóveis (ONR/SIG-RI, mapa.onr.org.br) — pesquisado e
  * descartado por enquanto: não embute em iframe (`X-Frame-Options:
@@ -141,10 +208,12 @@ export const CAMADAS_WMS: CamadaWms[] = [
  * que dá pra simular aqui.
  */
 
+const TODAS_CAMADAS: CamadaWms[] = [...CAMADAS_WMS, ...CAMADAS_WMS_PALHOCA];
+
 export function camadasParaMunicipio(codigoIbge: string | null): CamadaWms[] {
-  return CAMADAS_WMS.filter((c) => c.abrangencia === "nacional" || (codigoIbge && c.abrangencia.includes(codigoIbge)));
+  return TODAS_CAMADAS.filter((c) => c.abrangencia === "nacional" || (codigoIbge && c.abrangencia.includes(codigoIbge)));
 }
 
 export function getCamada(id: string): CamadaWms | undefined {
-  return CAMADAS_WMS.find((c) => c.id === id);
+  return TODAS_CAMADAS.find((c) => c.id === id);
 }

@@ -129,6 +129,16 @@ export const CAMADAS_WMS: CamadaWms[] = [
  * GeoServer (fora do ar por HTTPS na checagem), e não achei geoportal
  * público de São José. Quando alguém confirmar, é só seguir o padrão
  * acima: baseUrl + layerName reais, abrangencia com o codigo_ibge certo.
+ *
+ * Mapa do Registro de Imóveis (ONR/SIG-RI, mapa.onr.org.br) — pesquisado e
+ * descartado por enquanto: não embute em iframe (`X-Frame-Options:
+ * sameorigin`, confirmado), e o backend real por trás da página
+ * (gis-mapas.onr.org.br, parece ArcGIS Server) responde 401 direto na
+ * raiz — exige credencial institucional, não é serviço público. O único
+ * "API" documentado é de um broker comercial terceiro (Infosimples),
+ * pago. Pra integrar de verdade: ou conseguir acesso institucional
+ * ONR/Intranet, ou contratar um broker desses — nenhum dos dois é algo
+ * que dá pra simular aqui.
  */
 
 export function camadasParaMunicipio(codigoIbge: string | null): CamadaWms[] {

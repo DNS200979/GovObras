@@ -1,4 +1,5 @@
 import { MapPin } from "lucide-react";
+import Link from "next/link";
 import { AppShell } from "@/components/app-shell";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -68,7 +69,9 @@ export default async function ObrasPage() {
               {obras.map((row) => (
                 <TableRow key={row.obraId}>
                   <TableCell>
-                    <div className="font-medium">{row.nome}</div>
+                    <Link href={`/obras/${row.obraId}`} className="font-medium hover:underline">
+                      {row.nome}
+                    </Link>
                     <div className="font-mono text-[11px] text-muted-foreground">
                       {row.alvara} · {row.construtora}
                     </div>

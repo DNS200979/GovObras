@@ -3,6 +3,7 @@ import { Badge } from "@carbonfree/ui/badge";
 import { ObraShell } from "@/components/obra-shell";
 import { Card, CardEyebrow } from "@carbonfree/ui/card";
 import { categoriaLabel, listProjetosEsg, statusLabel } from "@/lib/queries";
+import { EsgSubnav } from "./esg-subnav";
 
 export const dynamic = "force-dynamic";
 
@@ -19,6 +20,8 @@ export default async function EsgPage() {
 
   return (
     <ObraShell active="/esg">
+      <EsgSubnav ativo="/esg" />
+
       <div className="mb-6 flex items-center justify-between">
         <div>
           <CardEyebrow>ESG · Documentação e desconto fiscal</CardEyebrow>
@@ -36,9 +39,14 @@ export default async function EsgPage() {
 
       {projetos.length === 0 ? (
         <Card>
-          <p className="py-10 text-center text-[13.5px] text-texto-fraco">
+          <p className="mb-4 text-center text-[13.5px] text-texto-fraco">
             Nenhum projeto ESG enviado ainda. Use documentação ambiental, social ou de governança
             da obra para instruir o processo de desconto fiscal junto à prefeitura.
+          </p>
+          <p className="text-center">
+            <Link href="/esg/guia" className="font-mono text-[12px] text-verde hover:underline">
+              não sabe por onde começar? veja o guia →
+            </Link>
           </p>
         </Card>
       ) : (

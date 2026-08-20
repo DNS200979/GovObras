@@ -5,8 +5,13 @@ import { NovoProjetoForm } from "./novo-form";
 
 export const dynamic = "force-dynamic";
 
-export default async function NovoProjetoEsgPage() {
+export default async function NovoProjetoEsgPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ requisito?: string; titulo?: string }>;
+}) {
   const [obras, requisitos] = await Promise.all([listObrasConstrutora(), listRequisitosAuditoria()]);
+  const { requisito, titulo } = await searchParams;
 
   return (
     <ObraShell active="/esg">
@@ -22,7 +27,11 @@ export default async function NovoProjetoEsgPage() {
             prefeitura antes de enviar um projeto ESG.
           </p>
         ) : (
-          <NovoProjetoForm obras={obras} requisitos={requisitos} />
+          <NovoProjetoForm
+            obras={obras}
+            requisitos={requisitos}
+            prefill={{ requisitoId: requisito, titulo }}
+          />
         )}
       </Card>
     </ObraShell>

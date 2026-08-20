@@ -6,6 +6,7 @@ import {
   Building2,
   Factory,
   Truck,
+  Map,
   CalendarCheck,
   ClipboardCheck,
   Leaf,
@@ -31,6 +32,7 @@ import { UserMenu } from "@/components/user-menu";
 
 const nav = [
   { href: "/", label: "Painel", icon: LayoutDashboard },
+  { href: "/mapa", label: "Mapa", icon: Map },
   { href: "/obras", label: "Obras", icon: Building2 },
   { href: "/construtoras", label: "Construtoras", icon: Factory },
   { href: "/concreteiras", label: "Concreteiras", icon: Truck },

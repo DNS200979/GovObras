@@ -52,8 +52,13 @@ export async function consultarPonto(
   };
 
   try {
-    const res = await fetch(url, { signal: AbortSignal.timeout(10_000), cache: "no-store" });
+    // 18s: essas fontes são servidor de prefeitura pequena, não CDN — de um
+    // datacenter da Vercel (iad1) pra um servidor HTTP puro em SC, latência
+    // alta é esperada, não é bug se demorar.
+    const res = await fetch(url, { signal: AbortSignal.timeout(18_000), cache: "no-store" });
     if (!res.ok) {
+      const corpo = await res.text().catch(() => "");
+      console.error(`[geo-consulta] ${camada.id} respondeu ${res.status}: ${corpo.slice(0, 300)} — url=${url}`);
       return { ...base, encontrado: false, atributos: null, erro: `fonte respondeu ${res.status}` };
     }
     const dados = await res.json();
@@ -61,12 +66,9 @@ export async function consultarPonto(
     if (!feature) return { ...base, encontrado: false, atributos: null };
     return { ...base, encontrado: true, atributos: feature.properties ?? null };
   } catch (err) {
-    return {
-      ...base,
-      encontrado: false,
-      atributos: null,
-      erro: err instanceof Error ? err.message : String(err),
-    };
+    const mensagem = err instanceof Error ? err.message : String(err);
+    console.error(`[geo-consulta] ${camada.id} falhou: ${mensagem} — url=${url}`);
+    return { ...base, encontrado: false, atributos: null, erro: mensagem };
   }
 }
 

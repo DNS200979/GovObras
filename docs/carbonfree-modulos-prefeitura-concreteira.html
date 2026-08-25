@@ -373,6 +373,45 @@ tr:last-child td{border-bottom:none}
 td.lei{font-family:var(--display);font-weight:700;font-size:13.5px;color:var(--ink);white-space:nowrap}
 td.uso{color:var(--ink)}
 
+
+/* ============================================================
+   GARANTIAS DE ENGENHARIA
+   Estrutura ecoando os "requisitos auditáveis" do próprio produto:
+   toda garantia vem com o seu teste de verificação ao lado.
+   ============================================================ */
+.garantias{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.garantia{background:var(--surface);padding:clamp(18px,2.2vw,24px);display:flex;flex-direction:column;gap:11px}
+.garantia .medida{
+  font-family:var(--display);font-weight:900;font-stretch:78%;
+  font-size:clamp(30px,3.6vw,42px);line-height:.95;letter-spacing:-.03em;
+  color:var(--verde);font-variant-numeric:tabular-nums;
+}
+.garantia .medida small{font-size:.42em;font-stretch:100%;font-weight:700;letter-spacing:.02em;margin-left:3px;color:var(--ink-2)}
+.garantia .g{font-family:var(--display);font-weight:700;font-size:14.5px;line-height:1.25;color:var(--ink)}
+.garantia .d{font-size:13.5px;line-height:1.5;color:var(--ink-2)}
+.garantia .verif{
+  margin-top:auto;padding-top:11px;border-top:1px dashed var(--line-2);
+  font-family:var(--mono);font-size:10.5px;line-height:1.5;color:var(--ink-3);
+}
+.garantia .verif b{display:block;text-transform:uppercase;letter-spacing:.11em;font-size:9.5px;color:var(--verde);font-weight:600;margin-bottom:3px}
+
+/* achado auto-reportado — o argumento mais forte da seção */
+.achado{
+  margin-top:clamp(18px,2.4vw,26px);
+  background:var(--ambar-soft);border:1px solid var(--ambar-linha);border-radius:4px;
+  padding:clamp(18px,2.4vw,26px);
+  display:grid;grid-template-columns:auto 1fr;gap:clamp(14px,2vw,22px);align-items:start;
+}
+@media (max-width:700px){.achado{grid-template-columns:1fr}}
+.achado .selo{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:#F8F9F6;background:var(--ambar);padding:5px 9px;border-radius:2px;white-space:nowrap;
+}
+.achado h3{color:var(--ink);margin-bottom:8px}
+.achado p{font-size:14px;line-height:1.55;color:var(--ink-2);margin-bottom:9px}
+.achado p:last-child{margin-bottom:0}
+.achado code{font-family:var(--mono);font-size:12.5px;background:var(--surface);border:1px solid var(--ambar-linha);border-radius:2px;padding:1px 5px;color:var(--ink)}
+
 /* ============================================================
    FECHO
    ============================================================ */
@@ -805,6 +844,107 @@ a{color:var(--verde)}
       lugar da DAP do fornecedor já existe no catálogo e a substituição é troca de dado,
       não de código. Antes de qualquer homologação valer, o fator é DAP real.
     </p>
+  </div>
+</section>
+
+<!-- ============================================================
+     GARANTIAS DE ENGENHARIA
+     ============================================================ -->
+<section class="faixa faixa-papel">
+  <div class="wrap">
+    <div class="cabeca rv">
+      <p class="eyebrow">A régua aplicada ao próprio software</p>
+      <h2>Por que confiar no número</h2>
+      <p class="lede">
+        O produto exige que todo requisito da obra venha com o seu teste de verificação.
+        Seria incoerente vender isso sem aplicar a mesma régua ao software que faz a conta.
+        Cada garantia abaixo vem com o modo de conferir.
+      </p>
+    </div>
+
+    <div class="garantias rv">
+
+      <article class="garantia">
+        <div class="medida">0</div>
+        <span class="g">Nenhum caminho ignora as regras de acesso</span>
+        <p class="d">
+          Não existe no código nenhuma escrita no banco que passe por cima do controle
+          de permissão. Quem decide o que cada perfil enxerga e grava é o Postgres,
+          não a tela — nem mesmo por engano.
+        </p>
+        <p class="verif">
+          <b>Como se verifica</b>
+          Buscar por “service role” no código não retorna nenhum uso em runtime.
+        </p>
+      </article>
+
+      <article class="garantia">
+        <div class="medida">0</div>
+        <span class="g">Auditoria de segurança do banco sem apontamentos</span>
+        <p class="d">
+          Toda tabela tem controle de acesso ativo, toda tabela com controle tem regra
+          escrita, e nenhuma função interna aceita ser sequestrada por caminho de busca.
+        </p>
+        <p class="verif">
+          <b>Como se verifica</b>
+          Painel do Supabase → Advisors → Security. Três checagens, zero achados.
+        </p>
+      </article>
+
+      <article class="garantia">
+        <div class="medida">54</div>
+        <span class="g">Testes automatizados no motor de cálculo</span>
+        <p class="d">
+          Cobrem o diagnóstico de financiamento, a geração do arquivo da Receita e a
+          conversão de unidade que transforma entrega de concreto em tonelada de CO₂e —
+          onde um erro sairia plausível e entraria no inventário sem ninguém notar.
+        </p>
+        <p class="verif">
+          <b>Como se verifica</b>
+          Os testes foram checados por mutação: quebrar a conversão de propósito faz o
+          teste correspondente falhar. Teste que não detecta quebra não conta.
+        </p>
+      </article>
+
+      <article class="garantia">
+        <div class="medida">4<small>× por mudança</small></div>
+        <span class="g">Nada entra sem passar por quatro portões</span>
+        <p class="d">
+          Cada alteração roda análise estática, checagem de tipos, a suíte de testes e a
+          construção dos três aplicativos antes de poder ser incorporada.
+        </p>
+        <p class="verif">
+          <b>Como se verifica</b>
+          Histórico público de execuções no repositório, uma por alteração proposta.
+        </p>
+      </article>
+
+    </div>
+
+    <div class="achado rv">
+      <span class="selo">Achado e corrigido</span>
+      <div>
+        <h3>A auditoria encontrou uma falha nossa — e é por isso que ela está aqui</h3>
+        <p>
+          Uma das regras de acesso deveria amarrar a entrega de concreto à obra do
+          contrato. Ela continha <code>obra = obra</code> comparando o campo consigo
+          mesmo: sempre verdadeiro, sem efeito nenhum. Na prática, uma concreteira com
+          contrato legítimo numa obra poderia lançar entrega apontando para outra obra
+          qualquer — e ela apareceria para quem não deveria vê-la.
+        </p>
+        <p>
+          Foi encontrada durante a revisão, confirmada como nunca utilizada (a tabela
+          não tinha nenhum registro), corrigida e registrada em migração própria, separada
+          das demais para poder ser revisada isoladamente.
+        </p>
+        <p>
+          <strong>Está no material comercial de propósito.</strong> Um sistema que se vende
+          como infraestrutura de fiscalização e nunca achou nada em si mesmo ou não olhou,
+          ou não conta. A pergunta útil para qualquer fornecedor não é “vocês têm falhas”,
+          é “o que a última auditoria de vocês encontrou”.
+        </p>
+      </div>
+    </div>
   </div>
 </section>
 

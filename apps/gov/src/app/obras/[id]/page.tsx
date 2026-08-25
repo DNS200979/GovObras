@@ -91,9 +91,16 @@ export default async function ObraDetalhePage({ params }: { params: Promise<{ id
                 <div>
                   <div className="mb-1.5 flex items-center gap-2">
                     <span className="font-semibold">Área protegida</span>
-                    <Badge variant={dentroDeAreaProtegida ? "destructive" : "success"}>
-                      {dentroDeAreaProtegida ? "possível conflito" : "nenhuma encontrada"}
-                    </Badge>
+                    {/* Sem camada de preservação para o município, "nenhuma
+                        encontrada" em verde seria falso negativo: o que existe
+                        é ausência de fonte, não ausência de conflito. */}
+                    {camadasProtecao.length === 0 ? (
+                      <Badge variant="secondary">sem fonte para verificar</Badge>
+                    ) : (
+                      <Badge variant={dentroDeAreaProtegida ? "destructive" : "success"}>
+                        {dentroDeAreaProtegida ? "possível conflito" : "nenhuma encontrada"}
+                      </Badge>
+                    )}
                   </div>
                   {camadasProtecao.length === 0 ? (
                     <p className="text-muted-foreground">

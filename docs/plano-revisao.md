@@ -267,7 +267,7 @@ Performance, medido (não mais estimado a partir das migrations):
 
 | Achado | Qtd |
 | --- | --- |
-| `auth_rls_initplan` — policy chama `auth.*()` sem `(select ...)` | **11** |
+| `auth_rls_initplan` — policy chama `auth.*()` sem `(select ...)` | **11** → **0** ✅ |
 | `multiple_permissive_policies` — mesma tabela+ação com várias permissivas | **19** |
 | FK sem índice de cobertura | **28** |
 
@@ -284,13 +284,35 @@ Três índices resolvem, e é mudança aditiva, sem risco de alterar acesso.
 
 - [x] **Índice nas 3 FKs de `perfis`** — migration 32, aplicada e verificada.
       FKs sem índice: 28 → 25. Mudança aditiva, não altera nenhuma policy.
-- [ ] Criar índice nas outras 25 FKs.
-- [ ] Reescrever as 11 policies com `(select auth.uid())`.
-- [ ] Consolidar as 19 policies permissivas duplicadas.
+- [x] **As 11 policies reescritas com `(select auth.uid())`** — migration 33,
+      aplicada. `auth_rls_initplan`: **11 → 0**.
 
-      As duas últimas continuam merecendo PR próprio: são drop + recreate de
-      controle de acesso, onde um erro de transcrição abre dado ou quebra acesso
-      em silêncio. Os índices não têm esse risco.
+      O risco de transcrição que me fez adiar isso antes foi eliminado pelo
+      método: cada expressão foi **extraída de `pg_policies`** (decompilada pelo
+      próprio Postgres a partir do que estava em produção) e transformada por
+      substituição de `auth.<fn>()` por `(select auth.<fn>())`. Nenhuma
+      expressão foi redigitada. A migration é provadamente preservadora de
+      semântica.
+
+- [x] **Bug de segurança encontrado durante o trabalho** — migration 34.
+
+      A policy de INSERT de `entregas_concreto` continha
+      `oc.obra_id = oc.obra_id`, uma tautologia. A migration 24 escreveu
+      `and oc.obra_id = obra_id`: sem qualificação, dentro de um `EXISTS` com
+      `obra_concreteiras oc` no escopo interno, os dois lados resolvem para
+      `oc.obra_id`.
+
+      Efeito: a obra declarada na entrega não estava amarrada à obra do
+      vínculo. Uma concreteira com vínculo ativo legítimo podia inserir entrega
+      apontando `obra_id` para **qualquer** obra — e ela apareceria no escopo de
+      quem não deveria vê-la, já que as policies de SELECT de construtora e
+      prefeitura filtram justamente por `entregas_concreto.obra_id`.
+
+      Verificado que nunca foi exercido: a tabela tem 0 entregas. Correção
+      preventiva, isolada em migration própria para ser revisada por si só.
+
+- [ ] Criar índice nas outras 25 FKs.
+- [ ] Consolidar as 19 policies permissivas duplicadas.
 
 ## Fase 5 — Estrutura do código ✅ concluída em 25/08/2026
 

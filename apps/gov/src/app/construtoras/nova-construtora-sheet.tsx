@@ -2,17 +2,17 @@
 
 import { useActionState, useState } from "react";
 import { Plus } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@carbonfree/ui/shadcn/alert";
+import { Button } from "@carbonfree/ui/shadcn/button";
+import { Input } from "@carbonfree/ui/shadcn/input";
+import { Label } from "@carbonfree/ui/shadcn/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@carbonfree/ui/shadcn/select";
 import {
   Sheet,
   SheetClose,
@@ -22,7 +22,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
+} from "@carbonfree/ui/shadcn/sheet";
 import { criarConstrutora, type CriarConstrutoraState } from "./actions";
 
 export function NovaConstrutoraSheet() {

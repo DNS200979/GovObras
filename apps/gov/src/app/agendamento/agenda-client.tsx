@@ -2,18 +2,18 @@
 
 import { useActionState, useMemo, useState } from "react";
 import { CalendarPlus } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
+import { Badge } from "@carbonfree/ui/shadcn/badge";
+import { Button } from "@carbonfree/ui/shadcn/button";
+import { Calendar } from "@carbonfree/ui/shadcn/calendar";
+import { Card, CardContent, CardHeader, CardTitle } from "@carbonfree/ui/shadcn/card";
+import { Label } from "@carbonfree/ui/shadcn/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@carbonfree/ui/shadcn/select";
 import {
   Sheet,
   SheetClose,
@@ -23,7 +23,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
+} from "@carbonfree/ui/shadcn/sheet";
 import type { Fiscalizacao } from "@/lib/queries";
 import { criarVistoria, type CriarVistoriaState } from "./actions";
 

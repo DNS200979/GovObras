@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AppShell } from "@/components/app-shell";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
+import { Badge } from "@carbonfree/ui/shadcn/badge";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@carbonfree/ui/shadcn/card";
+import { Progress } from "@carbonfree/ui/shadcn/progress";
 import { getProjetoCaptacao, listDocumentosProjeto } from "@/lib/queries";
 import {
   ROTAS,

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Archivo, IBM_Plex_Mono, Source_Serif_4 } from "next/font/google";
 import "./globals.css";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { TooltipProvider } from "@carbonfree/ui/shadcn/tooltip";
 
 const archivo = Archivo({ variable: "--font-display", subsets: ["latin"] });
 const sourceSerif = Source_Serif_4({ variable: "--font-body", subsets: ["latin"] });

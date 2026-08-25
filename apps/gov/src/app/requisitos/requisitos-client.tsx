@@ -2,10 +2,10 @@
 
 import { useMemo, useState } from "react";
 import { Flame, Leaf, Search } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@carbonfree/ui/shadcn/badge";
+import { Card, CardContent } from "@carbonfree/ui/shadcn/card";
+import { Input } from "@carbonfree/ui/shadcn/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@carbonfree/ui/shadcn/tabs";
 import type { RequisitoAuditoria } from "@/lib/queries";
 import { NovoRequisitoSheet } from "./novo-requisito-sheet";
 

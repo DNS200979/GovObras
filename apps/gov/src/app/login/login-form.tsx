@@ -2,10 +2,10 @@
 
 import { useActionState } from "react";
 import { Lock, Mail } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@carbonfree/ui/shadcn/alert";
+import { Button } from "@carbonfree/ui/shadcn/button";
+import { Input } from "@carbonfree/ui/shadcn/input";
+import { Label } from "@carbonfree/ui/shadcn/label";
 import { entrar, type LoginState } from "./actions";
 
 export function LoginForm({ next }: { next: string }) {

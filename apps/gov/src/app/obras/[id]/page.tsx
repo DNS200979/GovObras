@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { AppShell } from "@/components/app-shell";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@carbonfree/ui/shadcn/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@carbonfree/ui/shadcn/card";
 import { camadasParaMunicipio } from "@/lib/geo-layers";
 import { consultarPontoEmCamadas } from "@/lib/geo-consulta";
 import { getMeuMunicipio, getObraDetalhe } from "@/lib/queries";

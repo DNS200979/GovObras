@@ -2,8 +2,8 @@
 
 import { useTransition } from "react";
 import { Sparkles } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Badge } from "@carbonfree/ui/shadcn/badge";
+import { Button } from "@carbonfree/ui/shadcn/button";
 import type { Questao, Resposta } from "@/lib/financiamento";
 import { responderQuestao } from "../actions";
 

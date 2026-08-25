@@ -1,8 +1,13 @@
 @import "tailwindcss";
 @import "@carbonfree/design-tokens/theme.css";
+@import "@carbonfree/design-tokens/dark.css";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "leaflet/dist/leaflet.css";
+
+/* packages/ui vive fora da raiz de varredura automática do Tailwind v4 —
+   sem isto, classes só usadas lá nunca são geradas. */
+@source "../../../../packages/ui/src/**/*.{ts,tsx}";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -91,38 +96,44 @@
 }
 
 .dark {
-  --background: #0E1619;
-  --foreground: #E4E9E7;
-  --card: var(--color-ardosia);
-  --card-foreground: #E4E9E7;
-  --popover: var(--color-ardosia);
-  --popover-foreground: #E4E9E7;
-  --primary: #4FBF9F;
-  --primary-foreground: #0E1619;
+  /* Os tokens semânticos do shadcn passam a apontar para a paleta escura
+     compartilhada (design-tokens/dark.css), em vez de repetir os hexes aqui.
+     Antes esta era a segunda fonte de verdade da marca no escuro. */
+  --background: var(--color-concreto);
+  --foreground: var(--color-texto);
+  --card: var(--color-papel);
+  --card-foreground: var(--color-texto);
+  --popover: var(--color-papel);
+  --popover-foreground: var(--color-texto);
+  --primary: var(--color-verde);
+  --primary-foreground: var(--color-concreto);
   --secondary: var(--color-ardosia-2);
-  --secondary-foreground: #E4E9E7;
+  --secondary-foreground: var(--color-texto);
   --muted: var(--color-ardosia-2);
-  --muted-foreground: #8A9995;
-  --accent: color-mix(in oklab, #4FBF9F 16%, var(--color-ardosia-2));
-  --accent-foreground: #7FD9C0;
+  --muted-foreground: var(--color-texto-fraco);
+  --accent: var(--color-verde-claro);
+  --accent-foreground: var(--color-verde);
+  --border: var(--color-linha);
+  --input: var(--color-linha);
+  --ring: var(--color-verde);
+  --chart-1: var(--color-verde);
+  --chart-2: var(--color-ambar);
+  --chart-3: var(--color-azul);
+  --chart-4: var(--color-texto-fraco);
+  --chart-5: var(--color-linha-forte);
+  /* Sem equivalente na paleta de marca: erro não é uma cor do CarbonFree. */
   --destructive: #E8756B;
-  --destructive-foreground: #0E1619;
-  --border: color-mix(in oklab, #E4E9E7 10%, transparent);
-  --input: color-mix(in oklab, #E4E9E7 13%, transparent);
-  --ring: #4FBF9F;
-  --chart-1: #4FBF9F;
-  --chart-2: #E8A24E;
-  --chart-3: #5B9BC7;
-  --chart-4: #8A9995;
-  --chart-5: #C96A63;
-  --sidebar: #0B1113;
-  --sidebar-foreground: #E4E9E7;
-  --sidebar-primary: #4FBF9F;
-  --sidebar-primary-foreground: #0E1619;
+  --destructive-foreground: var(--color-concreto);
+  /* A sidebar é mais escura que o fundo de propósito, para separar da área
+     de conteúdo — `ardosia` no escuro é justamente esse tom. */
+  --sidebar: var(--color-ardosia);
+  --sidebar-foreground: var(--color-texto);
+  --sidebar-primary: var(--color-verde);
+  --sidebar-primary-foreground: var(--color-concreto);
   --sidebar-accent: var(--color-ardosia-2);
-  --sidebar-accent-foreground: #E4E9E7;
-  --sidebar-border: color-mix(in oklab, #E4E9E7 8%, transparent);
-  --sidebar-ring: #4FBF9F;
+  --sidebar-accent-foreground: var(--color-texto);
+  --sidebar-border: var(--color-ardosia-2);
+  --sidebar-ring: var(--color-verde);
 }
 
 @layer base {

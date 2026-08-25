@@ -26,8 +26,8 @@ import {
   SidebarMenuItem,
   SidebarProvider,
   SidebarTrigger,
-} from "@/components/ui/sidebar";
-import { Separator } from "@/components/ui/separator";
+} from "@carbonfree/ui/shadcn/sidebar";
+import { Separator } from "@carbonfree/ui/shadcn/separator";
 import { UserMenu } from "@/components/user-menu";
 
 const nav = [

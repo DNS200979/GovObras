@@ -105,7 +105,7 @@ Server Action (`"use server"` + `redirect`); movê-la para um pacote compartilha
 exige configuração de transpilação e traz mais risco que as 10 linhas economizam.
 Fica.
 
-## Fase 3 — Convergir o design system  ·  tokens concluídos, componentes pendentes
+## Fase 3 — Convergir o design system ✅ concluída em 25/08/2026
 
 **Decisão tomada:** crescer o `packages/ui` e migrar o Gov para ele.
 
@@ -138,34 +138,42 @@ CSS vars do shadcn no Gov, e o HTML do plano de negócio.
       clicável passa a bater com o realce de hover, sem `onClick` em `<tr>` e
       sem tirar o foco de teclado do link real.
 
-### Pendente — a migração dos componentes
+### Migração dos componentes — feita
 
-O grosso da Fase 3 continua aberto: mover os 27 componentes shadcn de
-`apps/gov/src/components/ui/` para o `packages/ui` e convergir os dois
-mecanismos de tema.
+- [x] **Dark do Gov alinhado.** O bloco `.dark` do `gov/globals.css` repetia os
+      hexes da marca; agora mapeia os tokens semânticos do shadcn para a paleta
+      compartilhada (`design-tokens/dark.css`). Era a segunda fonte de verdade
+      da marca no escuro.
 
-**O obstáculo real** não é mover arquivo, é que os dois sistemas se tematizam
-de formas diferentes:
+      Dois valores mudaram, como avisado: `--muted-foreground` (#8A9995 →
+      `--color-texto-fraco` #93a5a0) e `--border`/`--input` (color-mix
+      translúcido → `--color-linha` #26383f, opaco). `--sidebar` também passou
+      de #0B1113 para `--color-ardosia` (#0a1114), diferença imperceptível.
+      `--destructive` ficou literal: erro não é uma cor da marca CarbonFree.
 
-- Gov usa tokens semânticos do shadcn (`--primary`, `--muted-foreground`),
-  mapeados para a marca em `gov/globals.css`.
-- `packages/ui` usa os tokens de marca direto (`text-texto`, `bg-concreto`).
+      Cascata verificada no CSS gerado: `:root` claro na posição 3464, paleta
+      escura em 101340, semânticos do Gov em 114177 — a ordem resolve.
 
-Fazer o Gov consumir a paleta escura compartilhada é quase mecânico, mas **dois
-valores divergem de fato** e mudariam a aparência:
+- [x] **26 dos 27 componentes shadcn movidos** para
+      `packages/ui/src/components/shadcn/`, mais o hook `use-mobile`.
+      30 arquivos do Gov tiveram o import reescrito de `@/components/ui/X` para
+      `@carbonfree/ui/shadcn/X`.
 
-| Token do Gov (dark) | Valor atual | Equivalente compartilhado |
-| --- | --- | --- |
-| `--muted-foreground` | `#8A9995` | `--color-texto-fraco` = `#93a5a0` |
-| `--border` | `color-mix(… 10%, transparent)` | `--color-linha` = `#26383f` |
+      **Por que um subdiretório:** `badge` e `card` existem nos dois sistemas
+      com APIs incompatíveis (`tone` no artesanal, `variant` no shadcn).
+      O subdiretório deixa os dois conviverem no mesmo pacote agora, e a
+      convergência componente a componente pode acontecer depois sem travar
+      esta etapa.
 
-Não é refatoração, é decisão visual — deixei para você olhar antes.
+- [ ] **`chart.tsx` ficou no Gov** — é o único preso ao recharts v3, enquanto
+      `packages/ui` e o Obra estão no v2. Movê-lo exigiria um major do recharts
+      sobre o `trend-chart` do Obra no mesmo passo, o que é risco visual sem
+      relação com esta migração. Fica como item próprio.
 
-- [ ] Alinhar (ou não) esses dois valores do dark do Gov.
-- [ ] Mover os 27 componentes shadcn para `packages/ui`, começando pelos que
-      Obra e Concreteira também usariam (`badge`, `card`, `table`, `button`).
-- [ ] `sidebar.tsx` (723 linhas), `chart.tsx` e `command.tsx` por último — são
-      os que mais dependem de `@base-ui/react` e `cmdk`.
+      Verificado que o Tailwind gera as classes que agora vivem em
+      `packages/ui`: `@source` adicionado ao `gov/globals.css` (o Obra já
+      tinha), e as classes de `sidebar.tsx` aparecem no CSS de produção.
+
 
 ## Fase 4 — Banco e segurança  ·  migration aplicada, service role zerado
 

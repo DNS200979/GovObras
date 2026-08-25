@@ -200,18 +200,19 @@ p{margin:0}
 }
 
 /* ============================================================
-   TESE / DOIS LADOS
+   TESE / OS TRÊS ATORES DA CADEIA
    ============================================================ */
 .tese{
   font-family:var(--display);font-weight:700;font-stretch:102%;
   font-size:clamp(21px,2.7vw,31px);line-height:1.24;letter-spacing:-.018em;
-  max-width:26ch;
+  max-width:34ch;
 }
 .tese em{font-style:normal;color:var(--verde)}
 .tese .amb{color:var(--ambar)}
+.tese .azu{color:var(--azul)}
 
-.lados{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden;margin-top:clamp(30px,4vw,46px)}
-@media (max-width:800px){.lados{grid-template-columns:1fr}}
+.lados{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden;margin-top:clamp(30px,4vw,46px)}
+@media (max-width:1000px){.lados{grid-template-columns:1fr}}
 .lado{background:var(--surface);padding:clamp(22px,3vw,30px);display:flex;flex-direction:column;gap:16px}
 .lado-topo{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-bottom:12px;border-bottom:2px solid var(--ink)}
 .lado-topo .quem{font-family:var(--display);font-weight:800;font-size:15px;letter-spacing:.01em}
@@ -223,6 +224,9 @@ p{margin:0}
 .lado-gov .lado-topo{border-bottom-color:var(--verde)}
 .lado-gov .quem{color:var(--verde)}
 .lado-gov li::before{background:var(--verde)}
+.lado-const .lado-topo{border-bottom-color:var(--azul)}
+.lado-const .quem{color:var(--azul)}
+.lado-const li::before{background:var(--azul)}
 .lado-conc .lado-topo{border-bottom-color:var(--ambar)}
 .lado-conc .quem{color:var(--ambar)}
 .lado-conc li::before{background:var(--ambar)}
@@ -455,8 +459,9 @@ a{color:var(--verde)}
     <h1>Carbono de obra vira <em>cadastro</em>, não relatório.</h1>
 
     <p class="capa-lede">
-      Dois módulos já construídos e rodando: o painel que a prefeitura opera e o
-      portal da concreteira que fecha a origem do maior passivo da obra.
+      A cadeia inteira já construída e rodando — prefeitura, construtora e concreteira.
+      Esta apresentação detalha as duas pontas que faltavam: o painel que a prefeitura
+      opera e o portal que fecha a origem do maior passivo da obra.
       Nada aqui é maquete — é o que está no código.
     </p>
 
@@ -499,8 +504,9 @@ a{color:var(--verde)}
   <div class="wrap rv">
     <p class="eyebrow">O recorte desta apresentação</p>
     <p class="tese" style="margin-top:14px">
-      A prefeitura tem a <em>alavanca</em>. A concreteira tem o <span class="amb">dado de origem</span>.
-      Sem os dois, o selo continua sendo boa-fé.
+      A prefeitura tem a <em>alavanca</em>. A construtora tem a <span class="azu">responsabilidade
+      técnica</span>. A concreteira tem o <span class="amb">dado de origem</span>.
+      Sem os três, o selo continua sendo boa-fé.
     </p>
 
     <div class="lados">
@@ -518,6 +524,23 @@ a{color:var(--verde)}
           <li>Mapa do município com camadas ambientais e cadastrais oficiais</li>
           <li>SisobraPref gerado e controlado dentro do prazo da Receita</li>
           <li>Diagnóstico de prontidão para captar recurso climático</li>
+        </ul>
+      </div>
+
+      <div class="lado lado-const">
+        <div class="lado-topo">
+          <span class="quem">Construtora</span>
+          <span class="app">MBV Construtoras</span>
+        </div>
+        <p class="frase">
+          É a dobradiça da cadeia: recebe o que a concreteira declara, confere contra o
+          que chegou no canteiro e assina o que vai para a prefeitura.
+        </p>
+        <ul>
+          <li>Valida ou contesta cada entrega antes de ela virar número</li>
+          <li>Só o responsável técnico lança no inventário — quem assina é quem responde</li>
+          <li>Painel de carbono, simulador de material e dossiê assinável</li>
+          <li>Vincula as concreteiras que a atendem, obra por obra</li>
         </ul>
       </div>
 

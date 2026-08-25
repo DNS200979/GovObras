@@ -292,11 +292,24 @@ Três índices resolvem, e é mudança aditiva, sem risco de alterar acesso.
       controle de acesso, onde um erro de transcrição abre dado ou quebra acesso
       em silêncio. Os índices não têm esse risco.
 
-## Fase 5 — Estrutura do código
+## Fase 5 — Estrutura do código ✅ concluída em 25/08/2026
 
-- [ ] `apps/gov/src/lib/queries.ts` tem **938 linhas** cobrindo os 10 módulos.
-      Quebrar por domínio (obras, financiamento, sisobrapref, esg, concreteiras).
-- [ ] `apps/obra/src/lib/queries.ts` (746 linhas) pelo mesmo motivo.
+- [x] `apps/gov/src/lib/queries.ts` (938 linhas) → 11 arquivos por domínio em
+      `lib/queries/`, o maior com 154 linhas.
+- [x] `apps/obra/src/lib/queries.ts` (772 linhas) → 5 arquivos, o maior com 232.
+
+**Zero call sites mudaram.** Um `index.ts` reexporta tudo, então os 20 arquivos
+do Gov e os do Obra que importam de `@/lib/queries` continuam iguais — o
+diretório resolve pelo barrel.
+
+O corte foi por fatiamento de linhas nas fronteiras de seção que o próprio
+arquivo já marcava com `// ====`, não por transcrição — nada foi reescrito à mão.
+Os imports de domínio foram redistribuídos para onde de fato são usados
+(`sisobrapref` só em `obrigacoes.ts`, `financiamento` só em `captacao.ts`).
+
+**Um achado durante o corte:** `getProjetoEsg` estava fisicamente dentro da
+seção "Concreteiras" do `queries.ts` do Obra, 160 linhas depois da seção de ESG
+a que pertence. Foi devolvido para `esg.ts`.
 
 ---
 

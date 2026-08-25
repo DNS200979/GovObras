@@ -1,0 +1,206 @@
+<title>Kit comercial CarbonFree</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400..700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --ground:#E3E7E2; --surface:#F8F9F6; --surface-2:#EDF0EB;
+  --ink:#22302F; --ink-2:#5C6B66; --ink-3:#7E8A85;
+  --line:#C9CFC7; --line-2:#A6B0A7;
+  --deep:#16232A; --deep-2:#1F323B; --deep-3:#2E4048;
+  --deep-ink:#DDE4E1; --deep-ink-2:#829990;
+  --verde:#1F6F5C; --verde-soft:#E1EEE9; --verde-linha:#A9CCC0;
+  --ambar:#A65D14; --ambar-soft:#F6E9DA; --ambar-linha:#DFBE94;
+  --azul:#2C5670; --azul-soft:#E2EAF0;
+  --display:'Archivo',system-ui,-apple-system,sans-serif;
+  --corpo:'Source Serif 4',Georgia,'Times New Roman',serif;
+  --mono:'IBM Plex Mono',ui-monospace,'SFMono-Regular',monospace;
+  --max:1040px; --pad:clamp(20px,4vw,32px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0E171C; --surface:#16232A; --surface-2:#1C2C34;
+    --ink:#DFE6E2; --ink-2:#9BAAA3; --ink-3:#7A8A84;
+    --line:#2C3D45; --line-2:#405259;
+    --verde:#5DBA9C; --verde-soft:#15302A; --verde-linha:#27564A;
+    --ambar:#DE9145; --ambar-soft:#33220F; --ambar-linha:#5C3E1B;
+    --azul:#7FAECD; --azul-soft:#14252F;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0E171C; --surface:#16232A; --surface-2:#1C2C34;
+  --ink:#DFE6E2; --ink-2:#9BAAA3; --ink-3:#7A8A84;
+  --line:#2C3D45; --line-2:#405259;
+  --verde:#5DBA9C; --verde-soft:#15302A; --verde-linha:#27564A;
+  --ambar:#DE9145; --ambar-soft:#33220F; --ambar-linha:#5C3E1B;
+  --azul:#7FAECD; --azul-soft:#14252F;
+}
+*{box-sizing:border-box}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.001ms!important}}
+body{margin:0;font-family:var(--corpo);font-size:16.5px;line-height:1.6;color:var(--ink);background:var(--ground);-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--display);font-weight:800;line-height:1.08;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(24px,3vw,32px);font-stretch:104%}
+p{margin:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3);font-weight:500}
+.lede{font-size:clamp(16px,1.6vw,18px);color:var(--ink-2);max-width:62ch}
+.faixa{padding:clamp(46px,6vw,72px) var(--pad)}
+.wrap{max-width:var(--max);margin-inline:auto}
+
+.capa{background:var(--deep);color:var(--deep-ink);padding:clamp(30px,4vw,44px) var(--pad) clamp(40px,5vw,60px);position:relative;overflow:hidden}
+.capa::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(var(--deep-2) 1px,transparent 1px),linear-gradient(90deg,var(--deep-2) 1px,transparent 1px);
+  background-size:46px 46px;opacity:.5}
+.capa .wrap{position:relative}
+.marca{display:flex;align-items:center;gap:13px;flex-wrap:wrap;margin-bottom:clamp(30px,4vw,46px)}
+.marca .selo{font-family:var(--display);font-weight:900;font-size:14px;color:#F8F9F6;background:#1F6F5C;padding:5px 10px;border-radius:3px}
+.marca .org{font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--deep-ink-2)}
+.capa h1{font-size:clamp(30px,5vw,52px);font-stretch:110%;color:#F8F9F6;max-width:20ch;margin-bottom:18px}
+.capa p{font-size:clamp(15.5px,1.7vw,18px);color:#B4C3BC;max-width:56ch}
+
+.pecas{display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.peca{
+  background:var(--surface);display:grid;grid-template-columns:5px 1fr;
+  text-decoration:none;color:inherit;transition:background .15s ease;
+}
+.peca:hover,.peca:focus-visible{background:var(--surface-2)}
+.peca .rail{background:var(--verde)}
+.peca-constr .rail{background:var(--azul)}
+.peca-conc .rail{background:var(--ambar)}
+.peca-plano .rail{background:var(--line-2)}
+.peca .corpo{padding:clamp(20px,2.6vw,26px);display:flex;flex-direction:column;gap:9px}
+.peca .topo{display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.peca .quem{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--verde)}
+.peca-constr .quem{color:var(--azul)}
+.peca-conc .quem{color:var(--ambar)}
+.peca-plano .quem{color:var(--ink-3)}
+.peca .abrir{font-family:var(--mono);font-size:10.5px;color:var(--ink-3)}
+.peca h3{font-size:clamp(17px,1.9vw,21px);color:var(--ink)}
+.peca .desc{font-size:14px;line-height:1.5;color:var(--ink-2);max-width:70ch}
+.peca .arg{
+  font-family:var(--mono);font-size:11px;line-height:1.55;color:var(--ink-3);
+  padding-top:10px;border-top:1px dashed var(--line-2);
+}
+.peca .arg b{color:var(--verde);font-weight:600;text-transform:uppercase;letter-spacing:.1em;font-size:9.5px;display:block;margin-bottom:3px}
+.peca-constr .arg b{color:var(--azul)}
+.peca-conc .arg b{color:var(--ambar)}
+.peca-plano .arg b{color:var(--ink-3)}
+
+.peca-local{cursor:default}
+.peca-local:hover{background:var(--surface)}
+.nota{margin-top:clamp(20px,2.6vw,28px);padding:15px 17px;background:var(--surface);border:1px solid var(--line);border-radius:4px;font-size:13.5px;line-height:1.55;color:var(--ink-2)}
+.nota b{color:var(--ink)}
+a{color:var(--verde)}
+:focus-visible{outline:2px solid var(--verde);outline-offset:2px;border-radius:2px}
+</style>
+
+<header class="capa">
+  <div class="wrap">
+    <div class="marca">
+      <span class="selo">CarbonFree</span>
+      <span class="org">MBV · Movimento Brasil Verde</span>
+      <span class="org">Kit comercial</span>
+    </div>
+    <h1>Cada ator da cadeia tem um motivo diferente para entrar.</h1>
+    <p>
+      Quatro materiais, um por interlocutor. Mandar o errado queima a reunião:
+      o que convence a prefeitura não é o que convence a concreteira.
+    </p>
+  </div>
+</header>
+
+<section class="faixa">
+  <div class="wrap">
+    <div class="pecas">
+
+      <a class="peca peca-pref" href="https://claude.ai/code/artifact/77903fb0-05f4-43c4-9f1b-e85dc93f1a93">
+        <div class="rail"></div>
+        <div class="corpo">
+          <div class="topo">
+            <span class="quem">Prefeitura · secretaria</span>
+            <span class="abrir">abrir ↗</span>
+          </div>
+          <h3>Os módulos de prefeitura e concreteira</h3>
+          <p class="desc">
+            O que a prefeitura opera hoje: dez módulos, do alvará ao financiamento climático.
+            Inclui as garantias verificáveis do próprio software e a base legal que dispensa lei nova.
+          </p>
+          <p class="arg">
+            <b>Argumento que abre a porta</b>
+            SisobraPref e mapa territorial resolvem dor de hoje e não exigem decreto nenhum.
+            O carbono entra depois, quando o cadastro já está em uso.
+          </p>
+        </div>
+      </a>
+
+      <a class="peca peca-constr" href="https://claude.ai/code/artifact/92ca7aad-d5e9-4aac-bf42-ea8081e3a1e9">
+        <div class="rail"></div>
+        <div class="corpo">
+          <div class="topo">
+            <span class="quem">Construtora · incorporadora</span>
+            <span class="abrir">abrir ↗</span>
+          </div>
+          <h3>Carbono que volta como desconto</h3>
+          <p class="desc">
+            Benefício fiscal em duas trilhas — com e sem programa municipal instituído —,
+            custo por tonelada evitada e simulador de retorno com os números da própria obra.
+          </p>
+          <p class="arg">
+            <b>Argumento que abre a porta</b>
+            Onde não há programa municipal, o ganho já existe: Escopo 3 da Lei 15.042,
+            margem de preferência em licitação e 80 a 200 horas por obra que somem da planilha.
+          </p>
+        </div>
+      </a>
+
+      <a class="peca peca-conc" href="https://claude.ai/code/artifact/26bc576a-acc8-4705-be88-5a25fe744d30">
+        <div class="rail"></div>
+        <div class="corpo">
+          <div class="topo">
+            <span class="quem">Concreteira</span>
+            <span class="abrir">abrir ↗</span>
+          </div>
+          <h3>A adição que ninguém conta</h3>
+          <p class="desc">
+            Por que a escória e a cinza que ela já usa não geram crédito comercial hoje,
+            e o que a Lei 15.042 muda na cadeia até chegar em quem entrega concreto.
+          </p>
+          <p class="arg">
+            <b>Argumento que abre a porta</b>
+            A construtora vai pedir o número. Quem entregar dado rastreável entra na lista curta;
+            quem mandar ficha técnica em PDF sai dela por eliminação.
+          </p>
+        </div>
+      </a>
+
+      <div class="peca peca-plano peca-local">
+        <div class="rail"></div>
+        <div class="corpo">
+          <div class="topo">
+            <span class="quem">Interno · investidor · sócio</span>
+            <span class="abrir">docs/carbonfree-obras-plano-de-negocio.html</span>
+          </div>
+          <h3>Plano de negócio completo</h3>
+          <p class="desc">
+            Documento longo: tese, base regulatória, arquitetura, anti-fraude e LGPD, régua de
+            incentivo, modelo de negócio, go-to-market, roadmap, projeções e riscos.
+          </p>
+          <p class="arg">
+            <b>Quando usar</b>
+            Não é material de primeira reunião. Serve para due diligence, conversa com sócio
+            e para embasar o termo de referência de uma contratação pública.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="nota">
+      <b>Ordem sugerida de ataque.</b> A construtora é o ponto de entrada mais rápido — decide
+      sozinha, tem ganho imediato e não depende de ciclo político. Ela puxa a concreteira, que
+      já a atende. Com duas ou três construtoras usando, a conversa com a prefeitura deixa de
+      ser sobre um software e passa a ser sobre um setor que já está medindo — que é uma
+      reunião completamente diferente.
+    </div>
+  </div>
+</section>

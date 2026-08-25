@@ -1,19 +1,33 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
+
+/**
+ * A fonte de verdade do tema é a classe `dark` no <html> — escrita pelo
+ * script de boot antes da hidratação e por este botão. Espelhá-la em state
+ * criava duas verdades e exigia setState dentro de efeito; aqui o React
+ * apenas observa o DOM.
+ */
+function inscrever(aoMudar: () => void) {
+  const observador = new MutationObserver(aoMudar);
+  observador.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["class"],
+  });
+  return () => observador.disconnect();
+}
+
+const lerNoCliente = () => document.documentElement.classList.contains("dark");
+/** No servidor não há <html> para inspecionar — `null` marca "ainda não sei". */
+const lerNoServidor = () => null;
 
 export function ThemeToggle() {
-  const [escuro, setEscuro] = useState(false);
-  const [montado, setMontado] = useState(false);
-
-  useEffect(() => {
-    setEscuro(document.documentElement.classList.contains("dark"));
-    setMontado(true);
-  }, []);
+  const escuro = useSyncExternalStore(inscrever, lerNoCliente, lerNoServidor);
+  const conhecido = escuro !== null;
 
   function alternar() {
     const proximo = !escuro;
-    setEscuro(proximo);
+    // Só mexe no DOM: o observador acima avisa o React.
     document.documentElement.classList.toggle("dark", proximo);
     try {
       localStorage.setItem("cf-tema", proximo ? "escuro" : "claro");
@@ -31,7 +45,7 @@ export function ThemeToggle() {
       aria-label={escuro ? "Usar tema claro" : "Usar tema escuro"}
       title={escuro ? "Usar tema claro" : "Usar tema escuro"}
       className={`flex h-7 w-7 items-center justify-center rounded-sm border border-linha text-texto-fraco transition-colors hover:border-verde hover:text-verde ${
-        montado ? "" : "invisible"
+        conhecido ? "" : "invisible"
       }`}
     >
       {escuro ? (

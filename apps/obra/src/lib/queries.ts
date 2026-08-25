@@ -1,4 +1,3 @@
-import { createAdminClient } from "@carbonfree/database/admin";
 import { DOCUMENTOS_ESPERADOS } from "./documentos";
 import { createServerSupabase } from "@carbonfree/database/server";
 
@@ -228,6 +227,19 @@ export interface FaixaRegua {
   beneficio: string;
 }
 
+/** Mantém só as entradas bem formadas do jsonb `municipios.faixa_regua`. */
+function ehFaixaRegua(valor: unknown): FaixaRegua[] {
+  if (!Array.isArray(valor)) return [];
+  return valor.filter(
+    (f): f is FaixaRegua =>
+      !!f &&
+      typeof f === "object" &&
+      typeof (f as FaixaRegua).faixa === "string" &&
+      typeof (f as FaixaRegua).ate_kgco2e_m2 === "number" &&
+      typeof (f as FaixaRegua).beneficio === "string",
+  );
+}
+
 export interface VersaoInventario {
   versao: number;
   status: string;
@@ -317,7 +329,10 @@ export async function getDossie(): Promise<DossieData> {
       .map((l) => ({ modulo: l.modulo_en15978, item: l.item, tco2e: Number(l.tco2e) }))
       .sort((a, b) => b.tco2e - a.tco2e);
 
-  const regua = ((municipio?.faixa_regua ?? []) as FaixaRegua[])
+  // `faixa_regua` é jsonb sem constraint de forma no banco — diferente de
+  // `natureza`, aqui não há nada garantindo o formato. Um item malformado
+  // faria o sort comparar NaN e embaralhar a régua em silêncio, então filtra.
+  const regua = ehFaixaRegua(municipio?.faixa_regua)
     .slice()
     .sort((a, b) => a.ate_kgco2e_m2 - b.ate_kgco2e_m2);
 
@@ -347,7 +362,10 @@ export interface Alternativa {
 }
 
 export async function getAlternativasMaterial(): Promise<Alternativa[]> {
-  const db = createAdminClient();
+  // Catálogo global: a policy "alternativas_material: leitura autenticada"
+  // (migration 3, endurecida na 5) já libera para qualquer autenticado —
+  // não precisa de service role.
+  const db = await createServerSupabase();
   const { data, error } = await db
     .from("alternativas_material")
     .select("id, material, material_original, unidade, custo_adicional_por_unidade, tco2e_evitado_por_unidade")
@@ -382,6 +400,14 @@ export async function listObrasConstrutora(): Promise<ObraResumo[]> {
   return (data ?? []).map((o) => ({ id: o.id, nome: o.nome, alvaraNumero: o.alvara_numero }));
 }
 
+/**
+ * O banco declara `natureza` como `text`, mas a coluna tem
+ * `check (natureza in ('passivo','ativo'))` — a união é garantida pelo
+ * Postgres, e o tipo gerado só não consegue expressar isso.
+ */
+type Natureza = "passivo" | "ativo";
+const comoNatureza = (v: string): Natureza => v as Natureza;
+
 export interface RequisitoResumo {
   id: string;
   codigo: string;
@@ -402,7 +428,7 @@ export async function listRequisitosAuditoria(): Promise<RequisitoResumo[]> {
     id: r.id,
     codigo: r.codigo,
     requisito: r.requisito,
-    natureza: r.natureza,
+    natureza: comoNatureza(r.natureza),
   }));
 }
 
@@ -438,7 +464,7 @@ export async function listRequisitosParaGuia(): Promise<RequisitoGuia[]> {
       id: r.id,
       codigo: r.codigo,
       requisito: r.requisito,
-      natureza: r.natureza,
+      natureza: comoNatureza(r.natureza),
       unidade: r.unidade,
       evidenciaPrimaria: r.evidencia_primaria,
       testeVerificacao: r.teste_verificacao,

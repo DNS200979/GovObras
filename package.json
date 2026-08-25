@@ -10,6 +10,7 @@
     "build": "turbo run build",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
     "dev:gov": "turbo run dev --filter=@carbonfree/gov",
     "dev:obra": "turbo run dev --filter=@carbonfree/obra",
     "dev:concreteira": "turbo run dev --filter=@carbonfree/concreteira",

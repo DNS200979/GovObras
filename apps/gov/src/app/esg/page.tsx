@@ -54,9 +54,13 @@ export default async function EsgGovPage() {
             </TableHeader>
             <TableBody>
               {projetos.map((p) => (
-                <TableRow key={p.id} className="cursor-pointer hover:bg-muted/40">
+                <TableRow key={p.id} className="relative hover:bg-muted/40">
                   <TableCell className="font-medium">
-                    <Link href={`/esg/${p.id}`} className="hover:underline">
+                    <Link
+                      href={`/esg/${p.id}`}
+                      // Ver nota em /concreteiras: link esticado sobre a linha.
+                      className="hover:underline after:absolute after:inset-0"
+                    >
                       {p.titulo}
                     </Link>
                   </TableCell>

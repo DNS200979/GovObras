@@ -43,9 +43,15 @@ export default async function ConcreteirasGovPage() {
             </TableHeader>
             <TableBody>
               {concreteiras.map((c) => (
-                <TableRow key={c.id} className="cursor-pointer hover:bg-muted/40">
+                <TableRow key={c.id} className="relative hover:bg-muted/40">
                   <TableCell className="font-medium">
-                    <Link href={`/concreteiras/${c.id}`} className="hover:underline">
+                    <Link
+                      href={`/concreteiras/${c.id}`}
+                      // O ::after estica o link sobre a linha toda: a área clicável
+                      // passa a bater com o realce de hover, sem pôr onClick num
+                      // <tr> nem tirar o foco de teclado do link de verdade.
+                      className="hover:underline after:absolute after:inset-0"
+                    >
                       {c.razaoSocial}
                     </Link>
                   </TableCell>

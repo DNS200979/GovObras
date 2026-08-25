@@ -144,7 +144,7 @@ export function NovaEntregaForm({ obras, fatores }: { obras: ObraVinculada[]; fa
         ))}
         <p className="font-mono text-[10.5px] text-texto-fraco">
           O fator só é usado se a unidade daqui bater exatamente com a que o fator espera (ex.:
-          fator em tCO2e/t exige quantidade em "t") — sem isso a linha entra na entrega mas fica
+          fator em tCO2e/t exige quantidade em “t”) — sem isso a linha entra na entrega mas fica
           de fora do cálculo de carbono.
         </p>
       </div>

@@ -1,6 +1,6 @@
 import { createServerSupabase } from "@carbonfree/database/server";
 import type { AlvaraSisobra } from "./sisobrapref";
-import { competenciaDeReferencia, pendenciasDoAlvara } from "./sisobrapref";
+import { competenciaDeReferencia, diasAteOPrazo, pendenciasDoAlvara, prazoDaCompetencia } from "./sisobrapref";
 import type { Resposta, SituacaoDoc } from "./financiamento";
 import { calcularDiagnostico } from "./financiamento";
 
@@ -284,6 +284,14 @@ export async function getConstrutorasComContagem(): Promise<ConstrutoraComContag
   }));
 }
 
+/**
+ * O banco declara `natureza` como `text`, mas a coluna tem
+ * `check (natureza in ('passivo','ativo'))` — a união é garantida pelo
+ * Postgres, e o tipo gerado só não consegue expressar isso.
+ */
+type Natureza = "passivo" | "ativo";
+const comoNatureza = (v: string): Natureza => v as Natureza;
+
 export interface RequisitoAuditoria {
   id: string;
   natureza: "passivo" | "ativo";
@@ -304,7 +312,7 @@ export async function getRequisitosAuditoria(): Promise<RequisitoAuditoria[]> {
   if (error) throw error;
   return (data ?? []).map((r) => ({
     id: r.id,
-    natureza: r.natureza,
+    natureza: comoNatureza(r.natureza),
     codigo: r.codigo,
     requisito: r.requisito,
     unidade: r.unidade,
@@ -483,6 +491,9 @@ export interface CompetenciaSisobra {
   alvaras: AlvaraDaCompetencia[];
   prontos: number;
   comPendencia: number;
+  /** Dias até o prazo legal (dia 10). Calculado aqui porque ler o relógio
+   *  é impuro e não pertence ao corpo do componente. */
+  diasRestantes: number;
   envio: {
     id: string;
     tipo: string;
@@ -586,6 +597,7 @@ export async function getCompetenciaSisobra(competencia?: Date): Promise<Compete
     alvaras,
     prontos: alvaras.filter((a) => a.pendencias.length === 0).length,
     comPendencia: alvaras.filter((a) => a.pendencias.length > 0).length,
+    diasRestantes: diasAteOPrazo(prazoDaCompetencia(ref), new Date()),
     envio: envio
       ? {
           id: envio.id,

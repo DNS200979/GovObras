@@ -1,0 +1,25 @@
+/*
+ * Paleta escura do CarbonFree.
+ *
+ * Em vez de reescrever cada classe (bg-papel, text-texto…), a própria paleta
+ * é redefinida sob `.dark` — todo o app acompanha sozinho.
+ *
+ * Import opcional: quem quiser um escuro diferente não importa este arquivo,
+ * ou sobrescreve os tokens depois do import. É o que mantém a liberdade que
+ * Obra e Concreteira tinham quando cada um carregava a própria cópia.
+ */
+.dark {
+  --color-concreto: #0e1619;
+  --color-papel: #16232a;
+  --color-ardosia: #0a1114;
+  --color-ardosia-2: #1f323b;
+  --color-linha: #26383f;
+  --color-linha-forte: #3d545d;
+  --color-texto: #e4e9e7;
+  --color-texto-fraco: #93a5a0;
+  --color-verde: #4fbf9f;
+  --color-verde-claro: #14332c;
+  --color-ambar: #e8a24e;
+  --color-ambar-claro: #33261a;
+  --color-azul: #6fa8c9;
+}

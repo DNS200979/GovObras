@@ -33,7 +33,7 @@ export default async function ObrigacoesPage({
 
   const competencia = new Date(dados.competencia + "T00:00:00Z");
   const prazo = prazoDaCompetencia(competencia);
-  const diasRestantes = Math.ceil((prazo.getTime() - Date.now()) / 86_400_000);
+  const diasRestantes = dados.diasRestantes;
   const rotulo = rotuloCompetencia(competencia);
 
   const semMovimento = dados.prontos === 0;

@@ -6,6 +6,7 @@
   "exports": {
     ".": "./src/index.ts",
     "./server": "./src/server.ts",
+    "./sessao": "./src/sessao.ts",
     "./admin": "./src/admin.ts",
     "./middleware": "./src/middleware.ts",
     "./types": "./src/types.ts"

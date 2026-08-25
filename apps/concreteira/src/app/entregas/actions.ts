@@ -3,7 +3,6 @@
 import { createHash } from "node:crypto";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { createAdminClient } from "@carbonfree/database/admin";
 import { createServerSupabase } from "@carbonfree/database/server";
 import { getSessaoConcreteira } from "@/lib/sessao";
 
@@ -100,8 +99,9 @@ export async function criarEntrega(
 
     const hash = createHash("sha256").update(Buffer.from(await arquivo.arrayBuffer())).digest("hex");
 
-    const admin = createAdminClient();
-    const { data: evidencia, error: evErr } = await admin
+    // Migration 31 deu à concreteira INSERT em `evidencias` restrito às obras
+    // em que ela está vinculada — não precisa mais de service role.
+    const { data: evidencia, error: evErr } = await db
       .from("evidencias")
       .insert({
         obra_id: vinculo.obra_id,

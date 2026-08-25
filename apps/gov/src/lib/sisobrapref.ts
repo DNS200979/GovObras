@@ -221,6 +221,16 @@ export function prazoDaCompetencia(competencia: Date): Date {
   return new Date(Date.UTC(competencia.getUTCFullYear(), competencia.getUTCMonth() + 1, 10));
 }
 
+/**
+ * Dias corridos até o prazo — negativo quando já venceu.
+ *
+ * Recebe o "agora" em vez de ler o relógio: quem lê o relógio é a camada de
+ * dados, não o componente. Assim isto continua puro e testável.
+ */
+export function diasAteOPrazo(prazo: Date, agora: Date): number {
+  return Math.ceil((prazo.getTime() - agora.getTime()) / 86_400_000);
+}
+
 export function rotuloCompetencia(competencia: Date): string {
   return competencia.toLocaleDateString("pt-BR", {
     month: "long",

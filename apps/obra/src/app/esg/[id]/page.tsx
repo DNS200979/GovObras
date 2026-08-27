@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { Badge } from "@carbonfree/ui/badge";
 import { ObraShell } from "@/components/obra-shell";
 import { Card, CardEyebrow, CardTitle } from "@carbonfree/ui/card";
+import { RoteiroDoAtivo } from "@/components/roteiro-ativo";
+import { roteiroDoRequisito } from "@/lib/roteiros-ativo";
 import { categoriaLabel, getProjetoEsg, statusLabel } from "@/lib/queries";
 import { EnviarParaAnaliseButton, ExcluirRascunhoButton, RemoverDocumentoButton } from "./acoes";
 import { UploadDocumentoForm } from "./upload-form";
@@ -27,6 +29,10 @@ export default async function ProjetoEsgPage({ params }: { params: Promise<{ id:
   const { id } = await params;
   const projeto = await getProjetoEsg(id);
   if (!projeto) notFound();
+
+  // Nem todo requisito ativo tem roteiro escrito ainda; sem roteiro a tela
+  // segue como era, em vez de mostrar seção vazia.
+  const roteiro = roteiroDoRequisito(projeto.requisito?.codigo);
 
   const editavel = projeto.status === "rascunho" || projeto.status === "enviado";
   const podeAnexar = projeto.status === "rascunho" || projeto.status === "enviado";
@@ -60,6 +66,8 @@ export default async function ProjetoEsgPage({ params }: { params: Promise<{ id:
               </p>
             ) : null}
           </Card>
+
+          {roteiro ? <RoteiroDoAtivo roteiro={roteiro} /> : null}
 
           <Card>
             <CardTitle>Documentos</CardTitle>

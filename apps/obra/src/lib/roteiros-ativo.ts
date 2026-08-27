@@ -252,7 +252,256 @@ const SUB: RoteiroAtivo = {
   ],
 };
 
-const ROTEIROS: RoteiroAtivo[] = [RCC, SUB];
+const ARB: RoteiroAtivo = {
+  codigo: "ARB",
+  titulo: "Compensação arbórea com sobrevivência monitorada",
+  resumo:
+    "É o único ativo do catálogo que não fecha no ano da obra. O crédito é liberado em parcelas " +
+    "conforme as mudas sobrevivem, e muda que morre reverte o lançamento já feito. Quem trata o " +
+    "plantio como evento — planta, fotografa, esquece — perde o ativo no primeiro checkpoint.",
+  baseLegal: [
+    {
+      norma: "Lei 12.651/2012 — Código Florestal",
+      oQueExige:
+        "Supressão de vegetação depende de autorização prévia do órgão competente, e a " +
+        "compensação é condicionante dessa autorização, não liberalidade do empreendedor.",
+    },
+    {
+      norma: "Autorização de supressão vegetal",
+      oQueExige:
+        "Emitida pelo município ou pelo órgão estadual conforme o caso. É ela que define quantas " +
+        "mudas, de que espécies e em que prazo — e é contra ela que a compensação é conferida.",
+    },
+    {
+      norma: "Termo de compensação",
+      oQueExige:
+        "Instrumento que vincula o empreendedor ao plantio e ao monitoramento. Sem termo assinado " +
+        "não há obrigação formal a cumprir, e sem obrigação não há adicionalidade a demonstrar.",
+    },
+  ],
+  passos: [
+    {
+      quando: "Antes de suprimir qualquer árvore",
+      titulo: "Obtenha a autorização de supressão",
+      oQueFazer:
+        "A autorização precede o corte. Ela é a linha de base do ativo: define o que foi suprimido " +
+        "e o que deve ser compensado.",
+      documento: "Autorização de supressão vegetal, com quantidade e espécies",
+      reprovaSe:
+        "A obra cortou primeiro e compensou depois. Compensar supressão não autorizada regulariza " +
+        "uma infração — não gera crédito de carbono.",
+    },
+    {
+      quando: "Antes do plantio",
+      titulo: "Assine o termo de compensação",
+      oQueFazer:
+        "Registre quantidade, espécies, local de plantio e prazo de monitoramento. É o documento " +
+        "que a análise usa para saber o que deveria ter sido plantado.",
+      documento: "Termo de compensação assinado",
+      reprovaSe: "Plantio feito sem termo, ou em quantidade e espécie diferentes do acordado.",
+    },
+    {
+      quando: "No plantio",
+      titulo: "Registre cada muda individualmente",
+      oQueFazer:
+        "Espécie, coordenada e data de plantio, muda por muda. Não é lote: o monitoramento é " +
+        "individual porque a liberação do crédito também é.",
+      documento: "Relação de mudas com espécie, coordenada e data",
+      reprovaSe:
+        "Registro por lote, sem coordenada individual. Sem localizar a muda não há como verificar " +
+        "se ela sobreviveu.",
+    },
+    {
+      quando: "Na conclusão do plantio",
+      titulo: "Faça o marco zero georreferenciado",
+      oQueFazer:
+        "Foto com coordenada de cada muda recém-plantada. É a referência contra a qual os " +
+        "checkpoints seguintes serão comparados.",
+      documento: "Foto georreferenciada por muda, na data do plantio",
+      reprovaSe: "Foto sem coordenada, ou tirada semanas depois — não serve como marco inicial.",
+    },
+    {
+      quando: "Aos 12, 24 e 36 meses",
+      titulo: "Cumpra os três checkpoints",
+      oQueFazer:
+        "Nova foto georreferenciada de cada muda em cada checkpoint, registrando sobrevivência. " +
+        "A parcela do crédito é liberada conforme o resultado — não de uma vez no plantio.",
+      documento: "Foto georreferenciada por muda em cada checkpoint, com data",
+      reprovaSe:
+        "Checkpoint perdido. A janela é a data, não a conveniência: sem registro no período, a " +
+        "parcela correspondente não é liberada.",
+    },
+    {
+      quando: "Ao fim do monitoramento",
+      titulo: "Feche o percentual de sobrevivência",
+      oQueFazer:
+        "Consolide quantas mudas chegaram vivas aos 36 meses. O crédito reconhecido é proporcional " +
+        "à sobrevivência apurada, e a diferença em relação ao plantado precisa ser reposta ou " +
+        "abatida do ativo.",
+      documento: "Consolidação de sobrevivência por checkpoint",
+      reprovaSe:
+        "Morte não declarada. Descobrir na verificação que a muda não existe reverte o lançamento " +
+        "já contabilizado, e não apenas a parcela pendente.",
+    },
+  ],
+  comoEntraNoCalculo:
+    "O carbono estocado é calculado por espécie e idade, e entra como ativo em parcelas: cada " +
+    "checkpoint libera a fração correspondente à sobrevivência apurada. É o único requisito em " +
+    "que o lançamento pode diminuir depois de feito — morte de muda reverte o que já havia sido " +
+    "reconhecido.",
+  beneficios: [
+    {
+      titulo: "Obrigação de licenciamento que passa a render",
+      detalhe:
+        "A compensação já é condicionante da autorização de supressão. Monitorar como o ativo " +
+        "exige não acrescenta plantio nenhum — acrescenta registro sobre um plantio que já seria " +
+        "obrigatório, e o transforma em crédito.",
+      natureza: "imediato",
+    },
+    {
+      titulo: "Prova pronta para a fiscalização ambiental",
+      detalhe:
+        "O mesmo conjunto de fotos georreferenciadas e checkpoints que sustenta o ativo é o que o " +
+        "órgão ambiental cobra para dar quitação do termo de compensação. Um trabalho, dois usos.",
+      natureza: "imediato",
+    },
+    {
+      titulo: "Ativo de longo prazo que atravessa obras",
+      detalhe:
+        "O monitoramento dura 36 meses e continua depois da entrega. Para incorporadora com " +
+        "carteira, é estoque de remoção que se acumula entre empreendimentos em vez de zerar a " +
+        "cada obra concluída.",
+      natureza: "imediato",
+    },
+    {
+      titulo: "Menor intensidade, faixa melhor do selo",
+      detalhe:
+        "A remoção reconhecida entra no lado ativo do balanço e reduz a intensidade líquida — que " +
+        "é o que a régua municipal lê para conceder desconto de IPTU e redução de outorga.",
+      natureza: "municipal",
+    },
+  ],
+};
+
+const ENE: RoteiroAtivo = {
+  codigo: "ENE",
+  titulo: "Energia renovável no canteiro ou no empreendimento",
+  resumo:
+    "Há três rotas possíveis — geração própria, certificado de atributo renovável e mercado " +
+    "livre — e cada uma prova de um jeito diferente. O erro que mais reprova não é técnico, é " +
+    "de contagem: o mesmo megawatt-hora reivindicado por duas rotas, ou por dois consumidores.",
+  baseLegal: [
+    {
+      norma: "Lei 14.300/2022",
+      oQueExige:
+        "Marco legal da geração distribuída e do sistema de compensação de energia elétrica. " +
+        "A compensação precisa aparecer na fatura da unidade consumidora da obra.",
+    },
+    {
+      norma: "Certificado de atributo renovável",
+      oQueExige:
+        "Cada certificado tem número de série e só pode ser resgatado uma vez. O atributo é " +
+        "consumido no resgate — depois disso ninguém mais pode reivindicá-lo.",
+    },
+    {
+      norma: "Fator de emissão da rede",
+      oQueExige:
+        "O que se evita é medido contra o fator da rede no período. Fator publicado varia mês a " +
+        "mês, então o período do consumo importa tanto quanto a quantidade.",
+    },
+  ],
+  passos: [
+    {
+      quando: "Antes de reivindicar qualquer MWh",
+      titulo: "Escolha a rota e não misture",
+      oQueFazer:
+        "Defina se aquele consumo será provado por geração própria, por certificado ou por " +
+        "contrato de mercado livre. Uma rota por megawatt-hora.",
+      documento: "Declaração da rota adotada por unidade consumidora e período",
+      reprovaSe:
+        "O mesmo consumo aparece coberto por geração própria e por certificado. É dupla contagem, " +
+        "e invalida as duas reivindicações, não só uma.",
+    },
+    {
+      quando: "Geração própria — na entrada em operação",
+      titulo: "Homologue o sistema junto à distribuidora",
+      oQueFazer:
+        "A unidade precisa estar homologada para que a compensação apareça na fatura. É a fatura, " +
+        "e não o projeto do sistema, que comprova a energia efetivamente compensada.",
+      documento: "Fatura com o campo de energia compensada, por mês",
+      reprovaSe:
+        "Reivindicação baseada na capacidade instalada do sistema em vez do que a fatura mostra " +
+        "compensado. Potência instalada não é energia gerada.",
+    },
+    {
+      quando: "Certificado — na aquisição",
+      titulo: "Resgate o certificado em nome do CNPJ da obra",
+      oQueFazer:
+        "Compre com número de série identificado e faça o resgate em nome do CNPJ da obra, não da " +
+        "holding nem da controladora. Guarde o comprovante com o serial visível.",
+      documento: "Comprovante de resgate com número de série, safra e período",
+      reprovaSe:
+        "Certificado adquirido mas não resgatado, ou resgatado em nome de outra pessoa jurídica " +
+        "do grupo — a obra não pode reivindicar o que não foi retirado em seu nome.",
+    },
+    {
+      quando: "A cada período de apuração",
+      titulo: "Amarre a energia ao período correto",
+      oQueFazer:
+        "O megawatt-hora vale para o período em que foi gerado ou certificado. Certificado de " +
+        "safra anterior não cobre consumo do período atual.",
+      documento: "Conciliação entre período de consumo e período de geração ou certificação",
+      reprovaSe: "Safra do certificado não cobre o período do consumo reivindicado.",
+    },
+    {
+      quando: "Ao fechar o inventário",
+      titulo: "Confronte o reivindicado com o consumido",
+      oQueFazer:
+        "A energia renovável reivindicada não pode superar o consumo medido da obra no período. " +
+        "Sobra indica erro de escopo — geralmente energia de outra unidade entrando na conta.",
+      documento: "Demonstrativo de consumo total × energia renovável reivindicada",
+      reprovaSe: "Reivindicação maior que o consumo medido no mesmo período.",
+    },
+  ],
+  comoEntraNoCalculo:
+    "O megawatt-hora renovável comprovado é multiplicado pelo fator de emissão da rede no " +
+    "período, e o resultado entra como ativo — é a emissão que teria ocorrido se aquela energia " +
+    "viesse da rede. Por isso o fator do período importa: rede mais limpa no mês reduz o ativo " +
+    "reconhecido, mesmo com a mesma geração.",
+  beneficios: [
+    {
+      titulo: "A conta de luz já cai",
+      detalhe:
+        "Geração própria reduz o custo de energia do canteiro desde o primeiro mês, " +
+        "independentemente de qualquer inventário. O ativo de carbono é ganho adicional sobre um " +
+        "investimento que já se justifica sozinho.",
+      natureza: "imediato",
+    },
+    {
+      titulo: "Ativo que continua depois da entrega",
+      detalhe:
+        "Sistema instalado no empreendimento, e não só no canteiro, segue gerando para o " +
+        "condomínio — e vira argumento de venda da unidade, com conta menor para o comprador.",
+      natureza: "imediato",
+    },
+    {
+      titulo: "Menor intensidade, faixa melhor do selo",
+      detalhe:
+        "Entra no lado ativo do balanço e reduz a intensidade líquida em kgCO₂e/m², que é a " +
+        "unidade que a régua municipal lê.",
+      natureza: "municipal",
+    },
+    {
+      titulo: "Converge com a etiqueta de eficiência",
+      detalhe:
+        "O mesmo investimento costuma melhorar o desempenho energético da edificação, que é " +
+        "requisito próprio no catálogo e bonifica a nota do selo por outro caminho.",
+      natureza: "municipal",
+    },
+  ],
+};
+
+const ROTEIROS: RoteiroAtivo[] = [RCC, SUB, ARB, ENE];
 
 /** Roteiro do requisito, quando existe. Nem todo requisito ativo tem um escrito ainda. */
 export function roteiroDoRequisito(codigo: string | null | undefined): RoteiroAtivo | null {

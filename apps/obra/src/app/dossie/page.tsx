@@ -113,6 +113,27 @@ function Tramite({ etapas }: { etapas: { nome: string; concluida: boolean }[] })
 
 /** Régua de faixas do município com a posição da obra. */
 function ReguaSelo({ intensidade, regua }: { intensidade: number; regua: FaixaRegua[] }) {
+  // Régua vazia não é "faixa mais alta" — é ausência de régua. Sem esta saída
+  // antecipada, `findIndex` devolve -1, `melhor` vira null e a tela cai no ramo
+  // que parabeniza a obra por estar no topo de uma escala que não existe.
+  if (regua.length === 0) {
+    return (
+      <Card>
+        <CardTitle>Régua do selo municipal</CardTitle>
+        <p className="rounded-sm border border-ambar/40 bg-ambar-claro px-3 py-2 text-[12.5px] text-ambar">
+          Este município ainda não tem régua calibrada no sistema. A intensidade da obra continua
+          sendo calculada e vale para o inventário — o que não existe ainda é a faixa que converte
+          essa intensidade em benefício fiscal.
+        </p>
+        <p className="mt-3 text-[12px] leading-relaxed text-texto-fraco">
+          A régua é calibrada por município, sobre a distribuição real das obras locais: uma escala
+          importada de outra cidade distribuiria benefício sem induzir mudança, ou esvaziaria o
+          programa. Enquanto a prefeitura não publica a sua, o dossiê não estima faixa.
+        </p>
+      </Card>
+    );
+  }
+
   const atual = faixaDe(intensidade, regua);
   const indice = regua.findIndex((f) => f.faixa === atual?.faixa);
   const melhor = indice > 0 ? regua[indice - 1] : null;
@@ -176,6 +197,7 @@ export default async function DossiePage() {
 
   const temInventario = versoes.length > 0 && atual !== null;
   const rank = RANK[atual?.status ?? "rascunho"] ?? 0;
+  const reguaCalibrada = regua.length > 0;
   const faixa = atual ? faixaDe(atual.intensidade, regua) : null;
 
   const etapas = [
@@ -238,12 +260,16 @@ export default async function DossiePage() {
             <Card className="lg:col-span-3">
               <div className="mb-1 flex items-baseline justify-between">
                 <CardTitle className="mb-0">Intensidade por versão</CardTitle>
-                <span className="font-mono text-[10.5px] text-texto-fraco">
-                  tracejado = faixas do selo
-                </span>
+                {reguaCalibrada ? (
+                  <span className="font-mono text-[10.5px] text-texto-fraco">
+                    tracejado = faixas do selo
+                  </span>
+                ) : null}
               </div>
               <p className="mb-3 text-[12.5px] text-texto-fraco">
-                Quanto mais baixa a curva, melhor a faixa e maior o benefício fiscal.
+                {reguaCalibrada
+                  ? "Quanto mais baixa a curva, melhor a faixa e maior o benefício fiscal."
+                  : "Quanto mais baixa a curva, melhor o desempenho da obra. Sem régua municipal calibrada, não há faixa de referência a traçar."}
               </p>
               <EvolucaoIntensidade versoes={versoes} regua={regua} />
             </Card>

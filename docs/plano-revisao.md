@@ -359,3 +359,34 @@ a que pertence. Foi devolvido para `esg.ts`.
 2. **Escopo dos testes.** A Fase 0 propõe cobrir só cálculo puro. Testar Server
    Actions e RLS exige subir Supabase local (Docker), que hoje não está disponível
    neste ambiente.
+
+3. **A régua de faixas não modela o programa de Porto Alegre.** Levantado ao
+   analisar o Decreto nº 21.789/2022 (`CERTIFICAÇÕES_PORTO_ALEGRE_RS.docx`).
+
+   `municipios.faixa_regua` é de eixo único: intensidade em kgCO₂e/m² cai numa
+   faixa, a faixa dá o benefício. O programa de Porto Alegre pontua sete
+   dimensões com mínimo próprio cada, e o selo sai da **contagem** de dimensões
+   aprovadas — Bronze com 2, Prata 3, Ouro 4, Diamante 5. Não há nota agregada,
+   e uma dimensão não compensa a outra. Uma obra com intensidade excelente pode
+   ficar sem selo: energia/GEE é uma dimensão de sete.
+
+   Ou seja, a `faixa_regua` semeada para POA na migration 35 não é só provisória
+   na calibragem (como aquela migration já registra) — é de **forma** diferente
+   da do município.
+
+   O programa entrou como catálogo versionado em
+   `apps/obra/src/lib/certificacao-poa.ts`, com a tela em `/esg/certificacao`,
+   seguindo a mesma decisão de `roteiros-ativo.ts`: norma versionada fica em
+   código, não em tabela operável pelo usuário.
+
+   **Resolvido:** a certificação virou entidade persistida na migration 36
+   (`certificacoes_municipais` + `certificacao_itens`, com RLS no padrão de
+   `projetos_esg`), aplicada no projeto linkado, com `types.ts` regenerado.
+   O que a simulação não guardava e agora guarda: os dois status separados
+   (SMAMUS certifica, SMF concede o benefício fiscal), o protocolo, a validade
+   de 3 anos, o exercício do IPTU derivado da data de protocolo, a Carta de
+   Habitação e o vínculo documento ↔ critério.
+
+   O catálogo continua em código — o banco guarda `criterio_codigo` como texto
+   sem FK, porque critério revogado por decreto não deve apagar o histórico de
+   quem já pontuou por ele.

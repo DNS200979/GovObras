@@ -155,6 +155,163 @@ export type Database = {
           },
         ]
       }
+      certificacao_itens: {
+        Row: {
+          certificacao_id: string
+          created_at: string
+          criterio_codigo: string
+          dimensao: string
+          documento_anexado: boolean
+          faixa: string | null
+          id: string
+          observacao: string | null
+          pontos: number
+          responsavel: string | null
+          updated_at: string
+          validade_documento: string | null
+          validado: boolean
+        }
+        Insert: {
+          certificacao_id: string
+          created_at?: string
+          criterio_codigo: string
+          dimensao: string
+          documento_anexado?: boolean
+          faixa?: string | null
+          id?: string
+          observacao?: string | null
+          pontos?: number
+          responsavel?: string | null
+          updated_at?: string
+          validade_documento?: string | null
+          validado?: boolean
+        }
+        Update: {
+          certificacao_id?: string
+          created_at?: string
+          criterio_codigo?: string
+          dimensao?: string
+          documento_anexado?: boolean
+          faixa?: string | null
+          id?: string
+          observacao?: string | null
+          pontos?: number
+          responsavel?: string | null
+          updated_at?: string
+          validade_documento?: string | null
+          validado?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "certificacao_itens_certificacao_id_fkey"
+            columns: ["certificacao_id"]
+            isOneToOne: false
+            referencedRelation: "certificacoes_municipais"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      certificacoes_municipais: {
+        Row: {
+          altura_basica_m: number | null
+          carta_habitacao_emitida: boolean
+          construtora_id: string
+          created_at: string
+          criado_por: string
+          emitido_em: string | null
+          exercicio_beneficio: number | null
+          id: string
+          iptu_anual_referencia: number | null
+          nivel_obtido: string | null
+          nivel_pretendido: string | null
+          obra_id: string
+          observacoes: string | null
+          programa: string
+          protocolada_em: string | null
+          protocolo: string | null
+          renovacao_de: string | null
+          status_beneficio_fiscal: string
+          status_certificacao: string
+          updated_at: string
+          validade: string | null
+        }
+        Insert: {
+          altura_basica_m?: number | null
+          carta_habitacao_emitida?: boolean
+          construtora_id: string
+          created_at?: string
+          criado_por: string
+          emitido_em?: string | null
+          exercicio_beneficio?: number | null
+          id?: string
+          iptu_anual_referencia?: number | null
+          nivel_obtido?: string | null
+          nivel_pretendido?: string | null
+          obra_id: string
+          observacoes?: string | null
+          programa?: string
+          protocolada_em?: string | null
+          protocolo?: string | null
+          renovacao_de?: string | null
+          status_beneficio_fiscal?: string
+          status_certificacao?: string
+          updated_at?: string
+          validade?: string | null
+        }
+        Update: {
+          altura_basica_m?: number | null
+          carta_habitacao_emitida?: boolean
+          construtora_id?: string
+          created_at?: string
+          criado_por?: string
+          emitido_em?: string | null
+          exercicio_beneficio?: number | null
+          id?: string
+          iptu_anual_referencia?: number | null
+          nivel_obtido?: string | null
+          nivel_pretendido?: string | null
+          obra_id?: string
+          observacoes?: string | null
+          programa?: string
+          protocolada_em?: string | null
+          protocolo?: string | null
+          renovacao_de?: string | null
+          status_beneficio_fiscal?: string
+          status_certificacao?: string
+          updated_at?: string
+          validade?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "certificacoes_municipais_construtora_id_fkey"
+            columns: ["construtora_id"]
+            isOneToOne: false
+            referencedRelation: "construtoras"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "certificacoes_municipais_criado_por_fkey"
+            columns: ["criado_por"]
+            isOneToOne: false
+            referencedRelation: "perfis"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "certificacoes_municipais_obra_id_fkey"
+            columns: ["obra_id"]
+            isOneToOne: false
+            referencedRelation: "obras"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "certificacoes_municipais_renovacao_de_fkey"
+            columns: ["renovacao_de"]
+            isOneToOne: false
+            referencedRelation: "certificacoes_municipais"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       concreteira_esg: {
         Row: {
           categoria: string

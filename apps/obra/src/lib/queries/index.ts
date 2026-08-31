@@ -9,3 +9,4 @@ export * from "./obras";
 export * from "./dossie";
 export * from "./esg";
 export * from "./concreteiras";
+export * from "./certificacao";

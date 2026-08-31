@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { AppShell } from "@/components/app-shell";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from "@carbonfree/ui/shadcn/card";
 import {
   Table,
   TableBody,
@@ -8,7 +8,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@carbonfree/ui/shadcn/table";
 import { listConcreteirasMunicipio } from "@/lib/queries";
 
 export const dynamic = "force-dynamic";
@@ -43,9 +43,15 @@ export default async function ConcreteirasGovPage() {
             </TableHeader>
             <TableBody>
               {concreteiras.map((c) => (
-                <TableRow key={c.id} className="cursor-pointer hover:bg-muted/40">
+                <TableRow key={c.id} className="relative hover:bg-muted/40">
                   <TableCell className="font-medium">
-                    <Link href={`/concreteiras/${c.id}`} className="hover:underline">
+                    <Link
+                      href={`/concreteiras/${c.id}`}
+                      // O ::after estica o link sobre a linha toda: a área clicável
+                      // passa a bater com o realce de hover, sem pôr onClick num
+                      // <tr> nem tirar o foco de teclado do link de verdade.
+                      className="hover:underline after:absolute after:inset-0"
+                    >
                       {c.razaoSocial}
                     </Link>
                   </TableCell>

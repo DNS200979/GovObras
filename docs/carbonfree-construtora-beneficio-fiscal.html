@@ -1,0 +1,564 @@
+<title>Carbono que volta como desconto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400..700&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   CarbonFree — o caso da construtora
+   Mesma identidade do plano de negócio. O par verde/âmbar é a
+   oposição ativo/passivo do razonete, validada para daltonismo
+   (ΔE 18,6 em visão normal, 8,5 no pior caso de protanopia).
+   ============================================================ */
+:root{
+  --ground:#E3E7E2; --surface:#F8F9F6; --surface-2:#EDF0EB;
+  --ink:#22302F; --ink-2:#5C6B66; --ink-3:#7E8A85;
+  --line:#C9CFC7; --line-2:#A6B0A7;
+  --deep:#16232A; --deep-2:#1F323B; --deep-3:#2E4048;
+  --deep-ink:#DDE4E1; --deep-ink-2:#829990;
+  --verde:#1F6F5C; --verde-soft:#E1EEE9; --verde-linha:#A9CCC0;
+  --ambar:#A65D14; --ambar-soft:#F6E9DA; --ambar-linha:#DFBE94;
+  --azul:#2C5670; --azul-soft:#E2EAF0;
+  --display:'Archivo',system-ui,-apple-system,sans-serif;
+  --corpo:'Source Serif 4',Georgia,'Times New Roman',serif;
+  --mono:'IBM Plex Mono',ui-monospace,'SFMono-Regular',monospace;
+  --max:1120px; --pad:clamp(20px,4vw,32px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0E171C; --surface:#16232A; --surface-2:#1C2C34;
+    --ink:#DFE6E2; --ink-2:#9BAAA3; --ink-3:#7A8A84;
+    --line:#2C3D45; --line-2:#405259;
+    --verde:#5DBA9C; --verde-soft:#15302A; --verde-linha:#27564A;
+    --ambar:#DE9145; --ambar-soft:#33220F; --ambar-linha:#5C3E1B;
+    --azul:#7FAECD; --azul-soft:#14252F;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0E171C; --surface:#16232A; --surface-2:#1C2C34;
+  --ink:#DFE6E2; --ink-2:#9BAAA3; --ink-3:#7A8A84;
+  --line:#2C3D45; --line-2:#405259;
+  --verde:#5DBA9C; --verde-soft:#15302A; --verde-linha:#27564A;
+  --ambar:#DE9145; --ambar-soft:#33220F; --ambar-linha:#5C3E1B;
+  --azul:#7FAECD; --azul-soft:#14252F;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition-duration:.001ms!important}}
+body{margin:0;font-family:var(--corpo);font-size:16.5px;line-height:1.6;color:var(--ink);background:var(--ground);-webkit-font-smoothing:antialiased}
+
+h1,h2,h3,h4{font-family:var(--display);font-weight:800;line-height:1.08;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(27px,3.6vw,40px);font-stretch:104%}
+h3{font-size:clamp(16px,1.5vw,19px);font-weight:700;letter-spacing:-.01em}
+h4{font-size:12.5px;font-weight:700;text-transform:uppercase;letter-spacing:.09em}
+p{margin:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3);font-weight:500}
+.lede{font-size:clamp(16px,1.6vw,18.5px);color:var(--ink-2);max-width:64ch}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+.faixa{padding:clamp(52px,6.5vw,84px) var(--pad)}
+.faixa-papel{background:var(--surface);border-block:1px solid var(--line)}
+.faixa-concreto{background:var(--ground)}
+.wrap{max-width:var(--max);margin-inline:auto}
+.cabeca{display:flex;flex-direction:column;gap:12px;margin-bottom:clamp(26px,3.4vw,42px);max-width:74ch}
+
+/* ---------- capa ---------- */
+.capa{background:var(--deep);color:var(--deep-ink);padding:clamp(30px,4vw,44px) var(--pad) clamp(46px,6vw,70px);position:relative;overflow:hidden}
+.capa::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(var(--deep-2) 1px,transparent 1px),linear-gradient(90deg,var(--deep-2) 1px,transparent 1px);
+  background-size:46px 46px;opacity:.5}
+.capa .wrap{position:relative}
+.marca{display:flex;align-items:center;gap:13px;flex-wrap:wrap;margin-bottom:clamp(36px,5vw,56px)}
+.marca .selo{font-family:var(--display);font-weight:900;font-size:14px;color:#F8F9F6;background:#1F6F5C;padding:5px 10px;border-radius:3px}
+.marca .org{font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--deep-ink-2)}
+.capa h1{font-size:clamp(34px,5.8vw,62px);font-stretch:110%;color:#F8F9F6;max-width:18ch;margin-bottom:20px}
+.capa h1 em{font-style:normal;color:#66C4A6}
+.capa-lede{font-size:clamp(16px,1.8vw,19px);color:#B4C3BC;max-width:58ch}
+
+/* ---------- trilhas ---------- */
+.trilhas{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+@media (max-width:820px){.trilhas{grid-template-columns:1fr}}
+.trilha{background:var(--surface);padding:clamp(20px,2.8vw,28px);display:flex;flex-direction:column;gap:14px}
+.trilha-topo{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding-bottom:11px;border-bottom:2px solid var(--verde)}
+.trilha-b .trilha-topo{border-bottom-color:var(--azul)}
+.trilha-topo .t{font-family:var(--display);font-weight:800;font-size:15px;color:var(--verde)}
+.trilha-b .trilha-topo .t{color:var(--azul)}
+.trilha-topo .q{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.trilha ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.trilha li{position:relative;padding-left:18px;font-size:14.5px;line-height:1.45;color:var(--ink-2)}
+.trilha li::before{content:"";position:absolute;left:0;top:.58em;width:8px;height:2px;background:var(--verde)}
+.trilha-b li::before{background:var(--azul)}
+.trilha li b{color:var(--ink)}
+
+/* ---------- régua ---------- */
+.regua{display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.deg{display:grid;grid-template-columns:70px 120px 1fr;gap:0;background:var(--surface);align-items:center}
+@media (max-width:640px){.deg{grid-template-columns:56px 1fr;}.deg .lim{display:none}}
+.deg .fx{font-family:var(--display);font-weight:900;font-stretch:80%;font-size:24px;text-align:center;padding:14px 8px;color:#F8F9F6}
+.deg-aaa .fx{background:var(--verde)}
+.deg-aa  .fx{background:var(--verde);opacity:.82}
+.deg-a   .fx{background:var(--azul)}
+.deg-b   .fx{background:var(--line-2)}
+.deg-c   .fx{background:var(--ambar)}
+.deg .lim{font-family:var(--mono);font-size:11.5px;color:var(--ink-2);padding:0 14px;border-right:1px solid var(--line)}
+.deg .ben{padding:12px 16px;font-size:14px;line-height:1.4;color:var(--ink)}
+.deg .ben small{display:block;font-family:var(--mono);font-size:10.5px;color:var(--ink-3);margin-top:2px}
+
+/* ---------- gráfico de custo por tonelada ---------- */
+.grafico{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:clamp(18px,2.4vw,26px)}
+.g-titulo{font-family:var(--display);font-weight:700;font-size:15px;color:var(--ink);margin-bottom:4px}
+.g-sub{font-family:var(--mono);font-size:10.5px;color:var(--ink-3);margin-bottom:20px;letter-spacing:.04em}
+.barras{display:flex;flex-direction:column;gap:16px}
+.barra{display:grid;grid-template-columns:190px 1fr;gap:14px;align-items:center}
+@media (max-width:700px){.barra{grid-template-columns:1fr;gap:5px}}
+.barra .rot{font-size:13.5px;line-height:1.3;color:var(--ink)}
+.barra .rot small{display:block;font-family:var(--mono);font-size:10px;color:var(--ink-3);margin-top:2px}
+.trilho{position:relative;height:26px;display:flex;align-items:center}
+.zero{position:absolute;top:-6px;bottom:-6px;width:1px;background:var(--line-2);z-index:1}
+.fill{position:absolute;height:22px;border-radius:0;display:flex;align-items:center}
+.fill.custa{background:var(--ambar);border-radius:0 4px 4px 0}
+.fill.economiza{background:var(--verde);border-radius:4px 0 0 4px}
+.valor{position:absolute;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:11.5px;font-weight:600;white-space:nowrap;color:var(--ink);z-index:2}
+.valor.dentro{padding-left:9px;color:#F8F9F6}
+.g-nota{margin-top:18px;padding-top:13px;border-top:1px solid var(--line);font-size:13px;line-height:1.5;color:var(--ink-2)}
+.g-nota b{color:var(--ink)}
+
+/* ---------- simulador ---------- */
+.sim{background:var(--surface);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.sim-campos{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--line)}
+.campo{background:var(--surface-2);padding:15px 17px;display:flex;flex-direction:column;gap:7px}
+.campo label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.campo input,.campo select{
+  font-family:var(--mono);font-size:16px;font-variant-numeric:tabular-nums;
+  background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:2px;
+  padding:7px 9px;width:100%;
+}
+.campo input:focus-visible,.campo select:focus-visible{outline:2px solid var(--verde);outline-offset:1px}
+.campo .hint{font-family:var(--mono);font-size:9.5px;color:var(--ink-3)}
+.sim-saida{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1px;background:var(--line);border-top:1px solid var(--line)}
+.saida{background:var(--surface);padding:17px}
+.saida .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:6px}
+.saida .v{font-family:var(--display);font-weight:900;font-stretch:80%;font-size:clamp(22px,2.6vw,30px);line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--ink)}
+.saida .v.bom{color:var(--verde)}
+.saida .v.ruim{color:var(--ambar)}
+.saida .u{font-family:var(--mono);font-size:10.5px;color:var(--ink-3);display:block;margin-top:5px}
+.sim-nota{padding:14px 17px;border-top:1px solid var(--line);background:var(--surface-2);font-size:12.5px;line-height:1.5;color:var(--ink-2)}
+
+/* ---------- ESG ---------- */
+.eixos{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.eixo{background:var(--surface);padding:clamp(18px,2.2vw,24px);display:flex;flex-direction:column;gap:9px}
+.eixo .cat{font-family:var(--display);font-weight:800;font-size:14px;color:var(--ink)}
+.eixo .est{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;padding:3px 7px;border-radius:2px;align-self:flex-start}
+.eixo .est.pronto{background:var(--verde-soft);color:var(--verde);border:1px solid var(--verde-linha)}
+.eixo .est.livre{background:var(--surface-2);color:var(--ink-3);border:1px solid var(--line)}
+.eixo p{font-size:13.5px;line-height:1.5;color:var(--ink-2)}
+
+.fluxo-esg{display:flex;flex-wrap:wrap;gap:8px;margin-top:clamp(18px,2.4vw,26px);align-items:center}
+.passo-esg{font-family:var(--mono);font-size:11px;padding:7px 12px;border:1px solid var(--line);border-radius:2px;background:var(--surface);color:var(--ink-2)}
+.passo-esg.fim{border-color:var(--verde-linha);background:var(--verde-soft);color:var(--verde);font-weight:600}
+.seta-esg{color:var(--ink-3);font-family:var(--mono)}
+
+/* ---------- preço ---------- */
+.planos{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+@media (max-width:800px){.planos{grid-template-columns:1fr}}
+.plano{background:var(--surface);padding:clamp(20px,2.6vw,26px);display:flex;flex-direction:column;gap:10px}
+.plano.destaque{background:var(--verde-soft)}
+.plano .n{font-family:var(--display);font-weight:800;font-size:15px;color:var(--ink)}
+.plano .p{font-family:var(--display);font-weight:900;font-stretch:80%;font-size:clamp(26px,3vw,34px);line-height:1;color:var(--verde);font-variant-numeric:tabular-nums}
+.plano .p small{font-size:.4em;font-stretch:100%;font-weight:600;color:var(--ink-2);margin-left:2px}
+.plano .q{font-family:var(--mono);font-size:10.5px;color:var(--ink-3)}
+.plano .d{font-size:13.5px;line-height:1.45;color:var(--ink-2);margin-top:auto;padding-top:10px;border-top:1px solid var(--line)}
+
+.aviso{margin-top:clamp(18px,2.4vw,26px);padding:14px 16px;border-left:3px solid var(--ambar);background:var(--ambar-soft);border-radius:0 3px 3px 0;font-size:13.5px;line-height:1.55;color:var(--ink-2)}
+.aviso b{color:var(--ink)}
+
+/* ---------- fecho ---------- */
+.fecho{background:var(--deep);color:var(--deep-ink);padding:clamp(48px,6vw,74px) var(--pad)}
+.fecho h2{color:#F8F9F6;max-width:20ch}
+.fecho .lede{color:#B4C3BC;margin-top:13px}
+.assin{margin-top:clamp(28px,3.6vw,40px);padding-top:17px;border-top:1px solid var(--deep-3);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--deep-ink-2)}
+
+a{color:var(--verde)}
+:focus-visible{outline:2px solid var(--verde);outline-offset:3px;border-radius:2px}
+.tabela-wrap{overflow-x:auto}
+</style>
+
+<!-- ============================ CAPA ============================ -->
+<header class="capa">
+  <div class="wrap">
+    <div class="marca">
+      <span class="selo">CarbonFree</span>
+      <span class="org">MBV · Movimento Brasil Verde</span>
+      <span class="org">Para construtoras e incorporadoras</span>
+    </div>
+    <h1>O carbono que você já emite pode voltar como <em>desconto</em>.</h1>
+    <p class="capa-lede">
+      Não é relatório ESG de gaveta. É inventário auditável que instrui processo
+      tributário municipal, disputa licitação e responde ao seu banco — a partir das
+      notas fiscais que você já emite.
+    </p>
+  </div>
+</header>
+
+<!-- ============================ AS DUAS TRILHAS ============================ -->
+<section class="faixa faixa-concreto">
+  <div class="wrap">
+    <div class="cabeca">
+      <p class="eyebrow">Onde você está hoje</p>
+      <h2>O benefício não é o mesmo em toda cidade</h2>
+      <p class="lede">
+        Desconto de IPTU e redução de outorga <strong>só existem onde a prefeitura instituiu
+        o programa por lei municipal</strong>. Vender isso a quem não está nesse contexto seria
+        desonesto — então aqui estão as duas situações, separadas.
+      </p>
+    </div>
+
+    <div class="trilhas">
+      <div class="trilha trilha-a">
+        <div class="trilha-topo">
+          <span class="t">Município com programa</span>
+          <span class="q">Trilha A</span>
+        </div>
+        <ul>
+          <li><b>Desconto de IPTU por faixa de desempenho</b>, sustentado no Estatuto da Cidade (Lei 10.257/2001)</li>
+          <li><b>Redução de outorga onerosa</b> e, na faixa mais alta, potencial construtivo adicional</li>
+          <li><b>Análise prioritária de projeto</b> — a fila de aprovação cai de meses para semanas</li>
+          <li><b>Selo público</b>, oponível a comprador e a investidor</li>
+        </ul>
+      </div>
+      <div class="trilha trilha-b">
+        <div class="trilha-topo">
+          <span class="t">Município sem programa ainda</span>
+          <span class="q">Trilha B</span>
+        </div>
+        <ul>
+          <li><b>Escopo 3 pronto</b> para a Lei 15.042/2024 — cimento, aço, cal e vidro entraram no regulado, e isso desce para você</li>
+          <li><b>Margem de preferência</b> em obra pública municipal (art. 26, Lei 14.133/2021)</li>
+          <li><b>Taxa verde de crédito</b> e resposta a due diligence de investidor</li>
+          <li><b>80 a 200 horas por obra</b> que hoje se gastam levantando A1–A5 na planilha</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="aviso">
+      <b>A trilha B é onde a maioria das construtoras está hoje</b> — e é ela que financia a
+      espera. O ciclo de adoção municipal leva de 9 a 18 meses; os ganhos da trilha B começam
+      na primeira obra inventariada, sem depender de nenhuma decisão da prefeitura.
+    </div>
+  </div>
+</section>
+
+<!-- ============================ A RÉGUA ============================ -->
+<section class="faixa faixa-papel">
+  <div class="wrap">
+    <div class="cabeca">
+      <p class="eyebrow">Trilha A · a régua de incentivo</p>
+      <h2>Quanto menos carbono por m², menos imposto</h2>
+      <p class="lede">
+        A régua abaixo é a que está cadastrada no sistema para Florianópolis. A unidade é
+        intensidade líquida: quilos de CO₂ equivalente por metro quadrado construído, já
+        descontado o que a obra remove ou substitui.
+      </p>
+    </div>
+
+    <div class="regua">
+      <div class="deg deg-aaa"><div class="fx">AAA</div><div class="lim num">até 150 kg/m²</div><div class="ben">IPTU −15% a −20% por 5 anos<small>+ potencial construtivo adicional · análise prioritária</small></div></div>
+      <div class="deg deg-aa"><div class="fx">AA</div><div class="lim num">até 200 kg/m²</div><div class="ben">IPTU −10% por 5 anos<small>+ redução de outorga onerosa · selo público</small></div></div>
+      <div class="deg deg-a"><div class="fx">A</div><div class="lim num">até 280 kg/m²</div><div class="ben">IPTU −5%<small>+ selo público · preferência em licitação municipal</small></div></div>
+      <div class="deg deg-b"><div class="fx">B</div><div class="lim num">até 380 kg/m²</div><div class="ben">Conformidade<small>sem benefício e sem sanção</small></div></div>
+      <div class="deg deg-c"><div class="fx">C</div><div class="lim num">acima de 380</div><div class="ben">Plano de adequação obrigatório<small>compensação adicional como condicionante de habite-se</small></div></div>
+    </div>
+
+    <div class="aviso">
+      <b>As faixas são calibradas por município</b>, sobre a distribuição real das obras locais.
+      Calibrar acima da mediana esvazia o programa; muito abaixo distribui benefício sem induzir
+      mudança. Os valores acima são os de Florianópolis — a sua cidade terá os seus.
+      Há ainda um teto de compensação de 30%: reduzir de verdade conta mais que compensar.
+    </div>
+  </div>
+</section>
+
+<!-- ============================ CUSTO POR TONELADA ============================ -->
+<section class="faixa faixa-concreto">
+  <div class="wrap">
+    <div class="cabeca">
+      <p class="eyebrow">A conta que decide</p>
+      <h2>Onde cada real investido reduz mais</h2>
+      <p class="lede">
+        A pergunta prática não é "como reduzir carbono", é "qual troca reduz mais por real
+        gasto". O sistema mantém esse catálogo e responde com número, não com achismo.
+      </p>
+    </div>
+
+    <div class="grafico">
+      <p class="g-titulo">Custo por tonelada de CO₂e evitada</p>
+      <p class="g-sub">VALORES DO CATÁLOGO DO SISTEMA · NEGATIVO = A TROCA SE PAGA</p>
+
+      <div class="barras">
+        <div class="barra">
+          <div class="rot">Agregado reciclado de RCC<small>no lugar de brita natural</small></div>
+          <div class="trilho">
+            <div class="zero" style="left:60.87%"></div>
+            <div class="fill economiza" style="right:39.13%;width:58.00%"></div>
+            <div class="valor dentro" style="left:2.87%">−R$ 667 · a troca se paga</div>
+          </div>
+        </div>
+        <div class="barra">
+          <div class="rot">Cimento CP III (alto-forno)<small>no lugar de CP II</small></div>
+          <div class="trilho">
+            <div class="zero" style="left:60.87%"></div>
+            <div class="fill custa" style="left:60.87%;width:5.83%"></div>
+            <div class="valor" style="left:calc(66.70% + 8px)">R$ 67</div>
+          </div>
+        </div>
+        <div class="barra">
+          <div class="rot">Fotovoltaico no canteiro<small>no lugar de energia da concessionária</small></div>
+          <div class="trilho">
+            <div class="zero" style="left:60.87%"></div>
+            <div class="fill custa" style="left:60.87%;width:20.26%"></div>
+            <div class="valor" style="left:calc(81.13% + 8px)">R$ 233</div>
+          </div>
+        </div>
+        <div class="barra">
+          <div class="rot">Aço rota EAF (forno elétrico)<small>no lugar de rota BF-BOF</small></div>
+          <div class="trilho">
+            <div class="zero" style="left:60.87%"></div>
+            <div class="fill custa" style="left:60.87%;width:26.87%"></div>
+            <div class="valor" style="left:calc(87.74% + 8px)">R$ 309</div>
+          </div>
+        </div>
+      </div>
+
+      <p class="g-nota">
+        <b>Barato por tonelada não é o mesmo que grande alavanca.</b> O agregado reciclado se paga,
+        mas evita só 0,012 t de CO₂e por tonelada de material — precisa de volume enorme para mover
+        a intensidade. O aço EAF custa mais por tonelada evitada, porém entrega 1,1 t de CO₂e por
+        tonelada trocada: quase cem vezes mais por unidade. A decisão real combina os dois eixos, e
+        é isso que o simulador de material faz obra a obra.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ SIMULADOR ============================ -->
+<section class="faixa faixa-papel">
+  <div class="wrap">
+    <div class="cabeca">
+      <p class="eyebrow">Faça a conta com os seus números</p>
+      <h2>Quanto vale subir uma faixa</h2>
+      <p class="lede">
+        Ajuste para a sua obra. O cálculo usa a régua de Florianópolis e o cimento CP III como
+        alavanca de referência, que é a mais barata com volume relevante.
+      </p>
+    </div>
+
+    <div class="sim">
+      <div class="sim-campos">
+        <div class="campo">
+          <label for="area">Área construída</label>
+          <input id="area" type="number" min="100" step="100" value="8000">
+          <span class="hint">m²</span>
+        </div>
+        <div class="campo">
+          <label for="intens">Intensidade hoje</label>
+          <input id="intens" type="number" min="0" step="5" value="265">
+          <span class="hint">kgCO₂e/m² · faixa A</span>
+        </div>
+        <div class="campo">
+          <label for="iptu">IPTU anual do empreendimento</label>
+          <input id="iptu" type="number" min="0" step="1000" value="120000">
+          <span class="hint">R$ por ano</span>
+        </div>
+        <div class="campo">
+          <label for="alvo">Faixa desejada</label>
+          <select id="alvo">
+            <option value="200">AA — até 200 kg/m² (IPTU −10%, 5 anos)</option>
+            <option value="150">AAA — até 150 kg/m² (IPTU −15%, 5 anos)</option>
+          </select>
+          <span class="hint">AAA usa o piso da faixa (−15%)</span>
+        </div>
+      </div>
+
+      <div class="sim-saida">
+        <div class="saida"><span class="k">Redução necessária</span><span class="v" id="o-red">—</span><span class="u">tCO₂e</span></div>
+        <div class="saida"><span class="k">Custo estimado</span><span class="v ruim" id="o-custo">—</span><span class="u">a R$ 67/tCO₂e</span></div>
+        <div class="saida"><span class="k">IPTU economizado</span><span class="v bom" id="o-ben">—</span><span class="u">em 5 anos</span></div>
+        <div class="saida"><span class="k">Licença no período</span><span class="v ruim" id="o-lic">—</span><span class="u">Obra Pro · 18 meses</span></div>
+        <div class="saida"><span class="k">Saldo</span><span class="v" id="o-saldo">—</span><span class="u" id="o-saldo-u">—</span></div>
+      </div>
+
+      <p class="sim-nota">
+        Conta deliberadamente conservadora: considera <strong>só o IPTU</strong>. Fora dela ficam a
+        redução de outorga onerosa, o potencial construtivo adicional, a antecipação de receita pela
+        análise prioritária de projeto e as 80–200 horas por obra que deixam de ser gastas em
+        planilha — que em pesquisa com incorporadoras costumam pesar mais que o desconto tributário.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ESG ============================ -->
+<section class="faixa faixa-concreto">
+  <div class="wrap">
+    <div class="cabeca">
+      <p class="eyebrow">Controle ESG</p>
+      <h2>ESG que instrui processo, não que enfeita relatório</h2>
+      <p class="lede">
+        Cada projeto ESG entra amarrado a um requisito que a prefeitura já audita, com a evidência
+        exigida e o teste de verificação declarados. É o que transforma iniciativa em instrução
+        processual de desconto fiscal.
+      </p>
+    </div>
+
+    <div class="eixos">
+      <div class="eixo">
+        <span class="cat">Ambiental</span>
+        <span class="est pronto">catálogo pré-auditado</span>
+        <p>
+          Substituição de material, reciclagem de resíduo, energia renovável no canteiro. É o único
+          eixo com requisitos já quantificados e auditáveis pela prefeitura — cada um com fator de
+          emissão versionado por trás.
+        </p>
+      </div>
+      <div class="eixo">
+        <span class="cat">Social</span>
+        <span class="est livre">descrição + evidência</span>
+        <p>
+          Capacitação de mão de obra, contratação local, segurança do canteiro acima do exigido,
+          acessibilidade. Sem catálogo formal ainda: descreve-se a ação e anexa-se a comprovação —
+          lista de presença, contrato, laudo.
+        </p>
+      </div>
+      <div class="eixo">
+        <span class="cat">Governança</span>
+        <span class="est livre">descrição + evidência</span>
+        <p>
+          Política de compliance, transparência de fornecedores, canal de denúncia, due diligence de
+          terceirizados. Mesma lógica do eixo social: descrição mais documento que comprove.
+        </p>
+      </div>
+    </div>
+
+    <div class="fluxo-esg">
+      <span class="passo-esg">Rascunho</span><span class="seta-esg">→</span>
+      <span class="passo-esg">Enviado</span><span class="seta-esg">→</span>
+      <span class="passo-esg">Em análise pela prefeitura</span><span class="seta-esg">→</span>
+      <span class="passo-esg fim">Aprovado</span>
+      <span class="seta-esg">·</span>
+      <span class="passo-esg">Rejeitado, com o motivo por escrito</span>
+    </div>
+
+    <div class="aviso">
+      <b>Dizer que só o eixo ambiental tem catálogo pronto é escolha nossa.</b> Prometer que
+      qualquer iniciativa social vira desconto seria vender o que a prefeitura ainda não sabe
+      auditar. O guia dentro do sistema diz exatamente isso, com todas as letras, antes de você
+      investir tempo montando um projeto que não teria como ser verificado.
+    </div>
+  </div>
+</section>
+
+<!-- ============================ PREÇO ============================ -->
+<section class="faixa faixa-papel">
+  <div class="wrap">
+    <div class="cabeca">
+      <p class="eyebrow">Comercial</p>
+      <h2>O que custa</h2>
+      <p class="lede">
+        Licença por obra, sem implantação e sem fidelidade. A comparação relevante é com as 80 a
+        200 horas de engenheiro que hoje se gastam levantando A1–A5 em planilha, uma vez por obra.
+      </p>
+    </div>
+
+    <div class="planos">
+      <div class="plano">
+        <span class="n">Obra Starter</span>
+        <span class="p">R$ 390<small>/mês</small></span>
+        <span class="q">obra individual até 5.000 m²</span>
+        <span class="d">Balanço de carbono, dossiê e protocolo junto à prefeitura.</span>
+      </div>
+      <div class="plano destaque">
+        <span class="n">Obra Pro</span>
+        <span class="p">R$ 990<small>/mês</small></span>
+        <span class="q">obra acima de 5.000 m²</span>
+        <span class="d">Tudo do Starter, mais declaração ambiental de produto, simulador de decisão de material e dossiê no formato exigido para verificação independente.</span>
+      </div>
+      <div class="plano">
+        <span class="n">Obra Corporate</span>
+        <span class="p">R$ 6.500<small>/mês+</small></span>
+        <span class="q">incorporadora com carteira</span>
+        <span class="d">Multi-obra, integração por API e consolidação de Escopo 3 da carteira inteira.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ FECHO ============================ -->
+<section class="fecho">
+  <div class="wrap">
+    <p class="eyebrow" style="color:#66C4A6">Como começa</p>
+    <h2 style="margin-top:11px">Uma obra, um inventário, um número real.</h2>
+    <p class="lede">
+      Não precisa de decisão da prefeitura nem de mudança de projeto. Escolhe-se uma obra em
+      andamento, importam-se as notas que já foram emitidas, e no fim do mês existe a intensidade
+      dela em kgCO₂e/m² — com origem rastreável até o documento fiscal.
+    </p>
+    <p class="lede" style="margin-top:14px">
+      A partir daí a conversa deixa de ser sobre intenção. Passa a ser sobre em qual faixa a obra
+      caiu, quanto custa subir uma, e o que isso vale.
+    </p>
+    <div class="assin">
+      <span>CarbonFree · MBV — Movimento Brasil Verde</span>
+      <span>Proposta para construtoras · agosto de 2026</span>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var CUSTO_POR_T = 67;      // cimento CP III: R$12/t ÷ 0,180 tCO2e/t
+  var LICENCA_MES = 990;     // Obra Pro
+  var MESES = 18;
+  var DESCONTO = { "200": 0.10, "150": 0.15 };
+
+  var brl = function(v){
+    return "R$ " + Math.round(v).toLocaleString("pt-BR");
+  };
+
+  function calcular(){
+    var area   = Math.max(0, Number($("area").value) || 0);
+    var atual  = Math.max(0, Number($("intens").value) || 0);
+    var iptu   = Math.max(0, Number($("iptu").value) || 0);
+    var alvoKg = Number($("alvo").value);
+
+    // toneladas a reduzir para a obra inteira sair de `atual` e chegar em `alvoKg`
+    var reducaoT = Math.max(0, (atual - alvoKg) * area / 1000);
+    var custo    = reducaoT * CUSTO_POR_T;
+    var beneficio = iptu * DESCONTO[String(alvoKg)] * 5;
+    var licenca  = LICENCA_MES * MESES;
+    var saldo    = beneficio - custo - licenca;
+
+    $("o-red").textContent   = reducaoT.toLocaleString("pt-BR", { maximumFractionDigits: 0 });
+    $("o-custo").textContent = brl(custo);
+    $("o-ben").textContent   = brl(beneficio);
+    $("o-lic").textContent   = brl(licenca);
+
+    var el = $("o-saldo");
+    el.textContent = brl(Math.abs(saldo));
+    el.className = "v " + (saldo >= 0 ? "bom" : "ruim");
+    $("o-saldo-u").textContent = saldo >= 0 ? "a favor, em 5 anos" : "contra — só com IPTU não fecha";
+
+    if (reducaoT === 0) {
+      $("o-red").textContent = "0";
+      $("o-saldo-u").textContent = "a obra já está na faixa";
+    }
+  }
+
+  ["area","intens","iptu","alvo"].forEach(function(id){
+    var el = $(id);
+    el.addEventListener("input", calcular);
+    el.addEventListener("change", calcular);
+  });
+  calcular();
+})();
+</script>

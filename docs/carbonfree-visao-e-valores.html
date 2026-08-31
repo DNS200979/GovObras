@@ -1,0 +1,468 @@
+<title>Carta de princípios CarbonFree</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400..700&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   CarbonFree — carta de princípios
+   Mesma identidade das demais peças, em tratamento mais austero:
+   documento de fundação, não material de venda. O dispositivo
+   estrutural é o mesmo que o produto exige da obra — toda
+   afirmação vem com o seu teste de verificação ao lado.
+   ============================================================ */
+:root{
+  --ground:#E3E7E2; --surface:#F8F9F6; --surface-2:#EDF0EB;
+  --ink:#22302F; --ink-2:#5C6B66; --ink-3:#7E8A85;
+  --line:#C9CFC7; --line-2:#A6B0A7;
+  --deep:#16232A; --deep-2:#1F323B; --deep-3:#2E4048;
+  --deep-ink:#DDE4E1; --deep-ink-2:#829990;
+  --verde:#1F6F5C; --verde-soft:#E1EEE9; --verde-linha:#A9CCC0;
+  --ambar:#A65D14; --ambar-soft:#F6E9DA; --ambar-linha:#DFBE94;
+  --azul:#2C5670;
+  --display:'Archivo',system-ui,-apple-system,sans-serif;
+  --corpo:'Source Serif 4',Georgia,'Times New Roman',serif;
+  --mono:'IBM Plex Mono',ui-monospace,'SFMono-Regular',monospace;
+  --max:960px; --pad:clamp(20px,4vw,32px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0E171C; --surface:#16232A; --surface-2:#1C2C34;
+    --ink:#DFE6E2; --ink-2:#9BAAA3; --ink-3:#7A8A84;
+    --line:#2C3D45; --line-2:#405259;
+    --verde:#5DBA9C; --verde-soft:#15302A; --verde-linha:#27564A;
+    --ambar:#DE9145; --ambar-soft:#33220F; --ambar-linha:#5C3E1B;
+    --azul:#7FAECD;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0E171C; --surface:#16232A; --surface-2:#1C2C34;
+  --ink:#DFE6E2; --ink-2:#9BAAA3; --ink-3:#7A8A84;
+  --line:#2C3D45; --line-2:#405259;
+  --verde:#5DBA9C; --verde-soft:#15302A; --verde-linha:#27564A;
+  --ambar:#DE9145; --ambar-soft:#33220F; --ambar-linha:#5C3E1B;
+  --azul:#7FAECD;
+}
+*{box-sizing:border-box}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.001ms!important}}
+body{margin:0;font-family:var(--corpo);font-size:17px;line-height:1.65;color:var(--ink);background:var(--ground);-webkit-font-smoothing:antialiased}
+
+h1,h2,h3{font-family:var(--display);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(25px,3.2vw,35px);font-stretch:104%}
+h3{font-size:clamp(16px,1.6vw,19px);font-weight:700;letter-spacing:-.01em}
+p{margin:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);font-weight:500}
+
+.faixa{padding:clamp(50px,6.5vw,82px) var(--pad)}
+.faixa-papel{background:var(--surface);border-block:1px solid var(--line)}
+.faixa-concreto{background:var(--ground)}
+.wrap{max-width:var(--max);margin-inline:auto}
+.corpo{max-width:66ch;display:flex;flex-direction:column;gap:17px}
+.corpo p{color:var(--ink-2)}
+.corpo p strong{color:var(--ink);font-weight:700}
+.cabeca{margin-bottom:clamp(24px,3vw,36px)}
+.cabeca h2{margin-top:11px}
+
+/* numeração das perguntas — é uma sequência real, cada uma responde à anterior */
+.q{display:flex;align-items:baseline;gap:14px;margin-bottom:11px}
+.q .n{
+  font-family:var(--display);font-weight:900;font-stretch:78%;font-size:clamp(38px,5vw,54px);
+  line-height:.8;color:var(--verde-linha);font-variant-numeric:tabular-nums;
+}
+
+/* ---------- capa ---------- */
+.capa{background:var(--deep);color:var(--deep-ink);padding:clamp(30px,4vw,44px) var(--pad) clamp(48px,6vw,72px);position:relative;overflow:hidden}
+.capa::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(var(--deep-2) 1px,transparent 1px),linear-gradient(90deg,var(--deep-2) 1px,transparent 1px);
+  background-size:46px 46px;opacity:.5}
+.capa .wrap{position:relative}
+.marca{display:flex;align-items:center;gap:13px;flex-wrap:wrap;margin-bottom:clamp(38px,5vw,58px)}
+.marca .selo{font-family:var(--display);font-weight:900;font-size:14px;color:#F8F9F6;background:#1F6F5C;padding:5px 10px;border-radius:3px}
+.marca .org{font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--deep-ink-2)}
+.capa h1{font-size:clamp(31px,5.2vw,54px);font-stretch:108%;color:#F8F9F6;max-width:21ch;margin-bottom:20px}
+.capa h1 em{font-style:normal;color:#66C4A6}
+.capa p{font-size:clamp(16px,1.8vw,19px);color:#B4C3BC;max-width:56ch}
+
+/* ---------- o que não somos ---------- */
+.nao{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden;margin-top:clamp(22px,3vw,32px)}
+@media (max-width:720px){.nao{grid-template-columns:1fr}}
+.nao div{background:var(--surface);padding:clamp(18px,2.4vw,25px)}
+.nao .q2{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:8px}
+.nao .e .q2{color:var(--verde)}
+.nao .ne .q2{color:var(--ambar)}
+.nao p{font-size:15px;line-height:1.5;color:var(--ink-2)}
+.nao b{color:var(--ink)}
+
+/* ---------- diferenciais ---------- */
+.difs{display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.dif{background:var(--surface);padding:clamp(19px,2.4vw,26px);display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,2.5vw,28px)}
+@media (max-width:760px){.dif{grid-template-columns:1fr;gap:10px}}
+.dif h3{color:var(--ink)}
+.dif .nosso{font-size:14.5px;line-height:1.5;color:var(--ink-2);margin-top:7px}
+.dif .mercado{
+  font-family:var(--mono);font-size:12px;line-height:1.55;color:var(--ink-3);
+  border-left:2px solid var(--line-2);padding-left:13px;align-self:center;
+}
+.dif .mercado b{display:block;text-transform:uppercase;letter-spacing:.11em;font-size:9.5px;color:var(--ink-3);margin-bottom:4px}
+
+/* ---------- valores ---------- */
+.valores{display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.valor{background:var(--surface);padding:clamp(19px,2.4vw,26px)}
+.valor .top{display:flex;align-items:baseline;gap:11px;flex-wrap:wrap}
+.valor .idx{font-family:var(--mono);font-size:11px;color:var(--verde);font-weight:600}
+.valor h3{color:var(--ink)}
+.valor .txt{font-size:14.5px;line-height:1.55;color:var(--ink-2);margin-top:8px;max-width:70ch}
+.valor .prova{
+  margin-top:11px;padding-top:10px;border-top:1px dashed var(--line-2);
+  font-family:var(--mono);font-size:11px;line-height:1.55;color:var(--ink-3);
+}
+.valor .prova b{color:var(--verde);text-transform:uppercase;letter-spacing:.11em;font-size:9.5px;display:block;margin-bottom:3px}
+
+.nota{margin-top:clamp(20px,2.6vw,28px);padding:15px 17px;border-left:3px solid var(--verde);background:var(--verde-soft);border-radius:0 3px 3px 0;font-size:14px;line-height:1.55;color:var(--ink-2)}
+.nota b{color:var(--ink)}
+
+/* ---------- fecho ---------- */
+.fecho{background:var(--deep);color:var(--deep-ink);padding:clamp(48px,6vw,76px) var(--pad)}
+.fecho h2{color:#F8F9F6;max-width:22ch}
+.fecho p{color:#B4C3BC;max-width:60ch;margin-top:14px;font-size:clamp(16px,1.7vw,18px)}
+.assin{margin-top:clamp(30px,3.8vw,42px);padding-top:17px;border-top:1px solid var(--deep-3);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--deep-ink-2)}
+:focus-visible{outline:2px solid var(--verde);outline-offset:3px;border-radius:2px}
+</style>
+
+<header class="capa">
+  <div class="wrap">
+    <div class="marca">
+      <span class="selo">CarbonFree</span>
+      <span class="org">MBV · Movimento Brasil Verde</span>
+      <span class="org">Carta de princípios</span>
+    </div>
+    <h1>Um número que ninguém consegue contestar vale mais que um selo que ninguém <em>acredita</em>.</h1>
+    <p>
+      Por que este software existe, o que ele se propõe a fazer, o que o separa do resto e o
+      que não vamos negociar pelo caminho.
+    </p>
+  </div>
+</header>
+
+<!-- ============================ 1 ============================ -->
+<section class="faixa faixa-papel">
+  <div class="wrap">
+    <div class="cabeca">
+      <div class="q"><span class="n">1</span><span class="eyebrow">Por que foi criado</span></div>
+      <h2>Porque o mesmo fracasso se repetia, e a causa era sempre a mesma</h2>
+    </div>
+
+    <div class="corpo">
+      <p>
+        Programas municipais de construção sustentável no Brasil vinham falhando por um motivo
+        que se repetia cidade após cidade: <strong>exigiam declaração sem criar evidência</strong>.
+        O selo era concedido com base em memorial descritivo e boa-fé. O fiscal recebia um PDF e
+        não tinha como contestar — não porque faltasse rigor, mas porque não havia contra o que
+        conferir.
+      </p>
+      <p>
+        Isso produz o pior dos dois mundos. A construtora que faz certo não consegue provar, e
+        portanto não é recompensada. A que não faz declara igual e recebe o mesmo selo. O programa
+        perde credibilidade, vira carimbo, e a próxima gestão o desativa.
+      </p>
+      <p>
+        Ao mesmo tempo, três atores viviam dores diferentes do mesmo problema. A prefeitura não
+        sabia quanto carbono a construção civil do município emitia, e não conseguia prestar conta
+        disso a ninguém. A construtora gastava de <strong>80 a 200 horas por obra</strong>
+        levantando dado em planilha, e ainda assim respondia ao banco com estimativa. O fiscal ia
+        a campo com prancheta e voltava com foto solta no celular, e o auto de infração caía por
+        vício de prova.
+      </p>
+      <p>
+        O software nasceu de uma constatação simples: <strong>ninguém precisava de mais um
+        relatório. Precisavam de contabilidade.</strong>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 2 ============================ -->
+<section class="faixa faixa-concreto">
+  <div class="wrap">
+    <div class="cabeca">
+      <div class="q"><span class="n">2</span><span class="eyebrow">A missão</span></div>
+      <h2>Tornar o carbono da obra contabilizável — e, por consequência, contestável</h2>
+    </div>
+
+    <div class="corpo">
+      <p>
+        Toda emissão é um passivo. Toda remoção, substituição de material ou desvio de resíduo é
+        um ativo. Cada lançamento nasce amarrado a um documento que <strong>já existe e já é
+        assinado digitalmente pelo Estado</strong> — nota fiscal, conhecimento de transporte,
+        manifesto de resíduo, certificado de destinação, fatura de energia.
+      </p>
+      <p>
+        A construtora não preenche formulário: ela importa o documento que já emitiu. O sistema
+        converte quantidade × fator versionado em tonelada de CO₂ equivalente. E o resultado não é
+        uma nota que alguém atribuiu — é um saldo que qualquer pessoa pode refazer a partir das
+        mesmas fontes e chegar ao mesmo número.
+      </p>
+    </div>
+
+    <div class="nao">
+      <div class="e">
+        <span class="q2">o que somos</span>
+        <p>
+          <b>Infraestrutura de fiscalização.</b> O mesmo papel que o sistema de nota fiscal
+          eletrônica cumpre para serviços, este cumpre para o carbono da construção civil.
+          Encanamento, não opinião.
+        </p>
+      </div>
+      <div class="ne">
+        <span class="q2">o que não somos</span>
+        <p>
+          <b>Consultoria ESG.</b> Não emitimos parecer, não damos nota, não vendemos selo.
+          Quem decide é a prefeitura, com a régua dela. Nós construímos o cadastro sobre o qual
+          essa decisão pode ser tomada.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 3 ============================ -->
+<section class="faixa faixa-papel">
+  <div class="wrap">
+    <div class="cabeca">
+      <div class="q"><span class="n">3</span><span class="eyebrow">O diferencial</span></div>
+      <h2>Cinco escolhas que quase ninguém faz</h2>
+    </div>
+
+    <div class="difs">
+      <div class="dif">
+        <div>
+          <h3>Partidas dobradas, não um número só</h3>
+          <p class="nosso">
+            Passivo e ativo lançados separadamente, cada um com sua evidência. O saldo é
+            resultado, não ponto de partida. Sem isso não há como auditar: um número único não
+            se abre.
+          </p>
+        </div>
+        <p class="mercado">
+          <b>o que se faz por aí</b>
+          Uma pegada agregada por obra, calculada em planilha própria, sem forma de reconstituir
+          como se chegou nela.
+        </p>
+      </div>
+
+      <div class="dif">
+        <div>
+          <h3>O lançamento nasce do documento fiscal</h3>
+          <p class="nosso">
+            A prova vem de documento que o Estado já assinou digitalmente e que a obra já era
+            obrigada a ter. Não criamos burocracia nova — usamos a que já existe.
+          </p>
+        </div>
+        <p class="mercado">
+          <b>o que se faz por aí</b>
+          Formulário preenchido pelo próprio interessado, com anexo em PDF que ninguém confere
+          contra a origem.
+        </p>
+      </div>
+
+      <div class="dif">
+        <div>
+          <h3>A prefeitura é o cliente, não o público-alvo</h3>
+          <p class="nosso">
+            O município detém alvará, habite-se e IPTU — pontos onde exigência documental já é
+            rotina e juridicamente sustentável. É o único mecanismo de adoção que não depende de
+            boa vontade.
+          </p>
+        </div>
+        <p class="mercado">
+          <b>o que se faz por aí</b>
+          Adesão voluntária de empresa, que atrai justamente quem já ia bem e não alcança quem
+          precisa mudar.
+        </p>
+      </div>
+
+      <div class="dif">
+        <div>
+          <h3>A cadeia inteira, com segregação de função</h3>
+          <p class="nosso">
+            A concreteira declara o que saiu. A construtora confere contra o que chegou. O
+            responsável técnico assina. A prefeitura lê. Cada passo é de um ator diferente — é
+            isso que faz o número valer.
+          </p>
+        </div>
+        <p class="mercado">
+          <b>o que se faz por aí</b>
+          Um único ator declara, confere e assina o próprio dado, e chama isso de autodeclaração
+          responsável.
+        </p>
+      </div>
+
+      <div class="dif">
+        <div>
+          <h3>O software se submete à régua que aplica</h3>
+          <p class="nosso">
+            Exigimos que todo requisito da obra venha com o seu teste de verificação. Seria
+            incoerente vender isso sem que o próprio sistema fosse auditável do mesmo jeito — e
+            sem publicar o que a auditoria encontra.
+          </p>
+        </div>
+        <p class="mercado">
+          <b>o que se faz por aí</b>
+          Fornecedor de conformidade que nunca publicou uma falha própria — porque não olhou, ou
+          porque não conta.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 4 ============================ -->
+<section class="faixa faixa-concreto">
+  <div class="wrap">
+    <div class="cabeca">
+      <div class="q"><span class="n">4</span><span class="eyebrow">Os valores</span></div>
+      <h2>Oito coisas que não vamos negociar</h2>
+      <p style="margin-top:14px;max-width:66ch;color:var(--ink-2)">
+        Cada uma vem com onde ela aparece hoje no sistema. Valor que não pode ser verificado é
+        slogan — e slogan é exatamente o que este produto existe para substituir.
+      </p>
+    </div>
+
+    <div class="valores">
+      <div class="valor">
+        <div class="top"><span class="idx">01</span><h3>O que não está confirmado fica de fora</h3></div>
+        <p class="txt">
+          Nunca inventamos fonte, endpoint, fator ou número para preencher lacuna. Quando não
+          existe dado confiável, a ausência é declarada como ausência — inclusive quando isso
+          deixa a tela mais pobre e a demonstração menos impressionante.
+        </p>
+        <p class="prova">
+          <b>Onde isso aparece</b>
+          Três cidades foram cadastradas sem camadas municipais porque nenhum geoportal delas foi
+          confirmado. O que foi testado e falhou está escrito no código, com o motivo.
+        </p>
+      </div>
+
+      <div class="valor">
+        <div class="top"><span class="idx">02</span><h3>Ausência de dado nunca se disfarça de ausência de problema</h3></div>
+        <p class="txt">
+          "Nada encontrado" e "não há como verificar" são respostas diferentes, e confundi-las é
+          a pior falha possível num sistema de fiscalização — porque o erro passa como aprovação.
+        </p>
+        <p class="prova">
+          <b>Onde isso aparece</b>
+          A verificação territorial mostra "sem fonte para verificar" onde não há camada, em vez
+          de um selo verde de "nenhuma área protegida encontrada".
+        </p>
+      </div>
+
+      <div class="valor">
+        <div class="top"><span class="idx">03</span><h3>Quem decide o acesso é o banco, nunca a tela</h3></div>
+        <p class="txt">
+          Toda regra de quem enxerga e grava o quê é aplicada pelo banco de dados. Validação em
+          código de interface é conveniência, não controle — e um caminho que ignore a regra não
+          pode existir nem por engano.
+        </p>
+        <p class="prova">
+          <b>Onde isso aparece</b>
+          Nenhum ponto do sistema escreve no banco contornando o controle de permissão. Os quatro
+          que faziam isso foram removidos, e a auditoria de segurança não tem apontamento.
+        </p>
+      </div>
+
+      <div class="valor">
+        <div class="top"><span class="idx">04</span><h3>Lançamento é imutável</h3></div>
+        <p class="txt">
+          O que entrou no livro não é editado nem apagado. Correção se faz por novo lançamento,
+          com rastro. Contabilidade que se reescreve não é contabilidade.
+        </p>
+        <p class="prova">
+          <b>Onde isso aparece</b>
+          A tabela de lançamentos não tem permissão de alteração nem de exclusão para ninguém —
+          nem para o autor, nem para a prefeitura.
+        </p>
+      </div>
+
+      <div class="valor">
+        <div class="top"><span class="idx">05</span><h3>Quem declara não valida; quem valida não assina</h3></div>
+        <p class="txt">
+          A segregação de função não é etapa de formulário, é o que dá valor ao número. Concentrar
+          os três papéis numa pessoa devolve o problema que o produto existe para resolver.
+        </p>
+        <p class="prova">
+          <b>Onde isso aparece</b>
+          Só o responsável técnico materializa entrega no inventário, e só depois de a construtora
+          ter validado o que a concreteira declarou.
+        </p>
+      </div>
+
+      <div class="valor">
+        <div class="top"><span class="idx">06</span><h3>Não prometemos benefício que depende de terceiro</h3></div>
+        <p class="txt">
+          Desconto de imposto depende de o município ter instituído o programa por lei. Onde não
+          houver, dizemos isso antes de a conversa avançar — e mostramos o que vale mesmo sem
+          programa nenhum.
+        </p>
+        <p class="prova">
+          <b>Onde isso aparece</b>
+          Todo material comercial separa o ganho imediato do que depende de régua municipal, e
+          todo roteiro de ativo é obrigado a ter ao menos um benefício da primeira categoria.
+        </p>
+      </div>
+
+      <div class="valor">
+        <div class="top"><span class="idx">07</span><h3>Teste que não detecta quebra não conta</h3></div>
+        <p class="txt">
+          Suíte verde não é evidência de nada por si só. Antes de confiar num teste, quebramos de
+          propósito o código que ele deveria proteger e conferimos que ele falha.
+        </p>
+        <p class="prova">
+          <b>Onde isso aparece</b>
+          A conversão que transforma entrega de concreto em tonelada de CO₂e tem seus testes
+          verificados assim — inverter a unidade faz o teste correspondente falhar.
+        </p>
+      </div>
+
+      <div class="valor">
+        <div class="top"><span class="idx">08</span><h3>Auditamos a nós mesmos e publicamos o que acharmos</h3></div>
+        <p class="txt">
+          Falha encontrada em casa é registrada, corrigida e contada — inclusive no material que
+          vai para o cliente. Um fornecedor de fiscalização que nunca achou nada em si mesmo ou
+          não olhou, ou não está contando.
+        </p>
+        <p class="prova">
+          <b>Onde isso aparece</b>
+          Uma regra de acesso que não amarrava a entrega à obra correta foi encontrada em
+          auditoria, corrigida em alteração isolada e descrita na apresentação comercial.
+        </p>
+      </div>
+    </div>
+
+    <div class="nota">
+      <b>Sobre esta lista.</b> Ela não é aspiracional. Cada item já custou alguma coisa — uma tela
+      mais pobre, uma demonstração menos vistosa, uma promessa que deixamos de fazer numa reunião.
+      É por isso que ela vale: valor que nunca custou nada ainda não foi testado.
+    </div>
+  </div>
+</section>
+
+<!-- ============================ FECHO ============================ -->
+<section class="fecho">
+  <div class="wrap">
+    <p class="eyebrow" style="color:#66C4A6">O critério</p>
+    <h2 style="margin-top:11px">Quando houver dúvida, pergunte o que a evidência sustenta.</h2>
+    <p>
+      Toda decisão difícil deste projeto — de produto, de venda, de código — cai na mesma
+      pergunta: isso é algo que alguém consegue refazer e conferir, ou é algo que a pessoa vai
+      ter que acreditar? Se for a segunda, não entra.
+    </p>
+    <p>
+      É a única regra da qual todas as outras derivam. Se um dia ela for negociada, o resto desta
+      carta perde o sentido junto — e o produto vira mais um selo em que ninguém acredita.
+    </p>
+    <div class="assin">
+      <span>CarbonFree · MBV — Movimento Brasil Verde</span>
+      <span>Carta de princípios · agosto de 2026</span>
+    </div>
+  </div>
+</section>

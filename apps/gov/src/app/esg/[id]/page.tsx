@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { AppShell } from "@/components/app-shell";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@carbonfree/ui/shadcn/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@carbonfree/ui/shadcn/card";
 import { categoriaEsgLabel, getProjetoEsgGov, statusEsgLabel } from "@/lib/queries";
 import { DecidirButtons, MarcarEmAnaliseButton } from "./decisao";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Alert, AlertDescription } from "@carbonfree/ui/shadcn/alert";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,10 +11,10 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+} from "@carbonfree/ui/shadcn/alert-dialog";
+import { Button } from "@carbonfree/ui/shadcn/button";
+import { Label } from "@carbonfree/ui/shadcn/label";
+import { Textarea } from "@carbonfree/ui/shadcn/textarea";
 import { decidirProjeto, marcarEmAnalise } from "../actions";
 
 export function MarcarEmAnaliseButton({ projetoId }: { projetoId: string }) {

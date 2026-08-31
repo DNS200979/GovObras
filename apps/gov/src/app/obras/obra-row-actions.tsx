@@ -11,15 +11,15 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
+} from "@carbonfree/ui/shadcn/alert-dialog";
+import { Alert, AlertDescription } from "@carbonfree/ui/shadcn/alert";
+import { Button } from "@carbonfree/ui/shadcn/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@carbonfree/ui/shadcn/dropdown-menu";
 import {
   Sheet,
   SheetClose,
@@ -28,7 +28,7 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-} from "@/components/ui/sheet";
+} from "@carbonfree/ui/shadcn/sheet";
 import { atualizarObra, excluirObra, type CriarObraState } from "./actions";
 import { ObraCamposForm, type ObraDefaultValues } from "./obra-campos-form";
 

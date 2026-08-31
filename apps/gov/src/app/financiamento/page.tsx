@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { AppShell } from "@/components/app-shell";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
+import { Badge } from "@carbonfree/ui/shadcn/badge";
+import { Card, CardContent } from "@carbonfree/ui/shadcn/card";
+import { Progress } from "@carbonfree/ui/shadcn/progress";
 import {
   Table,
   TableBody,
@@ -10,7 +10,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@carbonfree/ui/shadcn/table";
 import { listProjetosCaptacao } from "@/lib/queries";
 import { SITUACOES, TEMAS, faixaDaProntidao } from "@/lib/financiamento";
 import { NovoProjetoSheet } from "./novo-projeto-sheet";

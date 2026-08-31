@@ -1,0 +1,1125 @@
+<title>CarbonFree Gov e Concreteira</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400..700&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   CarbonFree — módulos Prefeitura e Concreteira
+   Paleta e tipografia herdadas do plano de negócio, em
+   tratamento de one-pager comercial.
+   ============================================================ */
+
+:root{
+  --ground:#E3E7E2;
+  --surface:#F8F9F6;
+  --surface-2:#EDF0EB;
+  --ink:#22302F;
+  --ink-2:#5C6B66;
+  --ink-3:#7E8A85;
+  --line:#C9CFC7;
+  --line-2:#A6B0A7;
+
+  /* faixas escuras — idênticas nos dois temas, de propósito */
+  --deep:#16232A;
+  --deep-2:#1F323B;
+  --deep-3:#2E4048;
+  --deep-ink:#DDE4E1;
+  --deep-ink-2:#829990;
+
+  --verde:#1F6F5C;
+  --verde-forte:#175245;
+  --verde-soft:#E1EEE9;
+  --verde-linha:#A9CCC0;
+
+  --ambar:#A65D14;
+  --ambar-soft:#F6E9DA;
+  --ambar-linha:#DFBE94;
+
+  --azul:#2C5670;
+  --azul-soft:#E2EAF0;
+
+  --display:'Archivo',system-ui,-apple-system,sans-serif;
+  --corpo:'Source Serif 4',Georgia,'Times New Roman',serif;
+  --mono:'IBM Plex Mono',ui-monospace,'SFMono-Regular',monospace;
+
+  --max:1160px;
+  --pad:clamp(20px,4vw,32px);
+}
+
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0E171C;
+    --surface:#16232A;
+    --surface-2:#1C2C34;
+    --ink:#DFE6E2;
+    --ink-2:#9BAAA3;
+    --ink-3:#7A8A84;
+    --line:#2C3D45;
+    --line-2:#405259;
+
+    --verde:#5DBA9C;
+    --verde-forte:#8ED4BC;
+    --verde-soft:#15302A;
+    --verde-linha:#27564A;
+
+    --ambar:#DE9145;
+    --ambar-soft:#33220F;
+    --ambar-linha:#5C3E1B;
+
+    --azul:#7FAECD;
+    --azul-soft:#14252F;
+  }
+}
+
+:root[data-theme="dark"]{
+  --ground:#0E171C;
+  --surface:#16232A;
+  --surface-2:#1C2C34;
+  --ink:#DFE6E2;
+  --ink-2:#9BAAA3;
+  --ink-3:#7A8A84;
+  --line:#2C3D45;
+  --line-2:#405259;
+
+  --verde:#5DBA9C;
+  --verde-forte:#8ED4BC;
+  --verde-soft:#15302A;
+  --verde-linha:#27564A;
+
+  --ambar:#DE9145;
+  --ambar-soft:#33220F;
+  --ambar-linha:#5C3E1B;
+
+  --azul:#7FAECD;
+  --azul-soft:#14252F;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{animation-duration:.001ms!important;transition-duration:.001ms!important}
+}
+
+body{
+  margin:0;
+  font-family:var(--corpo);
+  font-size:16.5px;
+  line-height:1.6;
+  color:var(--ink);
+  background:var(--ground);
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- tipografia ---------- */
+h1,h2,h3,h4{font-family:var(--display);font-weight:800;line-height:1.08;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(27px,3.6vw,40px);font-stretch:104%}
+h3{font-size:clamp(17px,1.6vw,20px);font-weight:700;letter-spacing:-.01em}
+h4{font-size:12.5px;font-weight:700;text-transform:uppercase;letter-spacing:.09em}
+p{margin:0}
+
+.eyebrow{
+  font-family:var(--mono);font-size:11px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--ink-3);font-weight:500;
+}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:500}
+.lede{font-size:clamp(16.5px,1.7vw,19px);color:var(--ink-2);max-width:62ch}
+
+/* ---------- estrutura ---------- */
+.faixa{padding:clamp(56px,7vw,88px) var(--pad)}
+.faixa-papel{background:var(--surface);border-block:1px solid var(--line)}
+.faixa-concreto{background:var(--ground)}
+.wrap{max-width:var(--max);margin-inline:auto}
+.cabeca{display:flex;flex-direction:column;gap:12px;margin-bottom:clamp(28px,3.5vw,44px);max-width:74ch}
+
+/* ============================================================
+   CAPA
+   ============================================================ */
+.capa{
+  background:var(--deep);
+  color:var(--deep-ink);
+  padding:clamp(30px,4vw,44px) var(--pad) 0;
+  position:relative;
+  overflow:hidden;
+}
+.capa::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(var(--deep-2) 1px,transparent 1px),linear-gradient(90deg,var(--deep-2) 1px,transparent 1px);
+  background-size:46px 46px;opacity:.5;
+}
+.capa .wrap{position:relative}
+
+.marca{display:flex;align-items:center;gap:13px;flex-wrap:wrap;margin-bottom:clamp(40px,6vw,64px)}
+.marca .selo{
+  font-family:var(--display);font-weight:900;font-size:14px;letter-spacing:.01em;
+  color:#F8F9F6;background:#1F6F5C;padding:5px 10px;border-radius:3px;
+}
+.marca .org{font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--deep-ink-2)}
+
+.capa h1{
+  font-size:clamp(36px,6.2vw,68px);font-stretch:110%;
+  color:#F8F9F6;max-width:17ch;margin-bottom:22px;
+}
+.capa h1 em{font-style:normal;color:#66C4A6}
+.capa-lede{font-size:clamp(16.5px,1.9vw,20px);color:#B4C3BC;max-width:56ch;margin-bottom:34px}
+
+.capa-meta{
+  display:flex;gap:clamp(20px,4vw,44px);flex-wrap:wrap;
+  border-top:1px solid var(--deep-3);padding-top:16px;
+  padding-bottom:clamp(40px,6vw,60px);
+}
+.capa-meta div{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--deep-ink-2)}
+.capa-meta b{display:block;font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:0;text-transform:none;color:#DDE4E1;margin-top:4px}
+
+/* ---------- painel de números encaixado na capa ---------- */
+.placar{
+  background:var(--surface);
+  border-radius:4px 4px 0 0;
+  box-shadow:0 -3px 0 var(--verde);
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  border-top:none;
+}
+.placar-item{padding:22px 22px 24px;border-left:1px solid var(--line)}
+.placar-item:first-child{border-left:none}
+.placar-item .v{
+  font-family:var(--display);font-weight:900;font-stretch:78%;
+  font-size:clamp(38px,5vw,58px);line-height:.94;letter-spacing:-.03em;
+  color:var(--verde);font-variant-numeric:tabular-nums;
+}
+.placar-item .r{
+  display:block;margin-top:9px;font-family:var(--display);font-weight:700;
+  font-size:13px;line-height:1.28;color:var(--ink);
+}
+.placar-item .d{display:block;margin-top:4px;font-family:var(--mono);font-size:10.5px;line-height:1.4;color:var(--ink-3)}
+@media (max-width:820px){
+  .placar{grid-template-columns:repeat(2,1fr)}
+  .placar-item:nth-child(3){border-left:none}
+  .placar-item:nth-child(n+3){border-top:1px solid var(--line)}
+}
+
+/* ============================================================
+   TESE / OS TRÊS ATORES DA CADEIA
+   ============================================================ */
+.tese{
+  font-family:var(--display);font-weight:700;font-stretch:102%;
+  font-size:clamp(21px,2.7vw,31px);line-height:1.24;letter-spacing:-.018em;
+  max-width:34ch;
+}
+.tese em{font-style:normal;color:var(--verde)}
+.tese .amb{color:var(--ambar)}
+.tese .azu{color:var(--azul)}
+
+.lados{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden;margin-top:clamp(30px,4vw,46px)}
+@media (max-width:1000px){.lados{grid-template-columns:1fr}}
+.lado{background:var(--surface);padding:clamp(22px,3vw,30px);display:flex;flex-direction:column;gap:16px}
+.lado-topo{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-bottom:12px;border-bottom:2px solid var(--ink)}
+.lado-topo .quem{font-family:var(--display);font-weight:800;font-size:15px;letter-spacing:.01em}
+.lado-topo .app{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.lado .frase{font-size:15.5px;line-height:1.5;color:var(--ink)}
+.lado ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.lado li{position:relative;padding-left:19px;font-size:14.5px;line-height:1.45;color:var(--ink-2)}
+.lado li::before{content:"";position:absolute;left:0;top:.6em;width:8px;height:2px}
+.lado-gov .lado-topo{border-bottom-color:var(--verde)}
+.lado-gov .quem{color:var(--verde)}
+.lado-gov li::before{background:var(--verde)}
+.lado-const .lado-topo{border-bottom-color:var(--azul)}
+.lado-const .quem{color:var(--azul)}
+.lado-const li::before{background:var(--azul)}
+.lado-conc .lado-topo{border-bottom-color:var(--ambar)}
+.lado-conc .quem{color:var(--ambar)}
+.lado-conc li::before{background:var(--ambar)}
+
+/* ============================================================
+   GRADE DE MÓDULOS
+   ============================================================ */
+.frentes{display:flex;flex-direction:column;gap:clamp(22px,3vw,32px)}
+.frente{display:grid;grid-template-columns:190px 1fr;gap:clamp(16px,3vw,32px);align-items:start}
+@media (max-width:780px){.frente{grid-template-columns:1fr;gap:12px}}
+.frente-rotulo{position:sticky;top:16px}
+.frente-rotulo h4{color:var(--verde);margin-bottom:6px}
+.frente-rotulo p{font-size:13px;line-height:1.45;color:var(--ink-3)}
+.mods{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
+.mod{
+  background:var(--surface);border:1px solid var(--line);border-radius:3px;
+  padding:15px 16px 16px;display:flex;flex-direction:column;gap:6px;
+  border-left:3px solid var(--verde-linha);
+}
+.mod .n{font-family:var(--display);font-weight:700;font-size:14.5px;letter-spacing:-.005em;color:var(--ink)}
+.mod .rota{font-family:var(--mono);font-size:10px;color:var(--ink-3);letter-spacing:.05em}
+.mod .desc{font-size:13.5px;line-height:1.45;color:var(--ink-2)}
+
+/* ============================================================
+   DESTAQUES
+   ============================================================ */
+.destaques{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,2vw,20px)}
+@media (max-width:940px){.destaques{grid-template-columns:1fr}}
+.destaque{
+  background:var(--surface);border:1px solid var(--line);border-radius:4px;
+  padding:clamp(20px,2.4vw,26px);display:flex;flex-direction:column;gap:14px;
+}
+.destaque .marcador{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ambar)}
+.destaque h3{color:var(--ink)}
+.destaque p{font-size:14.5px;line-height:1.5;color:var(--ink-2)}
+.destaque .fecho{
+  margin-top:auto;padding-top:13px;border-top:1px solid var(--line);
+  font-family:var(--mono);font-size:11px;line-height:1.5;color:var(--ink-3);
+}
+.destaque .fecho b{color:var(--verde);font-weight:600}
+
+/* régua de prontidão */
+.regua{display:flex;border-radius:2px;overflow:hidden;border:1px solid var(--line)}
+.regua span{
+  flex:1;padding:7px 5px;text-align:center;
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.05em;
+  color:var(--ink-2);background:var(--surface-2);
+  border-left:1px solid var(--line);
+}
+.regua span:first-child{border-left:none}
+.regua span.f4{background:var(--verde);color:#F2F7F5;font-weight:600}
+.regua-legenda{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--ink-3);margin-top:5px}
+
+/* pilha de camadas */
+.camadas{display:flex;flex-direction:column;gap:5px}
+.camada{
+  display:flex;align-items:center;gap:9px;
+  font-family:var(--mono);font-size:11px;color:var(--ink-2);
+  background:var(--surface-2);border:1px solid var(--line);border-radius:2px;
+  padding:6px 9px;
+}
+.camada i{width:7px;height:7px;border-radius:1px;flex-shrink:0;font-style:normal}
+.camada .fonte{margin-left:auto;color:var(--ink-3);font-size:10px}
+
+/* calendário do prazo */
+.prazo{display:flex;align-items:stretch;gap:10px}
+.prazo-dia{
+  background:var(--ambar-soft);border:1px solid var(--ambar-linha);border-radius:3px;
+  padding:8px 14px;text-align:center;flex-shrink:0;
+}
+.prazo-dia .d{font-family:var(--display);font-weight:900;font-stretch:80%;font-size:34px;line-height:1;color:var(--ambar)}
+.prazo-dia .m{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ambar);display:block;margin-top:3px}
+.prazo-texto{font-size:13.5px;line-height:1.45;color:var(--ink-2);align-self:center}
+
+/* ============================================================
+   FLUXO DA CONCRETEIRA
+   ============================================================ */
+.fluxo-caixa{
+  background:var(--surface);border:1px solid var(--line);border-radius:4px;
+  padding:clamp(18px,2.4vw,28px);overflow-x:auto;
+}
+.fluxo-caixa svg{display:block;min-width:660px;width:100%;height:auto}
+
+/* SVG estilizado por classe, não por atributo — var() em atributo de
+   apresentação não é confiável, e o diagrama precisa virar de tema junto. */
+.fx-caixa{fill:var(--surface-2);stroke:var(--line)}
+.fx-caixa-amb{fill:var(--ambar-soft);stroke:var(--ambar-linha)}
+.fx-caixa-vrd{fill:var(--verde-soft);stroke:var(--verde-linha)}
+.fx-topo-amb{fill:var(--ambar)}
+.fx-topo-azu{fill:var(--azul)}
+.fx-topo-vrd{fill:var(--verde)}
+.fx-topo-esc{fill:var(--ink-2)}
+.fx-ator{font-family:var(--mono);font-size:10px;letter-spacing:1.4px}
+.fx-ator.amb{fill:var(--ambar)}
+.fx-ator.azu{fill:var(--azul)}
+.fx-ator.vrd{fill:var(--verde)}
+.fx-ator.esc{fill:var(--ink-3)}
+.fx-acao{font-family:var(--display);font-size:16px;font-weight:700;fill:var(--ink)}
+.fx-txt{font-family:var(--corpo);font-size:12.5px;fill:var(--ink-2)}
+.fx-rodape{font-family:var(--mono);font-size:10.5px;letter-spacing:1.1px;fill:var(--ink-3)}
+.fx-linha{stroke:var(--line);stroke-width:1}
+.fx-seta{stroke:var(--line-2);stroke-width:1.5}
+.fx-ponta{fill:var(--line-2)}
+
+.travas{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-top:clamp(20px,2.6vw,28px)}
+.trava{
+  background:var(--ambar-soft);border:1px solid var(--ambar-linha);border-radius:3px;
+  padding:13px 15px;display:flex;flex-direction:column;gap:5px;
+}
+.trava .t{font-family:var(--display);font-weight:700;font-size:13.5px;color:var(--ink)}
+.trava .s{font-family:var(--mono);font-size:11px;line-height:1.45;color:var(--ink-2)}
+
+.nota{
+  margin-top:18px;padding:13px 15px;border-left:3px solid var(--line-2);
+  background:var(--surface-2);border-radius:0 3px 3px 0;
+  font-size:13.5px;line-height:1.5;color:var(--ink-2);
+}
+.nota b{color:var(--ink);font-weight:700}
+
+/* ============================================================
+   ESTADO DA ENTREGA
+   ============================================================ */
+.estado{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+@media (max-width:780px){.estado{grid-template-columns:1fr}}
+.estado-col{background:var(--surface);padding:clamp(20px,2.6vw,28px)}
+.estado-col h4{margin-bottom:14px;padding-bottom:9px;border-bottom:1px solid var(--line)}
+.estado-col.pronto h4{color:var(--verde)}
+.estado-col.andando h4{color:var(--ink-3)}
+.estado-col ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.estado-col li{display:flex;gap:10px;font-size:14px;line-height:1.45;color:var(--ink-2)}
+.estado-col li .mk{font-family:var(--mono);font-size:12px;flex-shrink:0;width:13px}
+.estado-col.pronto li .mk{color:var(--verde)}
+.estado-col.andando li .mk{color:var(--ink-3)}
+.estado-col li b{color:var(--ink);font-weight:700}
+
+/* ============================================================
+   BASE REGULATÓRIA
+   ============================================================ */
+.tabela-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:4px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:640px}
+th,td{text-align:left;padding:12px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+th{
+  font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-3);font-weight:500;background:var(--surface-2);white-space:nowrap;
+}
+td{font-size:14px;line-height:1.45;color:var(--ink-2)}
+tr:last-child td{border-bottom:none}
+td.lei{font-family:var(--display);font-weight:700;font-size:13.5px;color:var(--ink);white-space:nowrap}
+td.uso{color:var(--ink)}
+
+
+/* ============================================================
+   GARANTIAS DE ENGENHARIA
+   Estrutura ecoando os "requisitos auditáveis" do próprio produto:
+   toda garantia vem com o seu teste de verificação ao lado.
+   ============================================================ */
+.garantias{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.garantia{background:var(--surface);padding:clamp(18px,2.2vw,24px);display:flex;flex-direction:column;gap:11px}
+.garantia .medida{
+  font-family:var(--display);font-weight:900;font-stretch:78%;
+  font-size:clamp(30px,3.6vw,42px);line-height:.95;letter-spacing:-.03em;
+  color:var(--verde);font-variant-numeric:tabular-nums;
+}
+.garantia .medida small{font-size:.42em;font-stretch:100%;font-weight:700;letter-spacing:.02em;margin-left:3px;color:var(--ink-2)}
+.garantia .g{font-family:var(--display);font-weight:700;font-size:14.5px;line-height:1.25;color:var(--ink)}
+.garantia .d{font-size:13.5px;line-height:1.5;color:var(--ink-2)}
+.garantia .verif{
+  margin-top:auto;padding-top:11px;border-top:1px dashed var(--line-2);
+  font-family:var(--mono);font-size:10.5px;line-height:1.5;color:var(--ink-3);
+}
+.garantia .verif b{display:block;text-transform:uppercase;letter-spacing:.11em;font-size:9.5px;color:var(--verde);font-weight:600;margin-bottom:3px}
+
+/* achado auto-reportado — o argumento mais forte da seção */
+.achado{
+  margin-top:clamp(18px,2.4vw,26px);
+  background:var(--ambar-soft);border:1px solid var(--ambar-linha);border-radius:4px;
+  padding:clamp(18px,2.4vw,26px);
+  display:grid;grid-template-columns:auto 1fr;gap:clamp(14px,2vw,22px);align-items:start;
+}
+@media (max-width:700px){.achado{grid-template-columns:1fr}}
+.achado .selo{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:#F8F9F6;background:var(--ambar);padding:5px 9px;border-radius:2px;white-space:nowrap;
+}
+.achado h3{color:var(--ink);margin-bottom:8px}
+.achado p{font-size:14px;line-height:1.55;color:var(--ink-2);margin-bottom:9px}
+.achado p:last-child{margin-bottom:0}
+.achado code{font-family:var(--mono);font-size:12.5px;background:var(--surface);border:1px solid var(--ambar-linha);border-radius:2px;padding:1px 5px;color:var(--ink)}
+
+/* ============================================================
+   FECHO
+   ============================================================ */
+.fecho-faixa{background:var(--deep);color:var(--deep-ink);padding:clamp(52px,6.5vw,80px) var(--pad)}
+.fecho-faixa h2{color:#F8F9F6;max-width:20ch}
+.fecho-faixa .lede{color:#B4C3BC;margin-top:14px}
+.passos{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--deep-3);border:1px solid var(--deep-3);border-radius:4px;overflow:hidden;margin-top:clamp(28px,3.5vw,40px)}
+@media (max-width:800px){.passos{grid-template-columns:1fr}}
+.passo{background:var(--deep-2);padding:22px 22px 24px;display:flex;flex-direction:column;gap:8px}
+.passo .q{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#66C4A6}
+.passo .t{font-family:var(--display);font-weight:700;font-size:16px;color:#EEF3F0;line-height:1.2}
+.passo .s{font-size:14px;line-height:1.5;color:#9FB1AA}
+
+.assinatura{
+  margin-top:clamp(30px,4vw,44px);padding-top:18px;border-top:1px solid var(--deep-3);
+  display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--deep-ink-2);
+}
+
+/* ---------- foco visível ---------- */
+a{color:var(--verde)}
+:focus-visible{outline:2px solid var(--verde);outline-offset:3px;border-radius:2px}
+
+/* ---------- revelação suave ---------- */
+.rv{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease}
+.rv.on{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none}}
+</style>
+
+<!-- ============================================================
+     CAPA
+     ============================================================ -->
+<header class="capa">
+  <div class="wrap">
+    <div class="marca">
+      <span class="selo">CarbonFree</span>
+      <span class="org">MBV · Movimento Brasil Verde</span>
+      <span class="org">Apresentação comercial · ago 2026</span>
+    </div>
+
+    <h1>Carbono de obra vira <em>cadastro</em>, não relatório.</h1>
+
+    <p class="capa-lede">
+      A cadeia inteira já construída e rodando — prefeitura, construtora e concreteira.
+      Esta apresentação detalha as duas pontas que faltavam: o painel que a prefeitura
+      opera e o portal que fecha a origem do maior passivo da obra.
+      Nada aqui é maquete — é o que está no código.
+    </p>
+
+    <div class="capa-meta">
+      <div>Cliente âncora<b>Prefeitura</b></div>
+      <div>Elo da cadeia<b>Concreteira</b></div>
+      <div>Base<b>Supabase · RLS por município</b></div>
+      <div>Entrega<b>Next.js na Vercel</b></div>
+    </div>
+
+    <div class="placar">
+      <div class="placar-item">
+        <div class="v">10</div>
+        <span class="r">Módulos operando no painel da prefeitura</span>
+        <span class="d">do alvará ao financiamento</span>
+      </div>
+      <div class="placar-item">
+        <div class="v">14</div>
+        <span class="r">Camadas territoriais oficiais consultadas</span>
+        <span class="d">SICAR · SIGSC · geoportais municipais</span>
+      </div>
+      <div class="placar-item">
+        <div class="v">19</div>
+        <span class="r">Requisitos auditáveis catalogados</span>
+        <span class="d">11 de passivo · 8 de ativo</span>
+      </div>
+      <div class="placar-item">
+        <div class="v">18</div>
+        <span class="r">Fontes de financiamento climático mapeadas</span>
+        <span class="d">GCF, BID, CAF, Fundo Amazônia, Gap Fund…</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============================================================
+     OS DOIS LADOS
+     ============================================================ -->
+<section class="faixa faixa-concreto">
+  <div class="wrap rv">
+    <p class="eyebrow">O recorte desta apresentação</p>
+    <p class="tese" style="margin-top:14px">
+      A prefeitura tem a <em>alavanca</em>. A construtora tem a <span class="azu">responsabilidade
+      técnica</span>. A concreteira tem o <span class="amb">dado de origem</span>.
+      Sem os três, o selo continua sendo boa-fé.
+    </p>
+
+    <div class="lados">
+      <div class="lado lado-gov">
+        <div class="lado-topo">
+          <span class="quem">Prefeitura</span>
+          <span class="app">CarbonFree Gov</span>
+        </div>
+        <p class="frase">
+          Deixa de analisar PDF e passa a operar um cadastro vivo — com o
+          território, a obrigação fiscal e a captação de recurso no mesmo lugar.
+        </p>
+        <ul>
+          <li>Balanço de carbono do setor da construção, agregado e por obra</li>
+          <li>Mapa do município com camadas ambientais e cadastrais oficiais</li>
+          <li>SisobraPref gerado e controlado dentro do prazo da Receita</li>
+          <li>Diagnóstico de prontidão para captar recurso climático</li>
+        </ul>
+      </div>
+
+      <div class="lado lado-const">
+        <div class="lado-topo">
+          <span class="quem">Construtora</span>
+          <span class="app">MBV Construtoras</span>
+        </div>
+        <p class="frase">
+          É a dobradiça da cadeia: recebe o que a concreteira declara, confere contra o
+          que chegou no canteiro e assina o que vai para a prefeitura.
+        </p>
+        <ul>
+          <li>Valida ou contesta cada entrega antes de ela virar número</li>
+          <li>Só o responsável técnico lança no inventário — quem assina é quem responde</li>
+          <li>Painel de carbono, simulador de material e dossiê assinável</li>
+          <li>Vincula as concreteiras que a atendem, obra por obra</li>
+        </ul>
+      </div>
+
+      <div class="lado lado-conc">
+        <div class="lado-topo">
+          <span class="quem">Concreteira</span>
+          <span class="app">CarbonFree Concreteira</span>
+        </div>
+        <p class="frase">
+          Entra na conta com portal próprio: declara o que saiu do caminhão e
+          publica seu ESG — e isso vira lançamento no inventário da obra.
+        </p>
+        <ul>
+          <li>Escopo restrito às obras em que foi vinculada pela construtora</li>
+          <li>Entrega declarada com volume, traço e composição por insumo</li>
+          <li>Scorecard ESG visível à construtora e à prefeitura quando publicado</li>
+          <li>A entrega vira lançamento A1–A3, não anexo de processo</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     MÓDULO PREFEITURA
+     ============================================================ -->
+<section class="faixa faixa-papel">
+  <div class="wrap">
+    <div class="cabeca rv">
+      <p class="eyebrow">Módulo 01 · CarbonFree Gov</p>
+      <h2>O que a prefeitura opera hoje</h2>
+      <p class="lede">
+        Dez módulos entregues, organizados em quatro frentes. Cada um lê e escreve
+        no mesmo banco, com isolamento por município garantido no nível da linha.
+      </p>
+    </div>
+
+    <div class="frentes rv">
+
+      <div class="frente">
+        <div class="frente-rotulo">
+          <h4>Fiscalizar</h4>
+          <p>Enxergar o setor e decidir sobre o dossiê.</p>
+        </div>
+        <div class="mods">
+          <div class="mod">
+            <span class="n">Painel</span>
+            <span class="rota">/</span>
+            <span class="desc">KPIs, balanço passivo × ativo, distribuição por faixa do selo, série de intensidade e mesa de análise dos dossiês pendentes.</span>
+          </div>
+          <div class="mod">
+            <span class="n">Obras</span>
+            <span class="rota">/obras</span>
+            <span class="desc">Cadastro licenciado com intensidade, risco e coordenada. Exclusão restrita a gestor e bloqueada em obra com inventário vinculado.</span>
+          </div>
+          <div class="mod">
+            <span class="n">Agendamento</span>
+            <span class="rota">/agendamento</span>
+            <span class="desc">Programação de vistorias: calendário, obra, fiscal e data, gravando direto na fiscalização.</span>
+          </div>
+          <div class="mod">
+            <span class="n">Requisitos auditáveis</span>
+            <span class="rota">/requisitos</span>
+            <span class="desc">As 19 linhas do método: o que é passivo, o que é ativo, a evidência primária e o teste de verificação de cada uma.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="frente">
+        <div class="frente-rotulo">
+          <h4>Situar no território</h4>
+          <p>Cruzar a obra com a base oficial, no ponto.</p>
+        </div>
+        <div class="mods">
+          <div class="mod">
+            <span class="n">Mapa do município</span>
+            <span class="rota">/mapa</span>
+            <span class="desc">Limite municipal do IBGE, obras georreferenciadas e camadas WMS do CAR, do estado e do geoportal da própria prefeitura.</span>
+          </div>
+          <div class="mod">
+            <span class="n">Verificação territorial</span>
+            <span class="rota">/obras/[id]</span>
+            <span class="desc">Ao abrir a obra, o sistema consulta cada camada na coordenada exata e responde se há conflito com área protegida e qual o cadastro no ponto.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="frente">
+        <div class="frente-rotulo">
+          <h4>Cumprir e captar</h4>
+          <p>Obrigação da Receita e rota de recurso climático.</p>
+        </div>
+        <div class="mods">
+          <div class="mod">
+            <span class="n">SisobraPref</span>
+            <span class="rota">/obrigacoes</span>
+            <span class="desc">Competência do mês, alvarás prontos e pendentes, contagem de dias até o prazo, XML gerado no leiaute da Receita e protocolo registrado.</span>
+          </div>
+          <div class="mod">
+            <span class="n">Financiamento climático</span>
+            <span class="rota">/financiamento</span>
+            <span class="desc">Diagnóstico de 20 questões por iniciativa, prontidão em percentual, rota de captação sugerida e plano de ação documental.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="frente">
+        <div class="frente-rotulo">
+          <h4>Ver a cadeia</h4>
+          <p>Quem constrói, quem fornece, o que já é ativo.</p>
+        </div>
+        <div class="mods">
+          <div class="mod">
+            <span class="n">Construtoras</span>
+            <span class="rota">/construtoras</span>
+            <span class="desc">Listagem com contagem de obras por empresa e cadastro direto pela prefeitura.</span>
+          </div>
+          <div class="mod">
+            <span class="n">Concreteiras</span>
+            <span class="rota">/concreteiras</span>
+            <span class="desc">Fornecedores vinculados às obras do município, com entregas declaradas, composição e o ESG que a concreteira publicou.</span>
+          </div>
+          <div class="mod">
+            <span class="n">Projetos ESG</span>
+            <span class="rota">/esg</span>
+            <span class="desc">Fila de projetos enviados pelas construtoras para instruir desconto fiscal, cada um amarrado a um requisito auditável.</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     TRÊS DESTAQUES
+     ============================================================ -->
+<section class="faixa faixa-concreto">
+  <div class="wrap">
+    <div class="cabeca rv">
+      <p class="eyebrow">O que vende a conversa</p>
+      <h2>Três módulos que resolvem dor de hoje</h2>
+      <p class="lede">
+        Carbono é a tese de longo prazo. Estes três entregam valor no primeiro mês —
+        e são o que abre a porta da secretaria.
+      </p>
+    </div>
+
+    <div class="destaques rv">
+
+      <article class="destaque">
+        <span class="marcador">Obrigação acessória</span>
+        <h3>SisobraPref sem susto no dia 10</h3>
+        <div class="prazo">
+          <div class="prazo-dia">
+            <span class="d">10</span>
+            <span class="m">todo mês</span>
+          </div>
+          <p class="prazo-texto">
+            Prazo da Receita Federal para informar os alvarás do mês anterior —
+            ou declarar sem movimento.
+          </p>
+        </div>
+        <p>
+          O módulo monta a competência sozinho a partir dos alvarás já cadastrados,
+          aponta o que está com campo obrigatório faltando, gera o XML no leiaute
+          v1.03 e guarda o protocolo do envio.
+        </p>
+        <p class="fecho">
+          Lote de até 50 alvarás · declaração de sem movimento automática quando o mês
+          não teve emissão · <b>a assinatura e o envio SOAP ficam com o e-CNPJ do município</b>
+        </p>
+      </article>
+
+      <article class="destaque">
+        <span class="marcador">Captação de recurso</span>
+        <h3>Da prontidão à rota de financiamento</h3>
+        <div>
+          <div class="regua">
+            <span>Base institucional</span>
+            <span>Pré-viabilidade</span>
+            <span>Estruturar</span>
+            <span class="f4">Negociar</span>
+          </div>
+          <div class="regua-legenda"><span>0</span><span>40</span><span>60</span><span>80</span><span>99 pts</span></div>
+        </div>
+        <p>
+          Vinte questões pesadas em 99 pontos classificam cada iniciativa e apontam os
+          canais compatíveis. O diagnóstico já nasce parcialmente respondido com o que
+          a plataforma sabe — inventários homologados, requisitos, selos emitidos —
+          e cada sugestão vem com a evidência que a originou.
+        </p>
+        <p class="fecho">
+          18 fontes catalogadas · plano de ação documental por rota ·
+          <b>Aracaju e Campinas carregados como casos de referência</b>
+        </p>
+      </article>
+
+      <article class="destaque">
+        <span class="marcador">Território</span>
+        <h3>A obra confrontada com a base oficial</h3>
+        <div class="camadas">
+          <div class="camada"><i style="background:var(--verde)"></i>APP e unidades de conservação<span class="fonte">GeoPortal PMF</span></div>
+          <div class="camada"><i style="background:var(--azul)"></i>Nascentes e cursos d'água<span class="fonte">SIGSC/SDS-SC</span></div>
+          <div class="camada"><i style="background:var(--ambar)"></i>Imóveis rurais declarados<span class="fonte">SICAR/IBAMA</span></div>
+          <div class="camada"><i style="background:var(--line-2)"></i>Lotes, inscrição e zoneamento<span class="fonte">Palhoça · Geomais</span></div>
+        </div>
+        <p>
+          A coordenada da obra é geografia de verdade no banco, com índice espacial.
+          Abrir a obra dispara uma consulta ponto a ponto em cada camada e devolve
+          conflito de área protegida e situação cadastral, com os atributos como vieram
+          da fonte.
+        </p>
+        <p class="fecho">
+          Florianópolis e Palhoça já ligados ·
+          <b>novo município entra por configuração de camada, não por código</b>
+        </p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     MÓDULO CONCRETEIRA
+     ============================================================ -->
+<section class="faixa faixa-papel">
+  <div class="wrap">
+    <div class="cabeca rv">
+      <p class="eyebrow">Módulo 02 · CarbonFree Concreteira</p>
+      <h2>O elo que faltava na cadeia</h2>
+      <p class="lede">
+        Concreto e cimento respondem pela maior fatia do passivo A1–A3 de uma obra.
+        Enquanto esse número vier de ficha técnica em PDF, o inventário inteiro é
+        estimativa. O portal da concreteira fecha a origem.
+      </p>
+    </div>
+
+    <div class="fluxo-caixa rv">
+      <svg viewBox="0 0 940 260" role="img" aria-labelledby="fluxo-t fluxo-d">
+        <title id="fluxo-t">Fluxo da entrega de concreto até o painel da prefeitura</title>
+        <desc id="fluxo-d">A concreteira declara a entrega; a construtora valida; o responsável técnico materializa o lançamento no inventário; a prefeitura vê o resultado no balanço do município.</desc>
+
+        <defs>
+          <marker id="seta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path class="fx-ponta" d="M 0 0 L 10 5 L 0 10 z"></path>
+          </marker>
+        </defs>
+
+        <!-- trilhos -->
+        <line class="fx-seta" x1="212" y1="104" x2="248" y2="104" marker-end="url(#seta)"></line>
+        <line class="fx-seta" x1="452" y1="104" x2="488" y2="104" marker-end="url(#seta)"></line>
+        <line class="fx-seta" x1="692" y1="104" x2="728" y2="104" marker-end="url(#seta)"></line>
+
+        <!-- 1. concreteira -->
+        <rect class="fx-caixa-amb" x="8" y="40" width="204" height="128" rx="3"></rect>
+        <rect class="fx-topo-amb" x="8" y="40" width="204" height="3"></rect>
+        <text class="fx-ator amb" x="26" y="70">CONCRETEIRA</text>
+        <text class="fx-acao" x="26" y="94">Declara a entrega</text>
+        <text class="fx-txt" x="26" y="118">Volume, traço, data e</text>
+        <text class="fx-txt" x="26" y="136">composição por insumo,</text>
+        <text class="fx-txt" x="26" y="154">com NF-e ou CT-e anexada.</text>
+
+        <!-- 2. construtora -->
+        <rect class="fx-caixa" x="248" y="40" width="204" height="128" rx="3"></rect>
+        <rect class="fx-topo-azu" x="248" y="40" width="204" height="3"></rect>
+        <text class="fx-ator azu" x="266" y="70">CONSTRUTORA</text>
+        <text class="fx-acao" x="266" y="94">Valida ou contesta</text>
+        <text class="fx-txt" x="266" y="118">Confere contra o que</text>
+        <text class="fx-txt" x="266" y="136">recebeu no canteiro. Sem</text>
+        <text class="fx-txt" x="266" y="154">validar, nada avança.</text>
+
+        <!-- 3. RT -->
+        <rect class="fx-caixa-vrd" x="488" y="40" width="204" height="128" rx="3"></rect>
+        <rect class="fx-topo-vrd" x="488" y="40" width="204" height="3"></rect>
+        <text class="fx-ator vrd" x="506" y="70">RESPONSÁVEL TÉCNICO</text>
+        <text class="fx-acao" x="506" y="94">Materializa</text>
+        <text class="fx-txt" x="506" y="118">Quantidade × fator vira</text>
+        <text class="fx-txt" x="506" y="136">lançamento A1–A3 de</text>
+        <text class="fx-txt" x="506" y="154">passivo no inventário.</text>
+
+        <!-- 4. prefeitura -->
+        <rect class="fx-caixa" x="728" y="40" width="204" height="128" rx="3"></rect>
+        <rect class="fx-topo-esc" x="728" y="40" width="204" height="3"></rect>
+        <text class="fx-ator esc" x="746" y="70">PREFEITURA</text>
+        <text class="fx-acao" x="746" y="94">Lê o balanço</text>
+        <text class="fx-txt" x="746" y="118">O número chega ao painel</text>
+        <text class="fx-txt" x="746" y="136">com a origem rastreável</text>
+        <text class="fx-txt" x="746" y="154">até a nota fiscal.</text>
+
+        <!-- rodapé do fluxo -->
+        <line class="fx-linha" x1="8" y1="204" x2="932" y2="204"></line>
+        <text class="fx-rodape" x="8" y="228">CADA PASSO É DE UM ATOR DIFERENTE — SEGREGAÇÃO DE FUNÇÃO, NÃO ETAPA DE FORMULÁRIO</text>
+        <text class="fx-rodape" x="932" y="228" text-anchor="end">UMA VEZ SÓ, SEM VOLTA</text>
+      </svg>
+    </div>
+
+    <div class="travas">
+      <div class="trava">
+        <span class="t">Só o RT materializa</span>
+        <span class="s">Quem assina o dossiê é quem lança. Nenhum outro perfil consegue.</span>
+      </div>
+      <div class="trava">
+        <span class="t">Só entrega validada</span>
+        <span class="s">Declaração da concreteira sozinha não entra na conta do município.</span>
+      </div>
+      <div class="trava">
+        <span class="t">Só com nota anexada</span>
+        <span class="s">Sem NF-e ou CT-e vinculada, o lançamento é recusado com a razão.</span>
+      </div>
+      <div class="trava">
+        <span class="t">Só unidade compatível</span>
+        <span class="s">Insumo cuja unidade não bate com a do fator fica de fora e é listado, em vez de gerar número errado em silêncio.</span>
+      </div>
+      <div class="trava">
+        <span class="t">Uma vez por entrega</span>
+        <span class="s">Materializada, a entrega é marcada. Não há duplicidade no ledger.</span>
+      </div>
+    </div>
+
+    <p class="nota">
+      <b>Sobre os fatores de emissão.</b> O motor já calcula ponta a ponta, mas os fatores
+      de agregados e aditivos hoje carregados são estimativas de ordem de grandeza — o
+      lugar da DAP do fornecedor já existe no catálogo e a substituição é troca de dado,
+      não de código. Antes de qualquer homologação valer, o fator é DAP real.
+    </p>
+  </div>
+</section>
+
+<!-- ============================================================
+     GARANTIAS DE ENGENHARIA
+     ============================================================ -->
+<section class="faixa faixa-papel">
+  <div class="wrap">
+    <div class="cabeca rv">
+      <p class="eyebrow">A régua aplicada ao próprio software</p>
+      <h2>Por que confiar no número</h2>
+      <p class="lede">
+        O produto exige que todo requisito da obra venha com o seu teste de verificação.
+        Seria incoerente vender isso sem aplicar a mesma régua ao software que faz a conta.
+        Cada garantia abaixo vem com o modo de conferir.
+      </p>
+    </div>
+
+    <div class="garantias rv">
+
+      <article class="garantia">
+        <div class="medida">0</div>
+        <span class="g">Nenhum caminho ignora as regras de acesso</span>
+        <p class="d">
+          Não existe no código nenhuma escrita no banco que passe por cima do controle
+          de permissão. Quem decide o que cada perfil enxerga e grava é o Postgres,
+          não a tela — nem mesmo por engano.
+        </p>
+        <p class="verif">
+          <b>Como se verifica</b>
+          Buscar por “service role” no código não retorna nenhum uso em runtime.
+        </p>
+      </article>
+
+      <article class="garantia">
+        <div class="medida">0</div>
+        <span class="g">Auditoria de segurança do banco sem apontamentos</span>
+        <p class="d">
+          Toda tabela tem controle de acesso ativo, toda tabela com controle tem regra
+          escrita, e nenhuma função interna aceita ser sequestrada por caminho de busca.
+        </p>
+        <p class="verif">
+          <b>Como se verifica</b>
+          Painel do Supabase → Advisors → Security. Três checagens, zero achados.
+        </p>
+      </article>
+
+      <article class="garantia">
+        <div class="medida">54</div>
+        <span class="g">Testes automatizados no motor de cálculo</span>
+        <p class="d">
+          Cobrem o diagnóstico de financiamento, a geração do arquivo da Receita e a
+          conversão de unidade que transforma entrega de concreto em tonelada de CO₂e —
+          onde um erro sairia plausível e entraria no inventário sem ninguém notar.
+        </p>
+        <p class="verif">
+          <b>Como se verifica</b>
+          Os testes foram checados por mutação: quebrar a conversão de propósito faz o
+          teste correspondente falhar. Teste que não detecta quebra não conta.
+        </p>
+      </article>
+
+      <article class="garantia">
+        <div class="medida">4<small>× por mudança</small></div>
+        <span class="g">Nada entra sem passar por quatro portões</span>
+        <p class="d">
+          Cada alteração roda análise estática, checagem de tipos, a suíte de testes e a
+          construção dos três aplicativos antes de poder ser incorporada.
+        </p>
+        <p class="verif">
+          <b>Como se verifica</b>
+          Histórico público de execuções no repositório, uma por alteração proposta.
+        </p>
+      </article>
+
+    </div>
+
+    <div class="achado rv">
+      <span class="selo">Achado e corrigido</span>
+      <div>
+        <h3>A auditoria encontrou uma falha nossa — e é por isso que ela está aqui</h3>
+        <p>
+          Uma das regras de acesso deveria amarrar a entrega de concreto à obra do
+          contrato. Ela continha <code>obra = obra</code> comparando o campo consigo
+          mesmo: sempre verdadeiro, sem efeito nenhum. Na prática, uma concreteira com
+          contrato legítimo numa obra poderia lançar entrega apontando para outra obra
+          qualquer — e ela apareceria para quem não deveria vê-la.
+        </p>
+        <p>
+          Foi encontrada durante a revisão, confirmada como nunca utilizada (a tabela
+          não tinha nenhum registro), corrigida e registrada em migração própria, separada
+          das demais para poder ser revisada isoladamente.
+        </p>
+        <p>
+          <strong>Está no material comercial de propósito.</strong> Um sistema que se vende
+          como infraestrutura de fiscalização e nunca achou nada em si mesmo ou não olhou,
+          ou não conta. A pergunta útil para qualquer fornecedor não é “vocês têm falhas”,
+          é “o que a última auditoria de vocês encontrou”.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ESTADO DA ENTREGA
+     ============================================================ -->
+<section class="faixa faixa-concreto">
+  <div class="wrap">
+    <div class="cabeca rv">
+      <p class="eyebrow">Transparência de estágio</p>
+      <h2>O que já está de pé</h2>
+      <p class="lede">
+        Distinguir o construído do planejado é o que dá credibilidade na sala.
+        Este é o corte honesto.
+      </p>
+    </div>
+
+    <div class="estado rv">
+      <div class="estado-col pronto">
+        <h4>Construído e rodando</h4>
+        <ul>
+          <li><span class="mk">▪</span><span><b>Autenticação real na prefeitura</b> — e-mail e senha, com isolamento por município aplicado na linha, não no código da tela.</span></li>
+          <li><span class="mk">▪</span><span><b>Os 10 módulos do Gov</b> — painel, mapa, obras, construtoras, concreteiras, agendamento, requisitos, ESG, SisobraPref e financiamento.</span></li>
+          <li><span class="mk">▪</span><span><b>Portal da concreteira</b> — login próprio, obras vinculadas, entregas com composição e scorecard ESG publicável.</span></li>
+          <li><span class="mk">▪</span><span><b>Entrega vira lançamento</b> — cálculo de quantidade × fator com as cinco travas acima, gravando no inventário da obra.</span></li>
+          <li><span class="mk">▪</span><span><b>Geografia de verdade</b> — coordenada espacial indexada e consulta às camadas oficiais no ponto da obra.</span></li>
+          <li><span class="mk">▪</span><span><b>XML do SisobraPref</b> — leiaute da Receita gerado e testável, com controle de competência e protocolo.</span></li>
+        </ul>
+      </div>
+      <div class="estado-col andando">
+        <h4>Próximo na fila</h4>
+        <ul>
+          <li><span class="mk">▫</span><span><b>Assinatura e transmissão do SisobraPref</b> — depende do certificado e-CNPJ do município e da adesão ao DTE.</span></li>
+          <li><span class="mk">▫</span><span><b>DAP real no lugar dos fatores ilustrativos</b> — catálogo pronto, falta o laudo do fornecedor.</span></li>
+          <li><span class="mk">▫</span><span><b>Segundo fator na autenticação</b> dos perfis administrativos.</span></li>
+          <li><span class="mk">▫</span><span><b>Recebimento dos autos de campo</b> vindos do app do fiscal — hoje o Gov tem o agendamento, falta a mesa do auto.</span></li>
+          <li><span class="mk">▫</span><span><b>Identidade visual definitiva</b> nos ícones dos apps instaláveis.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     BASE REGULATÓRIA
+     ============================================================ -->
+<section class="faixa faixa-papel">
+  <div class="wrap">
+    <div class="cabeca rv">
+      <p class="eyebrow">Sustentação jurídica</p>
+      <h2>Não depende de lei nova</h2>
+      <p class="lede">
+        O produto se acopla a obrigação já vigente e a competência municipal
+        consolidada. O que o município publica é o programa e o procedimento.
+      </p>
+    </div>
+
+    <div class="tabela-wrap rv">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Instrumento</th>
+            <th scope="col">O que já obriga</th>
+            <th scope="col">Onde entra no produto</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="lei">SisobraPref<br><span class="num" style="font-size:11px;color:var(--ink-3)">Receita Federal</span></td>
+            <td>Informar mensalmente à Receita os alvarás emitidos, até o dia 10 do mês seguinte — ou declarar sem movimento.</td>
+            <td class="uso">Módulo próprio no Gov. Entrega valor sem discutir carbono.</td>
+          </tr>
+          <tr>
+            <td class="lei">Lei 15.042/2024<br><span class="num" style="font-size:11px;color:var(--ink-3)">SBCE</span></td>
+            <td>Cimento, aço, cal e vidro entram no regulado. A construtora herda como Escopo 3, categoria 1.</td>
+            <td class="uso">O que a concreteira declara é exatamente esse Escopo 3.</td>
+          </tr>
+          <tr>
+            <td class="lei">CONAMA 307 + Lei 12.305<br><span class="num" style="font-size:11px;color:var(--ink-3)">RCC</span></td>
+            <td>PGRCC obrigatório no licenciamento; destinação rastreada por MTR e CDF.</td>
+            <td class="uso">A prefeitura já fiscaliza. O manifesto vira lançamento sem processo novo.</td>
+          </tr>
+          <tr>
+            <td class="lei">Lei 10.257/2001<br><span class="num" style="font-size:11px;color:var(--ink-3)">Estatuto da Cidade</span></td>
+            <td>Outorga onerosa, IPTU progressivo, transferência do direito de construir.</td>
+            <td class="uso">Base para bonificar desempenho por faixa do selo.</td>
+          </tr>
+          <tr>
+            <td class="lei">Lei 14.133/2021<br><span class="num" style="font-size:11px;color:var(--ink-3)">Licitações</span></td>
+            <td>Desenvolvimento sustentável, margem de preferência e requisitos de obra.</td>
+            <td class="uso">Critério em obra pública municipal — e o caminho de contratação do software.</td>
+          </tr>
+          <tr>
+            <td class="lei">ISO 14064 + GHG Protocol<br><span class="num" style="font-size:11px;color:var(--ink-3)">Quantificação</span></td>
+            <td>Estrutura do inventário e regras de verificação por organismo acreditado.</td>
+            <td class="uso">Formato do dossiê exportável e dos 19 requisitos auditáveis.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FECHO
+     ============================================================ -->
+<section class="fecho-faixa">
+  <div class="wrap">
+    <p class="eyebrow" style="color:#66C4A6">Como entra</p>
+    <h2 style="margin-top:12px">Começa pela dor que já existe, não pelo carbono.</h2>
+    <p class="lede">
+      O SisobraPref e o mapa territorial resolvem problema de hoje e não exigem
+      decreto nenhum. O carbono entra depois, quando o cadastro já está em uso.
+    </p>
+
+    <div class="passos">
+      <div class="passo">
+        <span class="q">Primeiro</span>
+        <span class="t">Prova de conceito na secretaria</span>
+        <span class="s">Um município, os alvarás reais do mês e o mapa com as camadas do próprio geoportal. Sem lei, sem processo novo.</span>
+      </div>
+      <div class="passo">
+        <span class="q">Depois</span>
+        <span class="t">Três a cinco construtoras voluntárias</span>
+        <span class="s">Com as concreteiras que já as atendem. É onde o balanço passa a ter número de origem, e não estimativa.</span>
+      </div>
+      <div class="passo">
+        <span class="q">Então</span>
+        <span class="t">Programa e régua de incentivo</span>
+        <span class="s">Faixas calibradas sobre a distribuição real observada no piloto, com o impacto na receita simulado antes do decreto.</span>
+      </div>
+    </div>
+
+    <div class="assinatura">
+      <span>CarbonFree · MBV — Movimento Brasil Verde</span>
+      <span>Módulos Prefeitura e Concreteira · agosto de 2026</span>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  var alvos = document.querySelectorAll('.rv');
+  if(!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    alvos.forEach(function(a){ a.classList.add('on'); });
+    return;
+  }
+  var obs = new IntersectionObserver(function(entradas){
+    entradas.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('on'); obs.unobserve(e.target); }
+    });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+  alvos.forEach(function(a){ obs.observe(a); });
+})();
+</script>

@@ -1,6 +1,6 @@
 /**
  * Identidade visual do CarbonFree Obras.
- * Extraída do plano de negócio (carbonfree-obras-plano-de-negocio.html) para
+ * Extraída do plano de negócio (docs/carbonfree-obras-plano-de-negocio.html) para
  * manter Gov e Obra visualmente consistentes com o material institucional.
  */
 

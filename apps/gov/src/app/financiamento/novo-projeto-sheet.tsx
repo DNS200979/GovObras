@@ -2,17 +2,17 @@
 
 import { useActionState, useState } from "react";
 import { Plus } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@carbonfree/ui/shadcn/alert";
+import { Button } from "@carbonfree/ui/shadcn/button";
+import { Input } from "@carbonfree/ui/shadcn/input";
+import { Label } from "@carbonfree/ui/shadcn/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@carbonfree/ui/shadcn/select";
 import {
   Sheet,
   SheetClose,
@@ -21,8 +21,8 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-} from "@/components/ui/sheet";
-import { Textarea } from "@/components/ui/textarea";
+} from "@carbonfree/ui/shadcn/sheet";
+import { Textarea } from "@carbonfree/ui/shadcn/textarea";
 import { TEMAS } from "@/lib/financiamento";
 import { criarProjetoCaptacao, type ProjetoState } from "./actions";
 

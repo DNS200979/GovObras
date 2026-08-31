@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@carbonfree/ui/shadcn/badge";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@carbonfree/ui/shadcn/card";
 import { getProjetoCaptacao } from "@/lib/queries";
 import { FAIXAS, TEMAS } from "@/lib/financiamento";
 import {

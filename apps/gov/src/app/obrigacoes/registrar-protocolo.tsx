@@ -1,10 +1,10 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@carbonfree/ui/shadcn/alert";
+import { Button } from "@carbonfree/ui/shadcn/button";
+import { Input } from "@carbonfree/ui/shadcn/input";
+import { Label } from "@carbonfree/ui/shadcn/label";
 import {
   Sheet,
   SheetClose,
@@ -13,7 +13,7 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-} from "@/components/ui/sheet";
+} from "@carbonfree/ui/shadcn/sheet";
 import { registrarEnvio, type RegistrarEnvioState } from "./actions";
 
 export function RegistrarProtocolo({

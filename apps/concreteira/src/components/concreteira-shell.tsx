@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { AppShell } from "@carbonfree/ui/app-shell";
-import { HeaderActions } from "@/components/header-actions";
+import { HeaderActions } from "@carbonfree/ui/header-actions";
+import { HeaderUser } from "@/components/header-user";
 import { concreteiraNav } from "@/lib/nav";
 
 /**
@@ -22,7 +23,11 @@ export function ConcreteiraShell({ active, children }: { active: string; childre
         />
       }
       nav={concreteiraNav(active)}
-      headerRight={<HeaderActions />}
+      headerRight={
+        <HeaderActions>
+          <HeaderUser />
+        </HeaderActions>
+      }
     >
       {children}
     </AppShell>

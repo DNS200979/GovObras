@@ -12,6 +12,20 @@
 
 export type CategoriaCamada = "limite" | "preservacao" | "hidrografia" | "cadastro";
 
+/**
+ * Alcance de uma camada.
+ *
+ * `{ uf }` casa pelos dois primeiros dígitos do código IBGE, que são o código
+ * da unidade federativa. Serviço estadual é estadual — marcar como "nacional"
+ * faz a camada aparecer vazia fora do estado, e (pior) faz a verificação
+ * territorial devolver "nenhuma área protegida encontrada" quando o correto
+ * seria "não há fonte para este estado".
+ */
+export type Abrangencia =
+  | "nacional"
+  | { uf: string }
+  | string[];
+
 export interface CamadaWms {
   id: string;
   titulo: string;
@@ -20,8 +34,7 @@ export interface CamadaWms {
   /** Base do serviço WMS de origem — o proxy monta a query GetMap/GetFeatureInfo em cima disso. */
   baseUrl: string;
   layerName: string;
-  /** "nacional" ou os códigos IBGE dos municípios em que essa camada é conhecida por existir. */
-  abrangencia: "nacional" | string[];
+  abrangencia: Abrangencia;
   atribuicao: string;
   /** Ligada por padrão quando o painel de camadas abre. */
   ativaPorPadrao?: boolean;
@@ -29,23 +42,13 @@ export interface CamadaWms {
 
 export const CAMADAS_WMS: CamadaWms[] = [
   {
-    id: "sicar-imoveis-rurais",
-    titulo: "Imóveis rurais (CAR)",
-    categoria: "cadastro",
-    tipo: "wms",
-    baseUrl: "https://geoserver.car.gov.br/geoserver/sicar/wms",
-    layerName: "sicar_imoveis_sc",
-    abrangencia: "nacional",
-    atribuicao: "SICAR/IBAMA — geoserver.car.gov.br",
-  },
-  {
     id: "hidrografia-nascentes",
     titulo: "Nascentes (SC)",
     categoria: "hidrografia",
     tipo: "wms",
     baseUrl: "http://sigsc.sc.gov.br/sigserver/SIGSC/wms",
     layerName: "nascente",
-    abrangencia: "nacional", // serviço estadual, mas sem filtro por município no GeoServer — mostra o que cair no bbox
+    abrangencia: { uf: "42" }, // SIGSC é serviço estadual de SC: fora do estado devolve vazio
     atribuicao: "SIGSC/SDS-SC — sigsc.sc.gov.br",
   },
   {
@@ -55,7 +58,7 @@ export const CAMADAS_WMS: CamadaWms[] = [
     tipo: "wms",
     baseUrl: "http://sigsc.sc.gov.br/sigserver/SIGSC/wms",
     layerName: "curso_dagua",
-    abrangencia: "nacional",
+    abrangencia: { uf: "42" },
     atribuicao: "SIGSC/SDS-SC — sigsc.sc.gov.br",
   },
   // ---------- só Florianópolis: geoportal próprio confirmado ----------
@@ -197,6 +200,25 @@ export const CAMADAS_WMS_PALHOCA: CamadaWms[] = [
  * ainda. Quando alguém souber a URL certa, é só replicar o padrão de
  * Palhoça acima.
  *
+ * Rio Grande do Sul (Porto Alegre 4314902, Canoas 4304606, Novo Hamburgo
+ * 4313409) — municípios cadastrados, mas SEM camada municipal ou estadual
+ * confirmada. O que foi testado e o resultado:
+ *
+ *   - geo.poa.br, sig.procempa.com.br, geoportal.canoas.rs.gov.br,
+ *     geo.novohamburgo.rs.gov.br — nenhum resolve (DNS).
+ *   - iede.rs.gov.br (infraestrutura estadual de dados espaciais) e
+ *     ww2.fepam.rs.gov.br respondem 200 na raiz, mas /geoserver/wms e
+ *     /geoserver/ows dão 404 — o serviço existe em outro caminho, que a
+ *     página não expõe (é SPA, sem HTML útil para descobrir).
+ *   - A página de mapas da SMAMUS (Porto Alegre) publica arquivo para
+ *     download — shapefile, KMZ, PDF, DWG — e não serviço OGC.
+ *
+ * Ou seja: nas três cidades gaúchas o mapa tem hoje o contorno do IBGE e o
+ * CAR do RS, e nada de zoneamento, lote ou APP. Quem descobrir a URL certa
+ * do IEDE ou de um geoportal municipal replica o padrão de Palhoça acima.
+ * Enquanto isso, a ausência aparece como ausência na tela, e não como
+ * "nada encontrado".
+ *
  * Mapa do Registro de Imóveis (ONR/SIG-RI, mapa.onr.org.br) — pesquisado e
  * descartado por enquanto: não embute em iframe (`X-Frame-Options:
  * sameorigin`, confirmado), e o backend real por trás da página
@@ -208,10 +230,48 @@ export const CAMADAS_WMS_PALHOCA: CamadaWms[] = [
  * que dá pra simular aqui.
  */
 
-const TODAS_CAMADAS: CamadaWms[] = [...CAMADAS_WMS, ...CAMADAS_WMS_PALHOCA];
+/**
+ * Prefixo do código IBGE → sigla da UF. Os dois primeiros dígitos do código de
+ * município são o código da unidade federativa.
+ */
+const UF_POR_PREFIXO: Record<string, string> = {
+  "11": "ro", "12": "ac", "13": "am", "14": "rr", "15": "pa", "16": "ap", "17": "to",
+  "21": "ma", "22": "pi", "23": "ce", "24": "rn", "25": "pb", "26": "pe", "27": "al",
+  "28": "se", "29": "ba", "31": "mg", "32": "es", "33": "rj", "35": "sp", "41": "pr",
+  "42": "sc", "43": "rs", "50": "ms", "51": "mt", "52": "go", "53": "df",
+};
+
+/**
+ * O SICAR publica uma camada por UF (`sicar_imoveis_<uf>`) — as 27 foram
+ * confirmadas no GetCapabilities de geoserver.car.gov.br. Antes havia uma
+ * entrada única marcada "nacional" apontando para `sicar_imoveis_sc`, o que
+ * mostrava imóveis de Santa Catarina — ou nada — em qualquer outro estado.
+ *
+ * Derivando do código IBGE, todo município novo já entra com o CAR do seu
+ * estado, sem precisar cadastrar camada nenhuma.
+ */
+const CAMADAS_SICAR: CamadaWms[] = Object.entries(UF_POR_PREFIXO).map(([prefixo, uf]) => ({
+  id: `sicar-imoveis-${uf}`,
+  titulo: "Imóveis rurais (CAR)",
+  categoria: "cadastro",
+  tipo: "wms",
+  baseUrl: "https://geoserver.car.gov.br/geoserver/sicar/wms",
+  layerName: `sicar_imoveis_${uf}`,
+  abrangencia: { uf: prefixo },
+  atribuicao: "SICAR/IBAMA — geoserver.car.gov.br",
+}));
+
+const TODAS_CAMADAS: CamadaWms[] = [...CAMADAS_SICAR, ...CAMADAS_WMS, ...CAMADAS_WMS_PALHOCA];
+
+function cobre(abrangencia: Abrangencia, codigoIbge: string | null): boolean {
+  if (abrangencia === "nacional") return true;
+  if (!codigoIbge) return false;
+  if (Array.isArray(abrangencia)) return abrangencia.includes(codigoIbge);
+  return codigoIbge.startsWith(abrangencia.uf);
+}
 
 export function camadasParaMunicipio(codigoIbge: string | null): CamadaWms[] {
-  return TODAS_CAMADAS.filter((c) => c.abrangencia === "nacional" || (codigoIbge && c.abrangencia.includes(codigoIbge)));
+  return TODAS_CAMADAS.filter((c) => cobre(c.abrangencia, codigoIbge));
 }
 
 export function getCamada(id: string): CamadaWms | undefined {

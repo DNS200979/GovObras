@@ -1,8 +1,8 @@
 import { MapPin } from "lucide-react";
 import Link from "next/link";
 import { AppShell } from "@/components/app-shell";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@carbonfree/ui/shadcn/badge";
+import { Card, CardContent } from "@carbonfree/ui/shadcn/card";
 import {
   Table,
   TableBody,
@@ -10,7 +10,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@carbonfree/ui/shadcn/table";
 import { getConstrutoras, getObrasList } from "@/lib/queries";
 import { NovaObraSheet } from "./nova-obra-sheet";
 import { ObraRowActions } from "./obra-row-actions";

@@ -2,9 +2,9 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { createAdminClient } from "@carbonfree/database/admin";
 import { createServerSupabase } from "@carbonfree/database/server";
 import { getSessaoConstrutora } from "@/lib/sessao";
+import { converterComposicao, type ComposicaoDeclarada } from "@/lib/materializacao";
 
 export interface VincularConcreteiraState {
   error?: string;
@@ -27,17 +27,14 @@ export async function vincularConcreteira(
   }
 
   // RLS só deixa a construtora enxergar concreteiras que ela já vinculou —
-  // então a busca por CNPJ de uma concreteira nova (cadastrada por outra
-  // construtora) precisa do client admin. Só usado para achar o id; a
-  // criação em si passa pelo client de sessão, sujeito à política normal.
-  const admin = createAdminClient();
-  const { data: existente } = await admin
-    .from("concreteiras")
-    .select("id")
-    .eq("cnpj", cnpj)
-    .maybeSingle();
+  // então achar por CNPJ uma concreteira cadastrada por outra construtora
+  // precisa de um caminho próprio. `buscar_concreteira_por_cnpj` (migration 31)
+  // é security definer, devolve só o id e só responde a papéis de construtora.
+  const { data: existenteId } = await db.rpc("buscar_concreteira_por_cnpj", {
+    p_cnpj: cnpj,
+  });
 
-  let concreteiraId: string | undefined = existente?.id;
+  let concreteiraId: string | undefined = existenteId ?? undefined;
 
   if (!concreteiraId) {
     if (!razaoSocial) {
@@ -81,24 +78,15 @@ export interface MaterializarResultado {
   mensagem: string;
 }
 
-interface ComposicaoParaCalculo {
-  insumo: string;
-  quantidade: number;
-  unidade: string;
-  fator_id: string | null;
-  fatores_emissao: { valor: number; unidade: string } | null;
-}
-
 /**
  * Converte a composição declarada pela concreteira em lançamentos de
  * carbono (módulo A1-A3, natureza passivo) no inventário em aberto da obra.
  *
  * Só o RT materializa — é quem assina o dossiê, mesma segregação de função
- * que o resto do schema já segue (seção 5.3). A escrita em `lancamentos`
- * passa pelo client admin de propósito: essa tabela não tem NENHUMA policy
- * de INSERT (só leitura) — hoje o único jeito confiável de gravar o ledger
- * é um processo de confiança, não a sessão do usuário. A checagem de posse
- * da obra e do papel acontece aqui, em código, antes de usar esse client.
+ * que o resto do schema já segue (seção 5.3). Desde a migration 31 isso é
+ * garantido pelo banco: a policy de INSERT em `lancamentos` exige ser RT, o
+ * inventário ser de obra da própria construtora e estar aberto. As checagens
+ * abaixo continuam para dar mensagem de erro decente, não como controle.
  */
 export async function materializarEntrega(entregaId: string): Promise<MaterializarResultado> {
   const db = await createServerSupabase();
@@ -120,7 +108,7 @@ export async function materializarEntrega(entregaId: string): Promise<Materializ
       status: string;
       evidencia_id: string | null;
       materializado_em: string | null;
-      entrega_composicao: ComposicaoParaCalculo[];
+      entrega_composicao: ComposicaoDeclarada[];
     }>();
   if (entErr || !entrega) return { ok: false, mensagem: "Entrega não encontrada." };
 
@@ -154,31 +142,7 @@ export async function materializarEntrega(entregaId: string): Promise<Materializ
     };
   }
 
-  // Só entra no cálculo o insumo com fator vinculado E cuja unidade declarada
-  // bate exatamente com a que o fator espera (ex.: fator em tCO2e/t exige
-  // quantidade em "t") — sem isso o número sairia errado silenciosamente.
-  const linhas: { insumo: string; quantidade: number; unidade: string; fator_id: string; tco2e: number }[] = [];
-  const ignoradas: string[] = [];
-
-  for (const c of entrega.entrega_composicao ?? []) {
-    if (!c.fator_id || !c.fatores_emissao) {
-      ignoradas.push(`${c.insumo} (sem fator vinculado)`);
-      continue;
-    }
-    const partes = c.fatores_emissao.unidade.split("/");
-    if (partes.length !== 2) {
-      ignoradas.push(`${c.insumo} (fator com unidade não reconhecida: ${c.fatores_emissao.unidade})`);
-      continue;
-    }
-    const [saida, entrada] = partes;
-    if (c.unidade !== entrada) {
-      ignoradas.push(`${c.insumo} (unidade "${c.unidade}" não bate com a esperada "${entrada}")`);
-      continue;
-    }
-    const bruto = Number(c.quantidade) * Number(c.fatores_emissao.valor);
-    const tco2e = saida.startsWith("kgCO2e") ? bruto / 1000 : bruto;
-    linhas.push({ insumo: c.insumo, quantidade: Number(c.quantidade), unidade: c.unidade, fator_id: c.fator_id, tco2e });
-  }
+  const { linhas, ignoradas } = converterComposicao(entrega.entrega_composicao ?? []);
 
   if (linhas.length === 0) {
     return {
@@ -189,8 +153,7 @@ export async function materializarEntrega(entregaId: string): Promise<Materializ
     };
   }
 
-  const admin = createAdminClient();
-  const { error: lancErr } = await admin.from("lancamentos").insert(
+  const { error: lancErr } = await db.from("lancamentos").insert(
     linhas.map((l) => ({
       inventario_id: inventario.id,
       modulo_en15978: "A1-A3",

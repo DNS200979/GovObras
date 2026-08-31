@@ -1,8 +1,8 @@
 "use client";
 
 import { LogOut } from "lucide-react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback } from "@carbonfree/ui/shadcn/avatar";
+import { Button } from "@carbonfree/ui/shadcn/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,7 +11,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@carbonfree/ui/shadcn/dropdown-menu";
 import { sair } from "@/lib/auth-actions";
 
 const papelLabel: Record<string, string> = {

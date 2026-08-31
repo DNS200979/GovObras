@@ -1,16 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Input } from "@carbonfree/ui/shadcn/input";
+import { Label } from "@carbonfree/ui/shadcn/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+} from "@carbonfree/ui/shadcn/select";
+import { Alert, AlertDescription } from "@carbonfree/ui/shadcn/alert";
 
 export const tipologias = [
   "Residencial vertical",

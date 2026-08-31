@@ -2,7 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@carbonfree/ui/shadcn/button";
 import {
   Sheet,
   SheetClose,
@@ -12,7 +12,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
+} from "@carbonfree/ui/shadcn/sheet";
 import { criarObra, type CriarObraState } from "./actions";
 import { ObraCamposForm } from "./obra-campos-form";
 

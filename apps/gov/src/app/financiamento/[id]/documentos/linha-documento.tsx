@@ -2,15 +2,15 @@
 
 import { useActionState, useRef, useTransition } from "react";
 import { Download, Paperclip, Trash2 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Badge } from "@carbonfree/ui/shadcn/badge";
+import { Button } from "@carbonfree/ui/shadcn/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@carbonfree/ui/shadcn/select";
 import {
   SITUACOES_DOC,
   exigenciaNaRota,

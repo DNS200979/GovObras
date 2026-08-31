@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { AppShell } from "@/components/app-shell";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@carbonfree/ui/shadcn/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@carbonfree/ui/shadcn/card";
 import { camadasParaMunicipio } from "@/lib/geo-layers";
 import { consultarPontoEmCamadas } from "@/lib/geo-consulta";
 import { getMeuMunicipio, getObraDetalhe } from "@/lib/queries";
@@ -91,9 +91,16 @@ export default async function ObraDetalhePage({ params }: { params: Promise<{ id
                 <div>
                   <div className="mb-1.5 flex items-center gap-2">
                     <span className="font-semibold">Área protegida</span>
-                    <Badge variant={dentroDeAreaProtegida ? "destructive" : "success"}>
-                      {dentroDeAreaProtegida ? "possível conflito" : "nenhuma encontrada"}
-                    </Badge>
+                    {/* Sem camada de preservação para o município, "nenhuma
+                        encontrada" em verde seria falso negativo: o que existe
+                        é ausência de fonte, não ausência de conflito. */}
+                    {camadasProtecao.length === 0 ? (
+                      <Badge variant="secondary">sem fonte para verificar</Badge>
+                    ) : (
+                      <Badge variant={dentroDeAreaProtegida ? "destructive" : "success"}>
+                        {dentroDeAreaProtegida ? "possível conflito" : "nenhuma encontrada"}
+                      </Badge>
+                    )}
                   </div>
                   {camadasProtecao.length === 0 ? (
                     <p className="text-muted-foreground">

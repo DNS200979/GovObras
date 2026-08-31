@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { AppShell } from "@/components/app-shell";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@carbonfree/ui/shadcn/badge";
+import { Card, CardContent } from "@carbonfree/ui/shadcn/card";
 import {
   Table,
   TableBody,
@@ -9,7 +9,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@carbonfree/ui/shadcn/table";
 import { categoriaEsgLabel, listProjetosEsg, statusEsgLabel } from "@/lib/queries";
 
 export const dynamic = "force-dynamic";
@@ -54,9 +54,13 @@ export default async function EsgGovPage() {
             </TableHeader>
             <TableBody>
               {projetos.map((p) => (
-                <TableRow key={p.id} className="cursor-pointer hover:bg-muted/40">
+                <TableRow key={p.id} className="relative hover:bg-muted/40">
                   <TableCell className="font-medium">
-                    <Link href={`/esg/${p.id}`} className="hover:underline">
+                    <Link
+                      href={`/esg/${p.id}`}
+                      // Ver nota em /concreteiras: link esticado sobre a linha.
+                      className="hover:underline after:absolute after:inset-0"
+                    >
                       {p.titulo}
                     </Link>
                   </TableCell>

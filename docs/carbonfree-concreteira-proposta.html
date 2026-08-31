@@ -1,0 +1,388 @@
+<title>A adição que ninguém conta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400..700&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   CarbonFree — o caso da concreteira
+   Mesma identidade das demais peças. Âmbar é a cor dela em todo
+   o material: é o lado "passivo" do razonete, que é exatamente
+   o que a concreteira fornece à obra.
+   ============================================================ */
+:root{
+  --ground:#E3E7E2; --surface:#F8F9F6; --surface-2:#EDF0EB;
+  --ink:#22302F; --ink-2:#5C6B66; --ink-3:#7E8A85;
+  --line:#C9CFC7; --line-2:#A6B0A7;
+  --deep:#16232A; --deep-2:#1F323B; --deep-3:#2E4048;
+  --deep-ink:#DDE4E1; --deep-ink-2:#829990;
+  --verde:#1F6F5C; --verde-soft:#E1EEE9; --verde-linha:#A9CCC0;
+  --ambar:#A65D14; --ambar-soft:#F6E9DA; --ambar-linha:#DFBE94;
+  --azul:#2C5670; --azul-soft:#E2EAF0;
+  --display:'Archivo',system-ui,-apple-system,sans-serif;
+  --corpo:'Source Serif 4',Georgia,'Times New Roman',serif;
+  --mono:'IBM Plex Mono',ui-monospace,'SFMono-Regular',monospace;
+  --max:1120px; --pad:clamp(20px,4vw,32px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0E171C; --surface:#16232A; --surface-2:#1C2C34;
+    --ink:#DFE6E2; --ink-2:#9BAAA3; --ink-3:#7A8A84;
+    --line:#2C3D45; --line-2:#405259;
+    --verde:#5DBA9C; --verde-soft:#15302A; --verde-linha:#27564A;
+    --ambar:#DE9145; --ambar-soft:#33220F; --ambar-linha:#5C3E1B;
+    --azul:#7FAECD; --azul-soft:#14252F;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0E171C; --surface:#16232A; --surface-2:#1C2C34;
+  --ink:#DFE6E2; --ink-2:#9BAAA3; --ink-3:#7A8A84;
+  --line:#2C3D45; --line-2:#405259;
+  --verde:#5DBA9C; --verde-soft:#15302A; --verde-linha:#27564A;
+  --ambar:#DE9145; --ambar-soft:#33220F; --ambar-linha:#5C3E1B;
+  --azul:#7FAECD; --azul-soft:#14252F;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition-duration:.001ms!important}}
+body{margin:0;font-family:var(--corpo);font-size:16.5px;line-height:1.6;color:var(--ink);background:var(--ground);-webkit-font-smoothing:antialiased}
+
+h1,h2,h3{font-family:var(--display);font-weight:800;line-height:1.08;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(27px,3.6vw,40px);font-stretch:104%}
+h3{font-size:clamp(16px,1.5vw,19px);font-weight:700;letter-spacing:-.01em}
+p{margin:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3);font-weight:500}
+.lede{font-size:clamp(16px,1.6vw,18.5px);color:var(--ink-2);max-width:64ch}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+.faixa{padding:clamp(52px,6.5vw,84px) var(--pad)}
+.faixa-papel{background:var(--surface);border-block:1px solid var(--line)}
+.faixa-concreto{background:var(--ground)}
+.wrap{max-width:var(--max);margin-inline:auto}
+.cabeca{display:flex;flex-direction:column;gap:12px;margin-bottom:clamp(26px,3.4vw,42px);max-width:74ch}
+
+/* ---------- capa ---------- */
+.capa{background:var(--deep);color:var(--deep-ink);padding:clamp(30px,4vw,44px) var(--pad) clamp(46px,6vw,70px);position:relative;overflow:hidden}
+.capa::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(var(--deep-2) 1px,transparent 1px),linear-gradient(90deg,var(--deep-2) 1px,transparent 1px);
+  background-size:46px 46px;opacity:.5}
+.capa .wrap{position:relative}
+.marca{display:flex;align-items:center;gap:13px;flex-wrap:wrap;margin-bottom:clamp(36px,5vw,56px)}
+.marca .selo{font-family:var(--display);font-weight:900;font-size:14px;color:#F8F9F6;background:#1F6F5C;padding:5px 10px;border-radius:3px}
+.marca .org{font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--deep-ink-2)}
+.capa h1{font-size:clamp(34px,5.8vw,62px);font-stretch:110%;color:#F8F9F6;max-width:18ch;margin-bottom:20px}
+.capa h1 em{font-style:normal;color:#E8A24E}
+.capa-lede{font-size:clamp(16px,1.8vw,19px);color:#B4C3BC;max-width:58ch}
+
+/* ---------- número herói: a razão entre os fatores ---------- */
+.heroi{
+  display:grid;grid-template-columns:auto 1fr;gap:clamp(20px,3.5vw,42px);align-items:center;
+  background:var(--surface);border:1px solid var(--line);border-radius:4px;
+  padding:clamp(24px,3.4vw,40px);
+}
+@media (max-width:760px){.heroi{grid-template-columns:1fr;gap:20px}}
+.heroi .n{
+  font-family:var(--display);font-weight:900;font-stretch:76%;
+  font-size:clamp(72px,13vw,150px);line-height:.82;letter-spacing:-.045em;
+  color:var(--ambar);font-variant-numeric:tabular-nums;
+}
+.heroi .n span{font-size:.32em;font-stretch:100%;letter-spacing:-.01em}
+.heroi .txt p{font-size:15px;line-height:1.55;color:var(--ink-2);margin-bottom:12px}
+.heroi .txt p:last-child{margin-bottom:0}
+.heroi .txt b{color:var(--ink)}
+
+.confronto{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:3px;overflow:hidden;margin:16px 0}
+.conf{background:var(--surface-2);padding:13px 15px}
+.conf .q{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:5px}
+.conf .v{font-family:var(--mono);font-size:19px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--ink)}
+.conf .u{font-family:var(--mono);font-size:10px;color:var(--ink-3);display:block;margin-top:3px}
+.conf .f{font-family:var(--mono);font-size:9.5px;color:var(--ink-3);display:block;margin-top:6px;padding-top:6px;border-top:1px solid var(--line)}
+
+/* ---------- pressão / linha do tempo ---------- */
+.pressao{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.pr{background:var(--surface);padding:clamp(18px,2.3vw,25px);display:flex;flex-direction:column;gap:9px}
+.pr .qd{font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--ambar)}
+.pr .t{font-family:var(--display);font-weight:700;font-size:15px;line-height:1.25;color:var(--ink)}
+.pr p{font-size:13.5px;line-height:1.5;color:var(--ink-2)}
+
+/* ---------- fluxo ---------- */
+.fluxo{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:clamp(18px,2.4vw,26px);overflow-x:auto}
+.fluxo svg{display:block;min-width:620px;width:100%;height:auto}
+.fx-cx{fill:var(--surface-2);stroke:var(--line)}
+.fx-cx-amb{fill:var(--ambar-soft);stroke:var(--ambar-linha)}
+.fx-cx-vrd{fill:var(--verde-soft);stroke:var(--verde-linha)}
+.fx-tp-amb{fill:var(--ambar)} .fx-tp-azu{fill:var(--azul)} .fx-tp-vrd{fill:var(--verde)}
+.fx-at{font-family:var(--mono);font-size:9.5px;letter-spacing:1.3px}
+.fx-at.amb{fill:var(--ambar)} .fx-at.azu{fill:var(--azul)} .fx-at.vrd{fill:var(--verde)}
+.fx-ac{font-family:var(--display);font-size:15px;font-weight:700;fill:var(--ink)}
+.fx-tx{font-family:var(--corpo);font-size:12px;fill:var(--ink-2)}
+.fx-rp{font-family:var(--mono);font-size:10px;letter-spacing:1px;fill:var(--ink-3)}
+.fx-ln{stroke:var(--line);stroke-width:1}
+.fx-st{stroke:var(--line-2);stroke-width:1.5}
+.fx-pt{fill:var(--line-2)}
+
+/* ---------- ganhos ---------- */
+.ganhos{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.ganho{background:var(--surface);padding:clamp(18px,2.3vw,25px);display:flex;flex-direction:column;gap:9px}
+.ganho .t{font-family:var(--display);font-weight:700;font-size:15px;line-height:1.25;color:var(--ink)}
+.ganho p{font-size:13.5px;line-height:1.5;color:var(--ink-2)}
+.ganho .marca-g{font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--verde)}
+
+.aviso{margin-top:clamp(18px,2.4vw,26px);padding:14px 16px;border-left:3px solid var(--ambar);background:var(--ambar-soft);border-radius:0 3px 3px 0;font-size:13.5px;line-height:1.55;color:var(--ink-2)}
+.aviso b{color:var(--ink)}
+
+/* ---------- fecho ---------- */
+.fecho{background:var(--deep);color:var(--deep-ink);padding:clamp(48px,6vw,74px) var(--pad)}
+.fecho h2{color:#F8F9F6;max-width:20ch}
+.fecho .lede{color:#B4C3BC;margin-top:13px}
+.assin{margin-top:clamp(28px,3.6vw,40px);padding-top:17px;border-top:1px solid var(--deep-3);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--deep-ink-2)}
+
+a{color:var(--verde)}
+:focus-visible{outline:2px solid var(--verde);outline-offset:3px;border-radius:2px}
+</style>
+
+<!-- ============================ CAPA ============================ -->
+<header class="capa">
+  <div class="wrap">
+    <div class="marca">
+      <span class="selo">CarbonFree</span>
+      <span class="org">MBV · Movimento Brasil Verde</span>
+      <span class="org">Para concreteiras</span>
+    </div>
+    <h1>A sua adição já reduz carbono. Hoje ela <em>não conta</em>.</h1>
+    <p class="capa-lede">
+      Escória, cinza volante, agregado reciclado — o que você já coloca no traço reduz
+      emissão de verdade. Como ninguém documenta, você não recebe crédito comercial
+      por isso. E a construtora, que vai precisar do número, não tem como usá-lo.
+    </p>
+  </div>
+</header>
+
+<!-- ============================ O NÚMERO ============================ -->
+<section class="faixa faixa-concreto">
+  <div class="wrap">
+    <div class="cabeca">
+      <p class="eyebrow">A ordem de grandeza</p>
+      <h2>Cada tonelada de cimento substituída</h2>
+    </div>
+
+    <div class="heroi">
+      <div class="n">73<span>×</span></div>
+      <div class="txt">
+        <p>
+          É a diferença entre o fator de emissão do cimento CP II e o da cinza volante,
+          por tonelada. Substituir uma pela outra no traço evita <b>0,72 tonelada de CO₂e
+          por tonelada trocada</b>.
+        </p>
+        <div class="confronto">
+          <div class="conf">
+            <span class="q">Cimento CP II</span>
+            <span class="v">0,730</span>
+            <span class="u">tCO₂e por tonelada</span>
+            <span class="f">Fonte: DAP Brasil</span>
+          </div>
+          <div class="conf">
+            <span class="q">Cinza volante</span>
+            <span class="v">0,010</span>
+            <span class="u">tCO₂e por tonelada</span>
+            <span class="f">Estimativa a substituir por DAP</span>
+          </div>
+        </div>
+        <p>
+          Numa carga de 8 m³ com 320 kg de cimento por metro cúbico, trocar 20% do
+          aglomerante por adição evita cerca de <b>0,37 tCO₂e — em uma única viagem</b>.
+          Multiplicado pelo seu volume mensal, é um número que a construtora quer ver
+          escrito e hoje não consegue obter de ninguém.
+        </p>
+      </div>
+    </div>
+
+    <div class="aviso">
+      <b>Sobre esses dois números.</b> O fator do cimento vem de DAP Brasil — é laudo. O da
+      cinza volante é estimativa de ordem de grandeza, ainda não auditada, e está marcado
+      como tal dentro do sistema. Publicar a DAP real da sua adição substitui essa estimativa
+      e melhora a nota de toda obra que você atende. É por isso que a próxima seção importa.
+    </div>
+  </div>
+</section>
+
+<!-- ============================ A PRESSÃO ============================ -->
+<section class="faixa faixa-papel">
+  <div class="wrap">
+    <div class="cabeca">
+      <p class="eyebrow">Por que agora</p>
+      <h2>O pedido vai chegar, com ou sem você preparada</h2>
+      <p class="lede">
+        Não é tendência de mercado, é cadeia regulatória. A obrigação nasce no fabricante
+        de cimento e desce até quem entrega concreto no canteiro.
+      </p>
+    </div>
+
+    <div class="pressao">
+      <div class="pr">
+        <span class="qd">Onde nasce</span>
+        <span class="t">Lei 15.042/2024 põe o cimento no regulado</span>
+        <p>
+          O Sistema Brasileiro de Comércio de Emissões inclui fabricantes de cimento, aço,
+          cal e vidro. Acima de 10 mil toneladas de CO₂e por ano há reporte obrigatório;
+          acima de 25 mil, plano de monitoramento e entrega de certificado.
+        </p>
+      </div>
+      <div class="pr">
+        <span class="qd">Como desce</span>
+        <span class="t">A construtora herda isso como Escopo 3</span>
+        <p>
+          O que ela compra de você entra na conta dela como emissão de categoria 1 — bens
+          e serviços adquiridos. E concreto costuma ser o maior item isolado dessa conta.
+        </p>
+      </div>
+      <div class="pr">
+        <span class="qd">O que ela vai pedir</span>
+        <span class="t">Um número com origem, não uma ficha técnica</span>
+        <p>
+          Ficha técnica em PDF não serve: não é rastreável, não é verificável e não sobrevive
+          a uma auditoria. Quem entregar dado com origem documental entra na lista curta.
+          Quem não entregar sai dela por eliminação.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ O FLUXO ============================ -->
+<section class="faixa faixa-concreto">
+  <div class="wrap">
+    <div class="cabeca">
+      <p class="eyebrow">Como funciona na prática</p>
+      <h2>Da carga que saiu ao número que a prefeitura lê</h2>
+      <p class="lede">
+        Você declara o que saiu. A construtora confere. O responsável técnico dela assina.
+        Cada passo é de um ator diferente — é isso que faz o número valer.
+      </p>
+    </div>
+
+    <div class="fluxo">
+      <svg viewBox="0 0 920 250" role="img" aria-labelledby="ft fd">
+        <title id="ft">Da entrega declarada ao balanço do município</title>
+        <desc id="fd">A concreteira declara a entrega com volume, traço e composição; a construtora valida; o responsável técnico lança no inventário; a prefeitura lê o resultado.</desc>
+        <defs>
+          <marker id="s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path class="fx-pt" d="M 0 0 L 10 5 L 0 10 z"></path>
+          </marker>
+        </defs>
+        <line class="fx-st" x1="208" y1="100" x2="242" y2="100" marker-end="url(#s)"></line>
+        <line class="fx-st" x1="442" y1="100" x2="476" y2="100" marker-end="url(#s)"></line>
+        <line class="fx-st" x1="676" y1="100" x2="710" y2="100" marker-end="url(#s)"></line>
+
+        <rect class="fx-cx-amb" x="8" y="40" width="200" height="124" rx="3"></rect>
+        <rect class="fx-tp-amb" x="8" y="40" width="200" height="3"></rect>
+        <text class="fx-at amb" x="24" y="68">VOCÊ</text>
+        <text class="fx-ac" x="24" y="91">Declara a carga</text>
+        <text class="fx-tx" x="24" y="114">Volume, traço e o que</text>
+        <text class="fx-tx" x="24" y="131">foi somado ao cimento,</text>
+        <text class="fx-tx" x="24" y="148">com a nota anexada.</text>
+
+        <rect class="fx-cx" x="242" y="40" width="200" height="124" rx="3"></rect>
+        <rect class="fx-tp-azu" x="242" y="40" width="200" height="3"></rect>
+        <text class="fx-at azu" x="258" y="68">CONSTRUTORA</text>
+        <text class="fx-ac" x="258" y="91">Confere</text>
+        <text class="fx-tx" x="258" y="114">Valida contra o que</text>
+        <text class="fx-tx" x="258" y="131">chegou no canteiro,</text>
+        <text class="fx-tx" x="258" y="148">ou contesta.</text>
+
+        <rect class="fx-cx-vrd" x="476" y="40" width="200" height="124" rx="3"></rect>
+        <rect class="fx-tp-vrd" x="476" y="40" width="200" height="3"></rect>
+        <text class="fx-at vrd" x="492" y="68">RESPONSÁVEL TÉCNICO</text>
+        <text class="fx-ac" x="492" y="91">Assina</text>
+        <text class="fx-tx" x="492" y="114">Só ele lança no</text>
+        <text class="fx-tx" x="492" y="131">inventário da obra —</text>
+        <text class="fx-tx" x="492" y="148">quem assina responde.</text>
+
+        <rect class="fx-cx" x="710" y="40" width="200" height="124" rx="3"></rect>
+        <rect class="fx-tp-azu" x="710" y="40" width="200" height="3" style="fill:var(--ink-2)"></rect>
+        <text class="fx-at" x="726" y="68" style="fill:var(--ink-3)">PREFEITURA</text>
+        <text class="fx-ac" x="726" y="91">Lê o balanço</text>
+        <text class="fx-tx" x="726" y="114">Com a origem do</text>
+        <text class="fx-tx" x="726" y="131">número rastreável até</text>
+        <text class="fx-tx" x="726" y="148">a sua nota fiscal.</text>
+
+        <line class="fx-ln" x1="8" y1="198" x2="912" y2="198"></line>
+        <text class="fx-rp" x="8" y="222">VOCÊ SÓ ENXERGA AS OBRAS EM QUE FOI VINCULADA — NADA DE CONCORRENTE, NADA DE OUTRO CLIENTE</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ O QUE VOCÊ GANHA ============================ -->
+<section class="faixa faixa-papel">
+  <div class="wrap">
+    <div class="cabeca">
+      <p class="eyebrow">O que muda para você</p>
+      <h2>Quatro coisas que hoje você não tem</h2>
+    </div>
+
+    <div class="ganhos">
+      <div class="ganho">
+        <span class="marca-g">Diferenciação</span>
+        <span class="t">O número que a construtora precisa, pronto</span>
+        <p>
+          Enquanto o concorrente manda ficha técnica em PDF, você entrega dado rastreável até
+          a nota fiscal. Na hora em que a construtora tiver que fechar o Escopo 3 dela, essa
+          diferença decide o pedido.
+        </p>
+      </div>
+      <div class="ganho">
+        <span class="marca-g">Crédito pelo que já faz</span>
+        <span class="t">A adição sai da invisibilidade</span>
+        <p>
+          A escória e a cinza que você já usa passam a aparecer no balanço da obra como
+          redução medida, não como alegação. É argumento comercial que hoje simplesmente
+          não existe no seu material de venda.
+        </p>
+      </div>
+      <div class="ganho">
+        <span class="marca-g">Sua DAP vale mais</span>
+        <span class="t">Laudo próprio substitui estimativa genérica</span>
+        <p>
+          Onde o sistema hoje usa fator estimado, a sua declaração ambiental de produto entra
+          no lugar — e melhora a nota de toda obra que você atende. Quem investiu em DAP passa
+          a colher retorno disso obra a obra.
+        </p>
+      </div>
+      <div class="ganho">
+        <span class="marca-g">Vitrine</span>
+        <span class="t">Scorecard ESG visível a quem decide</span>
+        <p>
+          Certificações, políticas ambientais e sociais ficam publicadas e visíveis para as
+          construtoras que você atende e para a prefeitura — no mesmo lugar onde elas já olham
+          o desempenho da obra.
+        </p>
+      </div>
+    </div>
+
+    <div class="aviso">
+      <b>O que você não expõe.</b> O portal escopa o que você enxerga às obras em que foi
+      vinculada por uma construtora, e o que as outras partes enxergam de você é só o que
+      você declarou naquela obra, mais o ESG que você escolheu publicar. Preço, cliente e
+      traço de outra obra não circulam — a regra é aplicada pelo banco de dados, não pela tela.
+    </div>
+  </div>
+</section>
+
+<!-- ============================ FECHO ============================ -->
+<section class="fecho">
+  <div class="wrap">
+    <p class="eyebrow" style="color:#E8A24E">Como começa</p>
+    <h2 style="margin-top:11px">Uma construtora, uma obra, as cargas do mês.</h2>
+    <p class="lede">
+      Não precisa mudar traço, nem processo, nem sistema de gestão. A construtora vincula
+      você a uma obra, você declara as entregas daquele mês com o que já está na nota, e no
+      fim existe um número de carbono com origem — o primeiro que você vai poder mostrar
+      para o próximo cliente que pedir.
+    </p>
+    <div class="assin">
+      <span>CarbonFree · MBV — Movimento Brasil Verde</span>
+      <span>Proposta para concreteiras · agosto de 2026</span>
+    </div>
+  </div>
+</section>

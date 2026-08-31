@@ -2,17 +2,17 @@
 
 import { useActionState, useState } from "react";
 import { Flame, Leaf, Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@carbonfree/ui/shadcn/button";
+import { Input } from "@carbonfree/ui/shadcn/input";
+import { Label } from "@carbonfree/ui/shadcn/label";
+import { Textarea } from "@carbonfree/ui/shadcn/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@carbonfree/ui/shadcn/select";
 import {
   Sheet,
   SheetClose,
@@ -22,8 +22,8 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+} from "@carbonfree/ui/shadcn/sheet";
+import { Alert, AlertDescription } from "@carbonfree/ui/shadcn/alert";
 import { criarRequisito, type CriarRequisitoState } from "./actions";
 
 export function NovoRequisitoSheet() {

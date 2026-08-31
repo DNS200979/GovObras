@@ -1559,6 +1559,7 @@ export type Database = {
       }
       requisitos_auditoria: {
         Row: {
+          base_legal: Json
           codigo: string
           created_at: string
           evidencia_primaria: string
@@ -1570,6 +1571,7 @@ export type Database = {
           unidade: string
         }
         Insert: {
+          base_legal?: Json
           codigo: string
           created_at?: string
           evidencia_primaria: string
@@ -1581,6 +1583,7 @@ export type Database = {
           unidade: string
         }
         Update: {
+          base_legal?: Json
           codigo?: string
           created_at?: string
           evidencia_primaria?: string

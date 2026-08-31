@@ -1,6 +1,6 @@
 import { Card, CardTitle } from "@carbonfree/ui/card";
 import { Badge } from "@carbonfree/ui/badge";
-import type { RoteiroAtivo } from "@/lib/roteiros-ativo";
+import type { BaseLegal, RoteiroAtivo } from "@/lib/roteiros-ativo";
 
 /**
  * Passo a passo de aceitação de um ativo, dentro do projeto ESG.
@@ -9,7 +9,14 @@ import type { RoteiroAtivo } from "@/lib/roteiros-ativo";
  * acontecer e o que reprova. Descobrir na análise que o MTR foi emitido depois
  * da remoção custa a obra inteira.
  */
-export function RoteiroDoAtivo({ roteiro }: { roteiro: RoteiroAtivo }) {
+export function RoteiroDoAtivo({
+  roteiro,
+  baseLegal,
+}: {
+  roteiro: RoteiroAtivo;
+  /** Vem de `requisitos_auditoria.base_legal` — a citação é do banco, o roteiro é do código. */
+  baseLegal: BaseLegal[];
+}) {
   const imediatos = roteiro.beneficios.filter((b) => b.natureza === "imediato");
   const municipais = roteiro.beneficios.filter((b) => b.natureza === "municipal");
 
@@ -92,10 +99,11 @@ export function RoteiroDoAtivo({ roteiro }: { roteiro: RoteiroAtivo }) {
         ) : null}
       </Card>
 
+      {baseLegal.length > 0 ? (
       <Card>
         <CardTitle>Base legal</CardTitle>
         <ul className="mt-2 grid gap-3">
-          {roteiro.baseLegal.map((l) => (
+          {baseLegal.map((l) => (
             <li key={l.norma}>
               <span className="font-display text-[13px] font-bold text-texto">{l.norma}</span>
               <p className="mt-0.5 text-[12.5px] leading-relaxed text-texto-fraco">{l.oQueExige}</p>
@@ -103,6 +111,7 @@ export function RoteiroDoAtivo({ roteiro }: { roteiro: RoteiroAtivo }) {
           ))}
         </ul>
       </Card>
+      ) : null}
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import { createServerSupabase } from "@carbonfree/database/server";
+import type { BaseLegal } from "../roteiros-ativo";
 
 // ============================================================
 // ESG — projetos, documentos e processo de desconto fiscal
@@ -155,6 +156,22 @@ export interface ProjetoEsgDocumento {
   url: string | null;
 }
 
+/**
+ * Mantém só as entradas bem formadas de `requisitos_auditoria.base_legal`.
+ * O jsonb não tem constraint de forma no banco — mesma defesa que
+ * `ehFaixaRegua` faz com a régua do município.
+ */
+function ehBaseLegal(valor: unknown): BaseLegal[] {
+  if (!Array.isArray(valor)) return [];
+  return valor.filter(
+    (b): b is BaseLegal =>
+      !!b &&
+      typeof b === "object" &&
+      typeof (b as BaseLegal).norma === "string" &&
+      typeof (b as BaseLegal).oQueExige === "string",
+  );
+}
+
 export interface ProjetoEsgDetalhe {
   id: string;
   titulo: string;
@@ -166,6 +183,7 @@ export interface ProjetoEsgDetalhe {
   createdAt: string;
   motivoDecisao: string | null;
   requisito: { codigo: string; requisito: string } | null;
+  baseLegal: BaseLegal[];
   documentos: ProjetoEsgDocumento[];
 }
 
@@ -178,7 +196,7 @@ interface ProjetoEsgDetalheRow {
   created_at: string;
   motivo_decisao: string | null;
   obras: { id: string; nome: string } | null;
-  requisitos_auditoria: { codigo: string; requisito: string } | null;
+  requisitos_auditoria: { codigo: string; requisito: string; base_legal: unknown } | null;
   projeto_esg_documentos: {
     id: string;
     nome_arquivo: string;
@@ -194,7 +212,7 @@ export async function getProjetoEsg(id: string): Promise<ProjetoEsgDetalhe | nul
   const { data, error } = await db
     .from("projetos_esg")
     .select(
-      "id, titulo, descricao, categoria, status, created_at, motivo_decisao, obras(id, nome), requisitos_auditoria(codigo, requisito), projeto_esg_documentos(id, nome_arquivo, storage_path, tamanho_bytes, created_at)",
+      "id, titulo, descricao, categoria, status, created_at, motivo_decisao, obras(id, nome), requisitos_auditoria(codigo, requisito, base_legal), projeto_esg_documentos(id, nome_arquivo, storage_path, tamanho_bytes, created_at)",
     )
     .eq("id", id)
     .single<ProjetoEsgDetalheRow>();
@@ -227,6 +245,7 @@ export async function getProjetoEsg(id: string): Promise<ProjetoEsgDetalhe | nul
     createdAt: data.created_at,
     motivoDecisao: data.motivo_decisao,
     requisito: data.requisitos_auditoria,
+    baseLegal: ehBaseLegal(data.requisitos_auditoria?.base_legal),
     documentos,
   };
 }

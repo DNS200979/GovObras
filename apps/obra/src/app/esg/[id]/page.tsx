@@ -67,7 +67,7 @@ export default async function ProjetoEsgPage({ params }: { params: Promise<{ id:
             ) : null}
           </Card>
 
-          {roteiro ? <RoteiroDoAtivo roteiro={roteiro} /> : null}
+          {roteiro ? <RoteiroDoAtivo roteiro={roteiro} baseLegal={projeto.baseLegal} /> : null}
 
           <Card>
             <CardTitle>Documentos</CardTitle>

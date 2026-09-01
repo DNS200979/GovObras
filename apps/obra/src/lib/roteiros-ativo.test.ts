@@ -42,7 +42,6 @@ describe("integridade de cada roteiro", () => {
   it.each(todos.map((r) => [r.codigo, r] as const))("%s tem passos e benefícios", (_c, r) => {
     expect(r.passos.length).toBeGreaterThan(0);
     expect(r.beneficios.length).toBeGreaterThan(0);
-    expect(r.baseLegal.length).toBeGreaterThan(0);
   });
 
   it.each(todos.map((r) => [r.codigo, r] as const))(
@@ -99,12 +98,6 @@ describe("roteiro do RCC — a ordem é o conteúdo", () => {
 
   it("fecha com o balanço de massa, que é o teste de verificação do catálogo", () => {
     expect(rcc.passos.at(-1)?.titulo).toContain("balanço de massa");
-  });
-
-  it("cita CONAMA 307 e a PNRS como base", () => {
-    const normas = rcc.baseLegal.map((l) => l.norma).join(" ");
-    expect(normas).toContain("CONAMA 307");
-    expect(normas).toContain("12.305");
   });
 
   it("todo passo do RCC declara o que reprova", () => {

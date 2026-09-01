@@ -24,6 +24,15 @@ export interface PassoRoteiro {
   reprovaSe?: string;
 }
 
+/**
+ * Forma de `requisitos_auditoria.base_legal` (jsonb).
+ *
+ * A citação da norma vive no banco, não aqui: a prefeitura cadastra requisito
+ * próprio e agora pode corrigi-lo, então a base legal precisa ser editável por
+ * quem opera o catálogo. Este módulo guarda o COMO cumprir; o banco guarda o
+ * SOB QUAL NORMA. O tipo fica neste módulo por ele não ter dependência de
+ * servidor — a camada de consulta o importa daqui.
+ */
 export interface BaseLegal {
   norma: string;
   oQueExige: string;
@@ -44,7 +53,6 @@ export interface RoteiroAtivo {
   codigo: string;
   titulo: string;
   resumo: string;
-  baseLegal: BaseLegal[];
   passos: PassoRoteiro[];
   /** Como a quantidade declarada vira tCO₂e no balanço da obra. */
   comoEntraNoCalculo: string;
@@ -59,26 +67,6 @@ const RCC: RoteiroAtivo = {
     "já são obrigação legal de qualquer obra licenciada. Você provavelmente já faz quase tudo. " +
     "O que falta é gerar a prova na ordem certa e fechar o balanço de massa — sem isso, o que " +
     "já foi feito não vira ativo de carbono.",
-  baseLegal: [
-    {
-      norma: "CONAMA 307/2002",
-      oQueExige:
-        "Classificação do resíduo em A, B, C e D e destinação diferenciada por classe. " +
-        "O agregado reciclado sai da classe A (alvenaria, concreto, argamassa).",
-    },
-    {
-      norma: "Lei 12.305/2010 — PNRS",
-      oQueExige:
-        "Responsabilidade do gerador até a destinação final adequada. A responsabilidade não " +
-        "termina no portão da obra: se o receptor destinar errado, a obra responde junto.",
-    },
-    {
-      norma: "PGRCC no licenciamento",
-      oQueExige:
-        "Plano de gerenciamento aprovado como condicionante do alvará, com estimativa de geração " +
-        "por classe. É o documento contra o qual o balanço de massa vai ser conferido.",
-    },
-  ],
   passos: [
     {
       quando: "Antes de iniciar a obra",
@@ -194,14 +182,6 @@ const SUB: RoteiroAtivo = {
     "A linha de base é a especificação aprovada no alvará. Trocar para melhor é ativo; trocar " +
     "sem registrar a especificação original é troca sem prova, e a análise não tem contra o que " +
     "comparar.",
-  baseLegal: [
-    {
-      norma: "Especificação do alvará",
-      oQueExige:
-        "O memorial aprovado no licenciamento é a linha de base. Substituição não prevista em " +
-        "projeto exige aditivo registrado para ser aceita.",
-    },
-  ],
   passos: [
     {
       quando: "Antes da compra",
@@ -259,26 +239,6 @@ const ARB: RoteiroAtivo = {
     "É o único ativo do catálogo que não fecha no ano da obra. O crédito é liberado em parcelas " +
     "conforme as mudas sobrevivem, e muda que morre reverte o lançamento já feito. Quem trata o " +
     "plantio como evento — planta, fotografa, esquece — perde o ativo no primeiro checkpoint.",
-  baseLegal: [
-    {
-      norma: "Lei 12.651/2012 — Código Florestal",
-      oQueExige:
-        "Supressão de vegetação depende de autorização prévia do órgão competente, e a " +
-        "compensação é condicionante dessa autorização, não liberalidade do empreendedor.",
-    },
-    {
-      norma: "Autorização de supressão vegetal",
-      oQueExige:
-        "Emitida pelo município ou pelo órgão estadual conforme o caso. É ela que define quantas " +
-        "mudas, de que espécies e em que prazo — e é contra ela que a compensação é conferida.",
-    },
-    {
-      norma: "Termo de compensação",
-      oQueExige:
-        "Instrumento que vincula o empreendedor ao plantio e ao monitoramento. Sem termo assinado " +
-        "não há obrigação formal a cumprir, e sem obrigação não há adicionalidade a demonstrar.",
-    },
-  ],
   passos: [
     {
       quando: "Antes de suprimir qualquer árvore",
@@ -390,26 +350,6 @@ const ENE: RoteiroAtivo = {
     "Há três rotas possíveis — geração própria, certificado de atributo renovável e mercado " +
     "livre — e cada uma prova de um jeito diferente. O erro que mais reprova não é técnico, é " +
     "de contagem: o mesmo megawatt-hora reivindicado por duas rotas, ou por dois consumidores.",
-  baseLegal: [
-    {
-      norma: "Lei 14.300/2022",
-      oQueExige:
-        "Marco legal da geração distribuída e do sistema de compensação de energia elétrica. " +
-        "A compensação precisa aparecer na fatura da unidade consumidora da obra.",
-    },
-    {
-      norma: "Certificado de atributo renovável",
-      oQueExige:
-        "Cada certificado tem número de série e só pode ser resgatado uma vez. O atributo é " +
-        "consumido no resgate — depois disso ninguém mais pode reivindicá-lo.",
-    },
-    {
-      norma: "Fator de emissão da rede",
-      oQueExige:
-        "O que se evita é medido contra o fator da rede no período. Fator publicado varia mês a " +
-        "mês, então o período do consumo importa tanto quanto a quantidade.",
-    },
-  ],
   passos: [
     {
       quando: "Antes de reivindicar qualquer MWh",

@@ -33,6 +33,34 @@ export interface PassoRoteiro {
  * SOB QUAL NORMA. O tipo fica neste módulo por ele não ter dependência de
  * servidor — a camada de consulta o importa daqui.
  */
+/**
+ * Camada estadual do requisito.
+ *
+ * O roteiro federal diz que é preciso licença do receptor e MTR por remoção.
+ * Não diz QUAL órgão licencia nem EM QUAL sistema o MTR é emitido — e isso
+ * muda por estado. Uma construtora de Canoas e uma de Palhoça liam o mesmo
+ * texto genérico, que não servia a nenhuma das duas.
+ *
+ * Fica em código, junto do roteiro, e não em `requisitos_auditoria.base_legal`,
+ * porque o catálogo é global: não tem UF, e uma citação estadual guardada lá
+ * apareceria para a obra do outro estado. Aqui a tela escolhe pela UF do
+ * município da obra.
+ */
+export type UfComCamadaEstadual = "RS" | "SC";
+
+export interface CamadaEstadual {
+  uf: UfComCamadaEstadual;
+  /** Órgão ambiental estadual. */
+  orgao: string;
+  sistemaMtr: string;
+  /** Norma que rege o uso do sistema hoje. */
+  norma: string;
+  /** Como descobrir se o licenciamento do receptor é estadual ou municipal. */
+  competenciaLicenciamento: string;
+  /** O que invalida o documento neste estado — é o que mais reprova. */
+  atencao: string[];
+}
+
 export interface BaseLegal {
   norma: string;
   oQueExige: string;
@@ -54,6 +82,8 @@ export interface RoteiroAtivo {
   titulo: string;
   resumo: string;
   passos: PassoRoteiro[];
+  /** Procedimento estadual, quando levantado. Nem todo requisito tem. */
+  camadaEstadual?: CamadaEstadual[];
   /** Como a quantidade declarada vira tCO₂e no balanço da obra. */
   comoEntraNoCalculo: string;
   beneficios: BeneficioAtivo[];
@@ -133,6 +163,58 @@ const RCC: RoteiroAtivo = {
       reprovaSe:
         "O balanço não fecha e não vem explicação. Diferença sem justificativa é lida como " +
         "dupla contagem.",
+    },
+  ],
+  camadaEstadual: [
+    {
+      uf: "RS",
+      orgao: "FEPAM — Fundação Estadual de Proteção Ambiental",
+      sistemaMtr: "Sistema MTR Online (FEPAM)",
+      norma:
+        "Portaria FEPAM nº 576/2026, publicada em 08/01/2026 e em vigor desde 12/01/2026, " +
+        "que regulamenta a obrigatoriedade do Sistema MTR Online no estado e sucede a " +
+        "Portaria FEPAM nº 087/2018.",
+      competenciaLicenciamento:
+        "A Resolução CONSEMA/RS nº 372/2018 lista as atividades licenciáveis e o porte que as " +
+        "caracteriza como de impacto local. Abaixo desse porte o licenciamento é do município; " +
+        "acima, da FEPAM. Confira em qual faixa a usina receptora se enquadra antes de aceitar " +
+        "a licença como válida — licença emitida por ente sem competência não sustenta o ativo.",
+      atencao: [
+        "Toda movimentação precisa ser registrada no sistema ANTES do transporte. O sistema é " +
+          "gratuito e autodeclaratório, e a responsabilidade pela informação é do gerador, do " +
+          "transportador e do destinador — não só de quem emite.",
+        "A portaria define Pequeno Gerador por remissão à faixa de “Não Incidência” da Resolução " +
+          "CONSEMA/RS nº 372/2018. Saber se a obra é pequeno gerador depende desse enquadramento, " +
+          "não do volume que ela estima gerar.",
+        "A portaria trata RCC como categoria própria — resíduo de construção, reforma, reparo e " +
+          "demolição, incluindo o da preparação e escavação do terreno. Escavação entra na conta.",
+        "Além do MTR e do CDF, o sistema opera a DMR (Declaração de Movimentação de Resíduos). " +
+          "Confirme no manual do sistema qual periodicidade se aplica à obra.",
+      ],
+    },
+    {
+      uf: "SC",
+      orgao: "IMA — Instituto do Meio Ambiente de Santa Catarina",
+      sistemaMtr: "Sistema MTR do IMA",
+      norma:
+        "Lei estadual nº 15.251, de 03/08/2010, que institui o manifesto; uso obrigatório desde " +
+        "abril de 2016. As condições de uso vigentes estão na Portaria IMA nº 009/2026, de " +
+        "14/01/2026, que revogou as portarias anteriores. O uso do sistema não tem custo.",
+      competenciaLicenciamento:
+        "A Resolução CONSEMA/SC nº 98/2017 lista as atividades sujeitas a licenciamento e a nº " +
+        "99/2017 as de impacto local, de competência municipal. Em município apto a licenciar, é " +
+        "vedado protocolar no órgão estadual atividade de impacto local — então uma licença " +
+        "estadual para atividade que era do município é irregular na origem.",
+      atencao: [
+        "O CDF é emitido EXCLUSIVAMENTE pelo Sistema MTR do IMA. Certificado em papel timbrado " +
+          "do receptor, planilha ou declaração avulsa não substitui.",
+        "Só o destinador que executou de fato a destinação final pode emitir o CDF. É vedada a " +
+          "emissão por intermediário que não realize a atividade — transportador, armazenador " +
+          "temporário ou gestor de resíduos. CDF vindo de intermediário é documento inválido, e " +
+          "é o erro mais comum de quem contrata a destinação por gestor terceirizado.",
+        "O sistema mantém a cópia eletrônica dos MTRs emitidos e recebidos, o que dispensa " +
+          "guardar via física — mas não dispensa conferir se o CDF correspondente foi emitido.",
+      ],
     },
   ],
   comoEntraNoCalculo:
@@ -452,6 +534,26 @@ export function roteiroDoRequisito(codigo: string | null | undefined): RoteiroAt
 export function temRoteiro(codigo: string | null | undefined): boolean {
   return roteiroDoRequisito(codigo) !== null;
 }
+
+/**
+ * Camada estadual do roteiro para a UF da obra.
+ *
+ * `null` quando o requisito não tem camada levantada, ou quando tem mas não
+ * para esta UF — a tela precisa distinguir "não se aplica" de "ainda não
+ * pesquisamos", e por isso não devolve lista vazia.
+ */
+export function camadaEstadualDe(
+  roteiro: RoteiroAtivo | null,
+  uf: string | null | undefined,
+): CamadaEstadual | null {
+  if (!roteiro?.camadaEstadual || !uf) return null;
+  return roteiro.camadaEstadual.find((c) => c.uf === uf) ?? null;
+}
+
+/** UFs com camada estadual escrita para algum requisito — o resto ainda não foi pesquisado. */
+export const UFS_COM_CAMADA_ESTADUAL: string[] = [
+  ...new Set(ROTEIROS.flatMap((r) => r.camadaEstadual?.map((c) => c.uf) ?? [])),
+];
 
 /** Códigos com roteiro escrito — usado para sinalizar no catálogo o que já tem passo a passo. */
 export const CODIGOS_COM_ROTEIRO: string[] = ROTEIROS.map((r) => r.codigo);

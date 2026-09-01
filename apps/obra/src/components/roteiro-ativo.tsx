@@ -1,6 +1,6 @@
 import { Card, CardTitle } from "@carbonfree/ui/card";
 import { Badge } from "@carbonfree/ui/badge";
-import type { BaseLegal, RoteiroAtivo } from "@/lib/roteiros-ativo";
+import type { BaseLegal, CamadaEstadual, RoteiroAtivo } from "@/lib/roteiros-ativo";
 
 /**
  * Passo a passo de aceitação de um ativo, dentro do projeto ESG.
@@ -12,10 +12,16 @@ import type { BaseLegal, RoteiroAtivo } from "@/lib/roteiros-ativo";
 export function RoteiroDoAtivo({
   roteiro,
   baseLegal,
+  camadaEstadual,
+  uf,
 }: {
   roteiro: RoteiroAtivo;
   /** Vem de `requisitos_auditoria.base_legal` — a citação é do banco, o roteiro é do código. */
   baseLegal: BaseLegal[];
+  /** Procedimento do estado da obra. `null` quando não há camada escrita para a UF. */
+  camadaEstadual: CamadaEstadual | null;
+  /** UF da obra, para dizer de qual estado se está falando quando não há camada. */
+  uf: string | null;
 }) {
   const imediatos = roteiro.beneficios.filter((b) => b.natureza === "imediato");
   const municipais = roteiro.beneficios.filter((b) => b.natureza === "municipal");
@@ -97,6 +103,62 @@ export function RoteiroDoAtivo({
             </ul>
           </>
         ) : null}
+      </Card>
+
+      <Card>
+        <CardTitle>
+          No seu estado{camadaEstadual ? ` — ${camadaEstadual.uf}` : ""}
+        </CardTitle>
+        {camadaEstadual ? (
+          <>
+            <div className="mb-4 grid gap-2 sm:grid-cols-2">
+              <div>
+                <p className="font-mono text-[10px] uppercase tracking-wider text-texto-fraco">
+                  Órgão ambiental
+                </p>
+                <p className="mt-0.5 text-[13px] text-texto">{camadaEstadual.orgao}</p>
+              </div>
+              <div>
+                <p className="font-mono text-[10px] uppercase tracking-wider text-texto-fraco">
+                  Onde emitir o MTR
+                </p>
+                <p className="mt-0.5 text-[13px] text-texto">{camadaEstadual.sistemaMtr}</p>
+              </div>
+            </div>
+
+            <p className="mb-3 text-[12.5px] leading-relaxed text-texto-fraco">
+              {camadaEstadual.norma}
+            </p>
+
+            <p className="mb-1 font-display text-[13px] font-bold text-texto">
+              Quem licencia o receptor
+            </p>
+            <p className="mb-4 text-[12.5px] leading-relaxed text-texto-fraco">
+              {camadaEstadual.competenciaLicenciamento}
+            </p>
+
+            <p className="mb-1 font-display text-[13px] font-bold text-texto">
+              O que invalida o documento aqui
+            </p>
+            <ul className="grid gap-2">
+              {camadaEstadual.atencao.map((a) => (
+                <li
+                  key={a}
+                  className="rounded-sm border border-ambar/40 bg-ambar-claro px-3 py-2 text-[12.5px] leading-relaxed text-ambar"
+                >
+                  {a}
+                </li>
+              ))}
+            </ul>
+          </>
+        ) : (
+          <p className="text-[12.5px] leading-relaxed text-texto-fraco">
+            O procedimento estadual{uf ? ` de ${uf}` : ""} ainda não foi levantado para este
+            requisito. Os passos acima valem em qualquer estado — mas o órgão que licencia o
+            receptor e o sistema em que o MTR é emitido mudam por unidade da federação, e é no
+            órgão do seu estado que essa parte precisa ser confirmada.
+          </p>
+        )}
       </Card>
 
       {baseLegal.length > 0 ? (

@@ -4,6 +4,8 @@ import {
   roteiroDoRequisito,
   temRoteiro,
   type RoteiroAtivo,
+  camadaEstadualDe,
+  UFS_COM_CAMADA_ESTADUAL,
 } from "./roteiros-ativo";
 
 const todos: RoteiroAtivo[] = CODIGOS_COM_ROTEIRO.map((c) => roteiroDoRequisito(c)!);
@@ -157,5 +159,54 @@ describe("roteiro do ENE — dupla contagem é o que reprova", () => {
   it("amarra o ativo ao fator da rede no período, não a um fator fixo", () => {
     expect(ene.comoEntraNoCalculo).toContain("fator de emissão da rede");
     expect(ene.comoEntraNoCalculo).toContain("período");
+  });
+});
+
+describe("camada estadual", () => {
+  const rcc = roteiroDoRequisito("RCC")!;
+
+  it("cobre RS e SC, os dois estados onde o produto opera", () => {
+    expect([...UFS_COM_CAMADA_ESTADUAL].sort()).toEqual(["RS", "SC"]);
+  });
+
+  it("devolve a camada da UF da obra", () => {
+    expect(camadaEstadualDe(rcc, "RS")?.orgao).toContain("FEPAM");
+    expect(camadaEstadualDe(rcc, "SC")?.orgao).toContain("IMA");
+  });
+
+  it("nomeia o sistema de MTR de cada estado — é o dado que faltava no roteiro", () => {
+    expect(camadaEstadualDe(rcc, "RS")?.sistemaMtr).toContain("MTR Online");
+    expect(camadaEstadualDe(rcc, "SC")?.sistemaMtr).toContain("IMA");
+  });
+
+  it("distingue UF sem camada de requisito sem camada — as duas devolvem null", () => {
+    // "não pesquisamos ainda" e "não se aplica" precisam ser o mesmo estado
+    // vazio para a tela, que então diz explicitamente qual é o caso.
+    expect(camadaEstadualDe(rcc, "SP")).toBeNull();
+    expect(camadaEstadualDe(rcc, null)).toBeNull();
+    expect(camadaEstadualDe(null, "RS")).toBeNull();
+  });
+
+  it("SUB, ARB e ENE ainda não têm camada estadual levantada", () => {
+    for (const r of todos.filter((x) => x.codigo !== "RCC")) {
+      expect(r.camadaEstadual, `${r.codigo} ganhou camada sem teste`).toBeUndefined();
+    }
+  });
+
+  it("cada camada diz órgão, sistema, norma e o que invalida o documento", () => {
+    for (const c of rcc.camadaEstadual ?? []) {
+      expect(c.orgao.trim()).not.toBe("");
+      expect(c.sistemaMtr.trim()).not.toBe("");
+      expect(c.norma).toMatch(/\d{4}/);
+      expect(c.competenciaLicenciamento.length).toBeGreaterThan(80);
+      expect(c.atencao.length, `${c.uf} sem ponto de atenção`).toBeGreaterThan(0);
+    }
+  });
+
+  it("SC avisa que CDF de intermediário é inválido — o erro mais comum lá", () => {
+    const sc = camadaEstadualDe(rcc, "SC")!;
+    const texto = sc.atencao.join(" ");
+    expect(texto).toContain("intermediário");
+    expect(texto).toContain("CDF");
   });
 });

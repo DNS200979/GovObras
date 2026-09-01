@@ -184,6 +184,8 @@ export interface ProjetoEsgDetalhe {
   motivoDecisao: string | null;
   requisito: { codigo: string; requisito: string } | null;
   baseLegal: BaseLegal[];
+  /** UF do município da obra — escolhe a camada estadual do roteiro. */
+  obraUf: string | null;
   documentos: ProjetoEsgDocumento[];
 }
 
@@ -195,7 +197,7 @@ interface ProjetoEsgDetalheRow {
   status: string;
   created_at: string;
   motivo_decisao: string | null;
-  obras: { id: string; nome: string } | null;
+  obras: { id: string; nome: string; municipios: { uf: string } | null } | null;
   requisitos_auditoria: { codigo: string; requisito: string; base_legal: unknown } | null;
   projeto_esg_documentos: {
     id: string;
@@ -212,7 +214,7 @@ export async function getProjetoEsg(id: string): Promise<ProjetoEsgDetalhe | nul
   const { data, error } = await db
     .from("projetos_esg")
     .select(
-      "id, titulo, descricao, categoria, status, created_at, motivo_decisao, obras(id, nome), requisitos_auditoria(codigo, requisito, base_legal), projeto_esg_documentos(id, nome_arquivo, storage_path, tamanho_bytes, created_at)",
+      "id, titulo, descricao, categoria, status, created_at, motivo_decisao, obras(id, nome, municipios(uf)), requisitos_auditoria(codigo, requisito, base_legal), projeto_esg_documentos(id, nome_arquivo, storage_path, tamanho_bytes, created_at)",
     )
     .eq("id", id)
     .single<ProjetoEsgDetalheRow>();
@@ -246,6 +248,7 @@ export async function getProjetoEsg(id: string): Promise<ProjetoEsgDetalhe | nul
     motivoDecisao: data.motivo_decisao,
     requisito: data.requisitos_auditoria,
     baseLegal: ehBaseLegal(data.requisitos_auditoria?.base_legal),
+    obraUf: data.obras?.municipios?.uf ?? null,
     documentos,
   };
 }

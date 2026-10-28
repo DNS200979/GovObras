@@ -2,6 +2,7 @@
 
 Aplica o schema atual num Postgres do Neon sem editar `../supabase/migrations`.
 
+0. **Ative a Data API do Neon no branch antes de tudo** (console → Data API, com Neon Auth e "Grant public schema access"; ou `provision_neon_data_api`). Ela cria as roles `authenticated`/`anonymous` e `auth.uid()`. Se essas roles já existirem, a ativação falha com "authenticated role already exists".
 1. No Neon, crie o projeto (região `sa-east-1` se disponível) e copie a connection string **direta** (sem `-pooler`).
 2. `DATABASE_URL="postgresql://..." node packages/database/neon/apply.mjs`
    (`--dry-run` lista o que seria aplicado; `--sem-vector` só para teste local, sem pgvector.)
@@ -25,3 +26,18 @@ Variáveis por app (obra, gov, concreteira):
 
 Criar usuário: `node packages/database/neon/criar-usuario.mjs <email> <senha> "<nome>" <papel> ["<alvo>"]`.
 Origens (domínios `*.vercel.app` e de produção) precisam estar nos *trusted domains* do Neon Auth.
+
+
+# Fase 3 — consultas (Data API do Neon)
+
+Em vez de reescrever as ~124 consultas, `createServerSupabase()` agora devolve um cliente
+`supabase-js` apontado para a **Data API do Neon** (PostgREST), autenticado com o JWT do usuário
+(`getAuth().token()`). As chamadas `.from().select()` — inclusive embeds como `municipios(nome, uf)` —
+e as políticas RLS (`auth.uid()` = `sub` do JWT) continuam valendo sem mudança.
+
+Variável nova por app: `NEON_DATA_API_URL` (URL do console, termina em `/rest/v1`).
+
+O que a Data API **não** cobre: Storage (`.storage.from()` — Fase 4) e um equivalente do `service_role`
+(não há como ignorar RLS por ela; tarefas administrativas usam SQL direto com `DATABASE_URL`).
+`apply.mjs` ajusta em memória as 3 linhas das migrações que dependem de `auth.users`/`auth.role()`,
+porque o schema `auth` pertence ao Neon (cloud_admin).

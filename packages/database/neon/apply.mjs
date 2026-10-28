@@ -23,7 +23,10 @@ if (!url) {
   process.exit(1);
 }
 
-/** Ajustes mínimos para Postgres sem as extensões exclusivas do Supabase. */
+/**
+ * Ajustes mínimos, em memória, para Postgres sem os objetos exclusivos do
+ * Supabase. Os arquivos em supabase/migrations não são tocados.
+ */
 function adaptar(arquivo, sql) {
   // Neon não tem pg_cron; nenhuma migração agenda job (só cria a extensão).
   if (arquivo.endsWith("_extensoes.sql")) {
@@ -31,7 +34,13 @@ function adaptar(arquivo, sql) {
     if (semVector) sql = sql.replace(/^create extension if not exists vector.*$/m, "-- vector: omitido (--sem-vector)");
     return sql;
   }
-  return sql;
+  // O schema auth é do cloud_admin: sem auth.users. A FK de perfis.id para o
+  // usuário real é criada por neon/migrations/01_auth_neon.sql.
+  if (arquivo.endsWith("_schema.sql")) {
+    return sql.replace(/references auth\.users \(id\) on delete cascade/, "");
+  }
+  // auth.role() não existe na Data API; current_user é a role do JWT validado.
+  return sql.replace(/auth\.role\(\) = 'authenticated'/g, "current_user = 'authenticated'");
 }
 
 const client = new pg.Client({ connectionString: url });

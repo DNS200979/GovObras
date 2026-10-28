@@ -7,11 +7,9 @@
     ".": "./src/index.ts",
     "./server": "./src/server.ts",
     "./sessao": "./src/sessao.ts",
-    "./admin": "./src/admin.ts",
     "./auth": "./src/auth.ts",
     "./db": "./src/db.ts",
     "./proxy": "./src/proxy.ts",
-    "./middleware": "./src/middleware.ts",
     "./types": "./src/types.ts"
   },
   "scripts": {
@@ -20,7 +18,6 @@
   "dependencies": {
     "@neondatabase/auth": "0.7.0-beta",
     "@neondatabase/serverless": "^1.2.0",
-    "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.48.0"
   },
   "devDependencies": {

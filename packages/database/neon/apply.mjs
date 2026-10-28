@@ -12,6 +12,7 @@ import pg from "pg";
 
 const aqui = dirname(fileURLToPath(import.meta.url));
 const dir = join(aqui, "..", "supabase", "migrations");
+const dirNeon = join(aqui, "migrations");
 const url = process.env.DATABASE_URL;
 const dryRun = process.argv.includes("--dry-run");
 // Só para teste local em imagem sem pgvector; no Neon não use.
@@ -49,6 +50,11 @@ try {
       .filter((f) => f.endsWith(".sql"))
       .sort()
       .map((f) => [f, adaptar(f, readFileSync(join(dir, f), "utf8"))]),
+    // Específicas do Neon (dependem de neon_auth); rodam depois das originais.
+    ...readdirSync(dirNeon)
+      .filter((f) => f.endsWith(".sql"))
+      .sort()
+      .map((f) => [`neon/${f}`, readFileSync(join(dirNeon, f), "utf8")]),
   ];
 
   for (const [nome, sql] of fila) {

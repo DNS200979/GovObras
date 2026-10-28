@@ -1,7 +1,4 @@
 import { lerSessaoDeOrganizacao } from "@carbonfree/database/sessao";
-import type { createServerSupabase } from "@carbonfree/database/server";
-
-type SupabaseServerClient = Awaited<ReturnType<typeof createServerSupabase>>;
 
 export interface SessaoConcreteira {
   userId: string;
@@ -16,13 +13,13 @@ export interface SessaoConcreteira {
 const PAPEIS_CONCRETEIRA = ["concreteira"] as const;
 
 export async function getSessaoConcreteira(
-  clientExistente?: SupabaseServerClient,
+  /** Ignorado: resquício do client do Supabase; sai junto com ele na Fase 3. */
+  _clientExistente?: unknown,
 ): Promise<SessaoConcreteira | null> {
   const s = await lerSessaoDeOrganizacao({
     papeis: PAPEIS_CONCRETEIRA,
     colunaId: "concreteira_id",
     relacao: "concreteiras",
-    client: clientExistente,
   });
   if (!s) return null;
 

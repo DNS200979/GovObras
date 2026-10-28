@@ -1,7 +1,8 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { createServerSupabase } from "@carbonfree/database/server";
+import { getAuth } from "@carbonfree/database/auth";
+import { buscarPerfil } from "@carbonfree/database/db";
 
 export interface LoginState {
   error?: string;
@@ -19,17 +20,17 @@ export async function entrar(_prev: LoginState, formData: FormData): Promise<Log
     return { error: "Informe e-mail e senha." };
   }
 
-  const supabase = await createServerSupabase();
-  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  const auth = getAuth();
+  const { data, error } = await auth.signIn.email({ email, password });
 
-  if (error || !data.user) {
+  if (error || !data?.user) {
     return { error: "E-mail ou senha incorretos." };
   }
 
-  const { data: perfil } = await supabase.from("perfis").select("papel").eq("id", data.user.id).single();
+  const perfil = await buscarPerfil(data.user.id);
 
   if (!perfil || !PAPEIS_PERMITIDOS.includes(perfil.papel)) {
-    await supabase.auth.signOut();
+    await auth.signOut();
     return {
       error: "Esta conta não é de concreteira. Contas da construtora acessam o CarbonFree Obra.",
     };

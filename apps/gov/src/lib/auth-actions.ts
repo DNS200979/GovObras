@@ -1,10 +1,9 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { createServerSupabase } from "@carbonfree/database/server";
+import { getAuth } from "@carbonfree/database/auth";
 
 export async function sair() {
-  const supabase = await createServerSupabase();
-  await supabase.auth.signOut();
+  await getAuth().signOut();
   redirect("/login");
 }

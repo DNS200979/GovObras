@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createServerSupabase } from "@carbonfree/database/server";
+import { getUsuario } from "@carbonfree/database/auth";
 import { sugestoesDoDiagnostico } from "@/lib/prefill-diagnostico";
 import type { Resposta, SituacaoDoc } from "@/lib/financiamento";
 
@@ -31,9 +32,7 @@ export async function criarProjetoCaptacao(
   }
 
   const db = await createServerSupabase();
-  const {
-    data: { user },
-  } = await db.auth.getUser();
+  const user = await getUsuario();
   const { data: municipio } = await db.from("municipios").select("id").single();
   if (!municipio || !user) return { error: "Sessão ou município não encontrados." };
 
@@ -76,9 +75,7 @@ export async function responderQuestao(
   resposta: Resposta,
 ) {
   const db = await createServerSupabase();
-  const {
-    data: { user },
-  } = await db.auth.getUser();
+  const user = await getUsuario();
 
   // Resposta da prefeitura sobrescreve a sugestão automática, e a evidência
   // deduzida some junto — ela justificava a sugestão, não a nova resposta.
@@ -106,9 +103,7 @@ export async function definirSituacaoDocumento(
   situacao: SituacaoDoc,
 ) {
   const db = await createServerSupabase();
-  const {
-    data: { user },
-  } = await db.auth.getUser();
+  const user = await getUsuario();
 
   const { error } = await db.from("projeto_documentos").upsert(
     {
@@ -148,9 +143,7 @@ export async function anexarDocumento(
   }
 
   const db = await createServerSupabase();
-  const {
-    data: { user },
-  } = await db.auth.getUser();
+  const user = await getUsuario();
   const { data: projeto } = await db
     .from("projetos_captacao")
     .select("municipio_id")

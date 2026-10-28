@@ -2,21 +2,19 @@
 // por módulo EN 15978 (o seed original só tinha duas linhas agregadas por
 // versão, o que não sustenta gráfico de composição).
 //
-//   NEXT_PUBLIC_SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... \
+//   DATABASE_URL=... \
 //     node packages/database/scripts/seed-inventario-demo.mjs "<nome da obra>"
 
-import { createClient } from "@supabase/supabase-js";
+import { criarDb } from "./lib/db-neon.mjs";
 
-const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const nomeObra = process.argv[2];
 
-if (!url || !serviceKey || !nomeObra) {
-  console.error('Uso: node seed-inventario-demo.mjs "<nome da obra>" (com env vars do Supabase)');
+if (!nomeObra) {
+  console.error('Uso: node seed-inventario-demo.mjs "<nome da obra>" (com DATABASE_URL do Neon)');
   process.exit(1);
 }
 
-const db = createClient(url, serviceKey, { auth: { persistSession: false } });
+const db = await criarDb();
 
 /**
  * Três versões contando uma história coerente: a intensidade cai porque o
@@ -188,7 +186,9 @@ async function main() {
   console.log(`Inventários de demonstração criados para "${obra.nome}".`);
 }
 
-main().catch((err) => {
-  console.error("Falha:", err.message);
-  process.exit(1);
-});
+main()
+  .catch((err) => {
+    console.error("Falha:", err.message);
+    process.exit(1);
+  })
+  .finally(() => db.fim());

@@ -41,3 +41,23 @@ O que a Data API **não** cobre: Storage (`.storage.from()` — Fase 4) e um equ
 (não há como ignorar RLS por ela; tarefas administrativas usam SQL direto com `DATABASE_URL`).
 `apply.mjs` ajusta em memória as 3 linhas das migrações que dependem de `auth.users`/`auth.role()`,
 porque o schema `auth` pertence ao Neon (cloud_admin).
+
+## Seeds
+
+Rodam direto no Postgres (dono do banco, ignora RLS — o papel que o `service_role` tinha) pelo adaptador
+`scripts/lib/db-neon.mjs`, que aceita o subconjunto de `supabase-js` que os seeds usam.
+Variáveis: `DATABASE_URL` (conexão **direta**, sem `-pooler`) e, para criar usuários, `NEON_AUTH_BASE_URL`.
+
+| Script | Efeito |
+|---|---|
+| `seed-requisitos.mjs` | requisitos de auditoria (seções 5.1 e 5.2) |
+| `seed.mjs` | Florianópolis, construtoras, obras, inventários, selos, fiscalizações (idempotente) |
+| `seed-inventario-demo.mjs "<obra>"` | inventários de demonstração de uma obra |
+| `seed-case-aracaju.mjs` / `seed-case-campinas.mjs` | cases de captação; exigem um `prefeitura_gestor` (use `criar-usuario.mjs`) e entram no município dele |
+
+`scripts/seed-prefeitura-user.mjs` e `seed-construtora-user.mjs` ainda falam com o Supabase: use `neon/criar-usuario.mjs`.
+
+## Cuidados com a Data API
+
+- **Depois de qualquer migração nova, atualize o cache de schema** (console → Data API → *Refresh schema cache*). Sem isso funções e colunas novas não aparecem (`try reloading the schema`).
+- Foram vistas poucas respostas **vazias** (não erro) na primeira consulta de uma sessão nova, em geral logo depois de ativar a Data API ou de gravar dados. Não reproduzível sob demanda; se uma tela aparecer vazia sem motivo, repita a consulta antes de investigar o RLS.

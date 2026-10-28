@@ -12,36 +12,10 @@
  * município fez.
  */
 
-import { readFileSync } from "node:fs";
-
-const env = Object.fromEntries(
-  readFileSync(new URL("../../../../apps/gov/.env.local", import.meta.url), "utf8")
-    .split("\n")
-    .filter((l) => l.includes("=") && !l.trim().startsWith("#"))
-    .map((l) => {
-      const i = l.indexOf("=");
-      return [l.slice(0, i).trim(), l.slice(i + 1).trim().replace(/^["']|["']$/g, "")];
-    }),
-);
-
-const URL_BASE = env.NEXT_PUBLIC_SUPABASE_URL;
-const CHAVE = env.SUPABASE_SERVICE_ROLE_KEY;
-const H = {
-  apikey: CHAVE,
-  Authorization: `Bearer ${CHAVE}`,
-  "Content-Type": "application/json",
-  Prefer: "return=representation",
-};
+import { criarDb } from "./db-neon.mjs";
 
 /** Pesos das 20 questões, na ordem — espelha QUESTOES em apps/gov/src/lib/financiamento.ts. */
 const PESOS = [5, 7, 5, 6, 5, 6, 6, 5, 6, 5, 4, 4, 3, 5, 6, 5, 5, 4, 3, 4];
-
-export async function api(caminho, opcoes = {}) {
-  const r = await fetch(`${URL_BASE}/rest/v1/${caminho}`, { headers: H, ...opcoes });
-  const corpo = await r.text();
-  if (!r.ok) throw new Error(`${caminho} → ${r.status} ${corpo}`);
-  return corpo ? JSON.parse(corpo) : null;
-}
 
 /**
  * @param {object} case_
@@ -54,34 +28,59 @@ export async function api(caminho, opcoes = {}) {
  * @param {[number, string, string][]} case_.documentos  [documentoId, situação, observação]
  */
 export async function carregarCase(case_) {
-  const [municipio] = await api("municipios?select=id,nome&limit=1");
-  const [gestor] = await api("perfis?select=id&papel=eq.prefeitura_gestor&limit=1");
+  const db = await criarDb();
+  try {
+    return await carregar(db, case_);
+  } finally {
+    await db.fim();
+  }
+}
+
+async function carregar(db, case_) {
+  const orFalha = ({ data, error }, onde) => {
+    if (error) throw new Error(`${onde}: ${error.message}`);
+    return data;
+  };
+
+  // O RLS enxerga os projetos pelo município do perfil: o case entra no
+  // município do gestor, não no "primeiro" da tabela (as migrações já carregam vários).
+  const [gestor] = orFalha(
+    await db.from("perfis").select("id, municipio_id").eq("papel", "prefeitura_gestor").limit(1),
+    "perfis",
+  );
+  const municipio = gestor
+    ? orFalha(await db.from("municipios").select("id, nome").eq("id", gestor.municipio_id).single(), "municipios")
+    : null;
   if (!municipio || !gestor) throw new Error("Município ou gestor não encontrados.");
 
   // Idempotente: recarregar o case substitui em vez de empilhar cópias.
-  const existentes = await api(
-    `projetos_captacao?nome=eq.${encodeURIComponent(case_.nome)}&select=id`,
+  const existentes = orFalha(
+    await db.from("projetos_captacao").select("id").eq("nome", case_.nome),
+    "projetos_captacao",
   );
   for (const p of existentes) {
-    await api(`projetos_captacao?id=eq.${p.id}`, { method: "DELETE" });
+    orFalha(await db.from("projetos_captacao").delete().eq("id", p.id), "delete projeto");
   }
 
-  const [projeto] = await api("projetos_captacao", {
-    method: "POST",
-    body: JSON.stringify({
-      municipio_id: municipio.id,
-      nome: case_.nome,
-      descricao: case_.descricao,
-      tema: case_.tema,
-      valor_estimado_brl: case_.valorBrl ?? null,
-      situacao: case_.situacao,
-      criado_por: gestor.id,
-    }),
-  });
+  const projeto = orFalha(
+    await db
+      .from("projetos_captacao")
+      .insert({
+        municipio_id: municipio.id,
+        nome: case_.nome,
+        descricao: case_.descricao,
+        tema: case_.tema,
+        valor_estimado_brl: case_.valorBrl ?? null,
+        situacao: case_.situacao,
+        criado_por: gestor.id,
+      })
+      .select("*")
+      .single(),
+    "projeto",
+  );
 
-  await api("diagnostico_respostas", {
-    method: "POST",
-    body: JSON.stringify(
+  orFalha(
+    await db.from("diagnostico_respostas").insert(
       case_.respostas.map(([questao_id, resposta, evidencia]) => ({
         projeto_id: projeto.id,
         questao_id,
@@ -91,11 +90,11 @@ export async function carregarCase(case_) {
         respondido_por: gestor.id,
       })),
     ),
-  });
+    "diagnostico_respostas",
+  );
 
-  await api("projeto_documentos", {
-    method: "POST",
-    body: JSON.stringify(
+  orFalha(
+    await db.from("projeto_documentos").insert(
       case_.documentos.map(([documento_id, situacao, observacao]) => ({
         projeto_id: projeto.id,
         documento_id,
@@ -104,7 +103,8 @@ export async function carregarCase(case_) {
         atualizado_por: gestor.id,
       })),
     ),
-  });
+    "projeto_documentos",
+  );
 
   const pontos = case_.respostas.reduce((s, [id, r]) => {
     const peso = PESOS[id - 1];

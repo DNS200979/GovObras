@@ -1,3 +1,4 @@
+import { storage } from "@carbonfree/database/storage";
 import { createServerSupabase } from "@carbonfree/database/server";
 import type { Resposta, SituacaoDoc } from "../financiamento";
 import { calcularDiagnostico } from "../financiamento";
@@ -147,6 +148,14 @@ export async function listDocumentosProjeto(projetoId: string): Promise<Document
 /** URL temporária para baixar o anexo; o bucket é privado. */
 export async function urlDoAnexo(storagePath: string): Promise<string | null> {
   const db = await createServerSupabase();
-  const { data } = await db.storage.from("captacao-docs").createSignedUrl(storagePath, 60 * 10);
+  // só assina caminhos de anexos que o usuário enxerga (RLS)
+  const { data: registro } = await db
+    .from("projeto_documentos")
+    .select("storage_path")
+    .eq("storage_path", storagePath)
+    .limit(1)
+    .maybeSingle();
+  if (!registro) return null;
+  const { data } = await storage.from("captacao-docs").createSignedUrl(storagePath, 60 * 10);
   return data?.signedUrl ?? null;
 }

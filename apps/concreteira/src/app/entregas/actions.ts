@@ -1,3 +1,4 @@
+import { storage } from "@carbonfree/database/storage";
 "use server";
 
 import { createHash } from "node:crypto";
@@ -89,7 +90,7 @@ export async function criarEntrega(
     const tipo = formData.get("evidencia_tipo")?.toString() === "cte" ? "cte" : "nfe";
     const caminho = `${sessao.concreteiraId}/${entrega.id}/${Date.now()}-${arquivo.name}`;
 
-    const { error: uploadErr } = await db.storage
+    const { error: uploadErr } = await storage
       .from("entregas-concreto-docs")
       .upload(caminho, arquivo, { contentType: arquivo.type || undefined });
 
@@ -114,7 +115,7 @@ export async function criarEntrega(
       .single();
 
     if (evErr) {
-      await db.storage.from("entregas-concreto-docs").remove([caminho]);
+      await storage.from("entregas-concreto-docs").remove([caminho]);
       return { error: "Entrega registrada, mas não foi possível gravar a evidência: " + evErr.message };
     }
 

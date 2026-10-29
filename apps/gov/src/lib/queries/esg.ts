@@ -1,3 +1,4 @@
+import { storage } from "@carbonfree/database/storage";
 import { createServerSupabase } from "@carbonfree/database/server";
 
 // ============================================================
@@ -123,7 +124,7 @@ export async function getProjetoEsgGov(id: string): Promise<ProjetoEsgDetalheGov
 
   const documentos = await Promise.all(
     (data.projeto_esg_documentos ?? []).map(async (doc) => {
-      const { data: signed } = await db.storage
+      const { data: signed } = await storage
         .from("projetos-esg-docs")
         .createSignedUrl(doc.storage_path, 60 * 10);
       return {

@@ -1,3 +1,4 @@
+import { storage } from "@carbonfree/database/storage";
 "use server";
 
 import { revalidatePath } from "next/cache";
@@ -155,7 +156,7 @@ export async function anexarDocumento(
   const extensao = arquivo.name.includes(".") ? arquivo.name.split(".").pop() : "bin";
   const caminho = `${projeto.municipio_id}/${projetoId}/doc-${documentoId}.${extensao}`;
 
-  const { error: erroUpload } = await db.storage
+  const { error: erroUpload } = await storage
     .from("captacao-docs")
     .upload(caminho, arquivo, { upsert: true, contentType: arquivo.type || undefined });
   if (erroUpload) return { error: "Falha ao enviar: " + erroUpload.message };
@@ -204,7 +205,7 @@ export async function removerAnexo(projetoId: string, documentoId: number) {
     .maybeSingle();
 
   if (registro?.storage_path) {
-    await db.storage.from("captacao-docs").remove([registro.storage_path]);
+    await storage.from("captacao-docs").remove([registro.storage_path]);
   }
 
   const { error } = await db
@@ -219,6 +220,14 @@ export async function removerAnexo(projetoId: string, documentoId: number) {
 
 export async function baixarAnexo(storagePath: string) {
   const db = await createServerSupabase();
-  const { data } = await db.storage.from("captacao-docs").createSignedUrl(storagePath, 60 * 10);
+  // só assina caminhos de anexos que o usuário enxerga (RLS)
+  const { data: registro } = await db
+    .from("projeto_documentos")
+    .select("storage_path")
+    .eq("storage_path", storagePath)
+    .limit(1)
+    .maybeSingle();
+  if (!registro) return null;
+  const { data } = await storage.from("captacao-docs").createSignedUrl(storagePath, 60 * 10);
   return data?.signedUrl ?? null;
 }

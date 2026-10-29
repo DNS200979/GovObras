@@ -1,3 +1,4 @@
+import { storage } from "@carbonfree/database/storage";
 import { NextResponse } from "next/server";
 import { createServerSupabase } from "@carbonfree/database/server";
 import { getSessaoConstrutora } from "@/lib/sessao";
@@ -25,7 +26,7 @@ export async function POST(request: Request) {
 
   const caminho = `${sessao.construtoraId}/${obraId}/${Date.now()}-${arquivo.name}`;
 
-  const { error: uploadErr } = await db.storage
+  const { error: uploadErr } = await storage
     .from("obra-docs")
     .upload(caminho, arquivo, { contentType: arquivo.type || undefined });
   if (uploadErr) {
@@ -45,7 +46,7 @@ export async function POST(request: Request) {
 
   if (dbErr) {
     // não deixa arquivo órfão no bucket se o registro falhar
-    await db.storage.from("obra-docs").remove([caminho]);
+    await storage.from("obra-docs").remove([caminho]);
     return NextResponse.json({ error: "Falha ao registrar o documento: " + dbErr.message }, { status: 400 });
   }
 
@@ -59,16 +60,18 @@ export async function DELETE(request: Request) {
     return NextResponse.json({ error: "Sessão expirada." }, { status: 401 });
   }
 
-  const { id, storagePath } = await request.json();
-  if (!id || !storagePath) {
+  const { id } = await request.json();
+  if (!id) {
     return NextResponse.json({ error: "Documento não informado." }, { status: 400 });
   }
 
-  await db.storage.from("obra-docs").remove([storagePath]);
-  const { error } = await db.from("obra_documentos").delete().eq("id", id);
+  // apaga o registro primeiro (RLS decide se pode) e remove o arquivo registrado, não um caminho recebido
+  const { data: removidos, error } = await db.from("obra_documentos").delete().eq("id", id).select("storage_path");
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 400 });
   }
+  const caminhos = (removidos ?? []).map((d) => d.storage_path).filter(Boolean) as string[];
+  if (caminhos.length > 0) await storage.from("obra-docs").remove(caminhos);
 
   return NextResponse.json({ ok: true });
 }

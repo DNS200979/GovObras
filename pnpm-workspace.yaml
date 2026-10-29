@@ -4,5 +4,6 @@ packages:
   # Expo/Metro usa resolução própria (npm) — fica fora do grafo pnpm/Turborepo.
   - "!apps/fiscal"
 allowBuilds:
+  core-js: false
   sharp: true
   unrs-resolver: true

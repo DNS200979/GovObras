@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createServerSupabase } from "@carbonfree/database/server";
+import { getUsuario } from "@carbonfree/database/auth";
 
 export interface RegistrarEnvioState {
   error?: string;
@@ -25,9 +26,7 @@ export async function registrarEnvio(
 
   const db = await createServerSupabase();
 
-  const {
-    data: { user },
-  } = await db.auth.getUser();
+  const user = await getUsuario();
   const { data: municipio } = await db.from("municipios").select("id").single();
   if (!municipio) return { error: "Município não encontrado." };
 

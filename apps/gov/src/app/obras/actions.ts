@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createServerSupabase } from "@carbonfree/database/server";
+import { getUsuario } from "@carbonfree/database/auth";
 
 export interface CriarObraState {
   error?: string;
@@ -103,9 +104,7 @@ function parseCamposObra(formData: FormData): { campos: CamposObra } | { error: 
 export async function criarObra(_prev: CriarObraState, formData: FormData): Promise<CriarObraState> {
   const db = await createServerSupabase();
 
-  const {
-    data: { user },
-  } = await db.auth.getUser();
+  const user = await getUsuario();
   if (!user) return { error: "Sessão expirada. Faça login novamente." };
 
   const { data: perfil, error: perfilErr } = await db

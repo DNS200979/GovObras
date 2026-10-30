@@ -7,19 +7,25 @@
     ".": "./src/index.ts",
     "./server": "./src/server.ts",
     "./sessao": "./src/sessao.ts",
-    "./admin": "./src/admin.ts",
-    "./middleware": "./src/middleware.ts",
+    "./auth": "./src/auth.ts",
+    "./db": "./src/db.ts",
+    "./storage": "./src/storage.ts",
+    "./proxy": "./src/proxy.ts",
     "./types": "./src/types.ts"
   },
   "scripts": {
     "gen:types": "supabase gen types typescript --linked --schema public > src/types.ts"
   },
   "dependencies": {
-    "@supabase/ssr": "^0.7.0",
+    "@aws-sdk/client-s3": "^3.1158.0",
+    "@aws-sdk/s3-request-presigner": "^3.1158.0",
+    "@neondatabase/auth": "0.7.0-beta",
+    "@neondatabase/serverless": "^1.2.0",
     "@supabase/supabase-js": "^2.48.0"
   },
   "devDependencies": {
     "next": "^16.0.0",
+    "pg": "^8.23.1",
     "supabase": "^2.5.0",
     "typescript": "^5.7.0"
   }

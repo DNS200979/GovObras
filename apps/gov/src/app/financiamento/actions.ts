@@ -1,8 +1,10 @@
 "use server";
+import { storage } from "@carbonfree/database/storage";
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createServerSupabase } from "@carbonfree/database/server";
+import { getUsuario } from "@carbonfree/database/auth";
 import { sugestoesDoDiagnostico } from "@/lib/prefill-diagnostico";
 import type { Resposta, SituacaoDoc } from "@/lib/financiamento";
 
@@ -31,9 +33,7 @@ export async function criarProjetoCaptacao(
   }
 
   const db = await createServerSupabase();
-  const {
-    data: { user },
-  } = await db.auth.getUser();
+  const user = await getUsuario();
   const { data: municipio } = await db.from("municipios").select("id").single();
   if (!municipio || !user) return { error: "Sessão ou município não encontrados." };
 
@@ -76,9 +76,7 @@ export async function responderQuestao(
   resposta: Resposta,
 ) {
   const db = await createServerSupabase();
-  const {
-    data: { user },
-  } = await db.auth.getUser();
+  const user = await getUsuario();
 
   // Resposta da prefeitura sobrescreve a sugestão automática, e a evidência
   // deduzida some junto — ela justificava a sugestão, não a nova resposta.
@@ -106,9 +104,7 @@ export async function definirSituacaoDocumento(
   situacao: SituacaoDoc,
 ) {
   const db = await createServerSupabase();
-  const {
-    data: { user },
-  } = await db.auth.getUser();
+  const user = await getUsuario();
 
   const { error } = await db.from("projeto_documentos").upsert(
     {
@@ -148,9 +144,7 @@ export async function anexarDocumento(
   }
 
   const db = await createServerSupabase();
-  const {
-    data: { user },
-  } = await db.auth.getUser();
+  const user = await getUsuario();
   const { data: projeto } = await db
     .from("projetos_captacao")
     .select("municipio_id")
@@ -162,7 +156,7 @@ export async function anexarDocumento(
   const extensao = arquivo.name.includes(".") ? arquivo.name.split(".").pop() : "bin";
   const caminho = `${projeto.municipio_id}/${projetoId}/doc-${documentoId}.${extensao}`;
 
-  const { error: erroUpload } = await db.storage
+  const { error: erroUpload } = await storage
     .from("captacao-docs")
     .upload(caminho, arquivo, { upsert: true, contentType: arquivo.type || undefined });
   if (erroUpload) return { error: "Falha ao enviar: " + erroUpload.message };
@@ -211,7 +205,7 @@ export async function removerAnexo(projetoId: string, documentoId: number) {
     .maybeSingle();
 
   if (registro?.storage_path) {
-    await db.storage.from("captacao-docs").remove([registro.storage_path]);
+    await storage.from("captacao-docs").remove([registro.storage_path]);
   }
 
   const { error } = await db
@@ -226,6 +220,14 @@ export async function removerAnexo(projetoId: string, documentoId: number) {
 
 export async function baixarAnexo(storagePath: string) {
   const db = await createServerSupabase();
-  const { data } = await db.storage.from("captacao-docs").createSignedUrl(storagePath, 60 * 10);
+  // só assina caminhos de anexos que o usuário enxerga (RLS)
+  const { data: registro } = await db
+    .from("projeto_documentos")
+    .select("storage_path")
+    .eq("storage_path", storagePath)
+    .limit(1)
+    .maybeSingle();
+  if (!registro) return null;
+  const { data } = await storage.from("captacao-docs").createSignedUrl(storagePath, 60 * 10);
   return data?.signedUrl ?? null;
 }

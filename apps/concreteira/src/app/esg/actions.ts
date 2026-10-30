@@ -1,4 +1,5 @@
 "use server";
+import { storage } from "@carbonfree/database/storage";
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -85,7 +86,7 @@ export async function enviarDocumento(
 
   const caminho = `${sessao.concreteiraId}/${itemId}/${Date.now()}-${arquivo.name}`;
 
-  const { error: uploadErr } = await db.storage
+  const { error: uploadErr } = await storage
     .from("concreteira-esg-docs")
     .upload(caminho, arquivo, { contentType: arquivo.type || undefined });
   if (uploadErr) return { error: "Falha no envio do arquivo: " + uploadErr.message };
@@ -99,7 +100,7 @@ export async function enviarDocumento(
     enviado_por: sessao.userId,
   });
   if (dbErr) {
-    await db.storage.from("concreteira-esg-docs").remove([caminho]);
+    await storage.from("concreteira-esg-docs").remove([caminho]);
     return { error: "Falha ao registrar o documento: " + dbErr.message };
   }
 
@@ -107,10 +108,16 @@ export async function enviarDocumento(
   return {};
 }
 
-export async function removerDocumento(documentoId: string, itemId: string, storagePath: string) {
+export async function removerDocumento(documentoId: string, itemId: string, _storagePath?: string) {
   const db = await createServerSupabase();
-  await db.storage.from("concreteira-esg-docs").remove([storagePath]);
-  const { error } = await db.from("concreteira_esg_documentos").delete().eq("id", documentoId);
+  // apaga o registro primeiro (RLS decide se pode) e remove o arquivo registrado, não o caminho recebido
+  const { data: removidos, error } = await db
+    .from("concreteira_esg_documentos")
+    .delete()
+    .eq("id", documentoId)
+    .select("storage_path");
   if (error) throw error;
+  const caminhos = (removidos ?? []).map((d) => d.storage_path).filter(Boolean) as string[];
+  if (caminhos.length > 0) await storage.from("concreteira-esg-docs").remove(caminhos);
   revalidatePath(`/esg/${itemId}`);
 }

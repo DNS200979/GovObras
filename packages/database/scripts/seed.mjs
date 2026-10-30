@@ -1,20 +1,15 @@
 // Seed do banco real com dados de demonstração relacionalmente íntegros
 // (respeita todos os FKs/constraints do schema — nada de dado solto).
-// Rodar com as env vars de apps/gov/.env.local (mesmo banco do Obra).
+// Roda contra o Postgres do Neon (dono do banco, ignora RLS).
 //
-//   node packages/database/scripts/seed.mjs
+//   DATABASE_URL=... NEON_AUTH_BASE_URL=... \
+//     node packages/database/scripts/seed.mjs
 //
 // Idempotente: se "Florianópolis" já existir como município, não duplica.
 
-import { createClient } from "@supabase/supabase-js";
+import { criarDb } from "./lib/db-neon.mjs";
 
-const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-if (!url || !serviceKey) {
-  console.error("Faltam NEXT_PUBLIC_SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY no ambiente.");
-  process.exit(1);
-}
-const db = createClient(url, serviceKey, { auth: { persistSession: false } });
+const db = await criarDb();
 
 function daysFromNow(days, hour = 9, minute = 0) {
   const d = new Date();
@@ -244,7 +239,9 @@ async function main() {
   console.log(`  obra em foco no app Obra: ${nomeByAlvara["ALV-2025-1042"]} (${byAlvara["ALV-2025-1042"].id})`);
 }
 
-main().catch((err) => {
-  console.error("Falha no seed:", err.message);
-  process.exit(1);
-});
+main()
+  .catch((err) => {
+    console.error("Falha no seed:", err.message);
+    process.exit(1);
+  })
+  .finally(() => db.fim());

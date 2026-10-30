@@ -13,6 +13,7 @@ import {
   FileCheck2,
 } from "lucide-react";
 import { createServerSupabase } from "@carbonfree/database/server";
+import { getUsuario } from "@carbonfree/database/auth";
 import {
   Sidebar,
   SidebarContent,
@@ -51,9 +52,7 @@ export async function AppShell({
   children: React.ReactNode;
 }) {
   const supabase = await createServerSupabase();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getUsuario();
 
   let perfil: { nome: string; papel: string } | null = null;
   if (user) {

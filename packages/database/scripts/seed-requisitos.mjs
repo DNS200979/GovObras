@@ -1,17 +1,11 @@
 // Popula requisitos_auditoria com o conteúdo real das seções 5.1 e 5.2 do
 // plano de negócio (transcrito das tabelas do documento).
 //
-//   NEXT_PUBLIC_SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... node packages/database/scripts/seed-requisitos.mjs
+//   DATABASE_URL=... node packages/database/scripts/seed-requisitos.mjs
 
-import { createClient } from "@supabase/supabase-js";
+import { criarDb } from "./lib/db-neon.mjs";
 
-const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-if (!url || !serviceKey) {
-  console.error("Faltam NEXT_PUBLIC_SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY no ambiente.");
-  process.exit(1);
-}
-const db = createClient(url, serviceKey, { auth: { persistSession: false } });
+const db = await criarDb();
 
 const passivo = [
   ["A1-A3", "Cimento e aglomerantes por tipo (CP II / III / IV / V)", "t · tCO₂e/t",
@@ -109,7 +103,9 @@ async function main() {
   console.log(`Inseridas ${rows.length} linhas (${passivo.length} passivo + ${ativo.length} ativo).`);
 }
 
-main().catch((err) => {
-  console.error("Falha:", err.message);
-  process.exit(1);
-});
+main()
+  .catch((err) => {
+    console.error("Falha:", err.message);
+    process.exit(1);
+  })
+  .finally(() => db.fim());

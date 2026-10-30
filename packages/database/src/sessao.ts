@@ -1,6 +1,5 @@
-import { createServerSupabase } from "./server";
-
-type SupabaseServerClient = Awaited<ReturnType<typeof createServerSupabase>>;
+import { getUsuario } from "./auth";
+import { getSql } from "./db";
 
 /** O que a leitura de sessão devolve, antes de cada app dar o nome do seu domínio. */
 export interface SessaoDeOrganizacao {
@@ -19,13 +18,6 @@ export interface LeituraDeSessao {
   colunaId: string;
   /** Tabela relacionada de onde sai a razão social (ex.: "construtoras"). */
   relacao: string;
-  /**
-   * Client já existente do chamador. Criar mais de um `createServerSupabase()`
-   * na mesma Server Action faz cada instância escrever cookies de sessão de
-   * forma independente, e uma sobrescreve a outra (visto derrubando a sessão
-   * inteira ao criar um projeto ESG). Sempre reutilize o do chamador.
-   */
-  client?: SupabaseServerClient;
 }
 
 /**
@@ -40,38 +32,41 @@ export async function lerSessaoDeOrganizacao({
   papeis,
   colunaId,
   relacao,
-  client,
 }: LeituraDeSessao): Promise<SessaoDeOrganizacao | null> {
-  const supabase = client ?? (await createServerSupabase());
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getUsuario();
   if (!user) return null;
 
-  const { data: perfil } = await supabase
-    .from("perfis")
-    .select(`nome, papel, ${colunaId}, ${relacao}(razao_social)`)
-    .eq("id", user.id)
-    .single();
+  // Nomes de coluna/tabela vêm de constantes dos apps, nunca de entrada do usuário;
+  // a checagem protege contra um erro de digitação virar SQL malformado.
+  if (!/^[a-z_]+$/.test(colunaId) || !/^[a-z_]+$/.test(relacao)) {
+    throw new Error("colunaId/relacao inválidos.");
+  }
 
+  const rows = await getSql().query(
+    `select p.nome, p.papel, p.${colunaId} as organizacao_id, r.razao_social
+       from perfis p
+       left join ${relacao} r on r.id = p.${colunaId}
+      where p.id = $1`,
+    [user.id],
+  );
+  const perfil = rows[0] as
+    | { nome: string; papel: string; organizacao_id: string | null; razao_social: string | null }
+    | undefined;
   if (!perfil) return null;
 
-  const registro = perfil as unknown as Record<string, unknown>;
-  const papel = String(registro.papel ?? "");
-  const organizacaoId = registro[colunaId];
+  const papel = String(perfil.papel ?? "");
+  const organizacaoId = perfil.organizacao_id;
 
   if (!papeis.includes(papel) || typeof organizacaoId !== "string" || !organizacaoId) {
     return null;
   }
 
-  const relacionada = registro[relacao] as { razao_social: string } | null;
-
   return {
     userId: user.id,
     email: user.email ?? "",
-    nome: String(registro.nome ?? ""),
+    nome: String(perfil.nome ?? ""),
     papel,
     organizacaoId,
-    organizacaoNome: relacionada?.razao_social ?? "",
+    organizacaoNome: perfil.razao_social ?? "",
   };
 }

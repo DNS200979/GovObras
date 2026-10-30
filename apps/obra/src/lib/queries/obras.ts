@@ -1,3 +1,4 @@
+import { storage } from "@carbonfree/database/storage";
 import { createServerSupabase } from "@carbonfree/database/server";
 import { DOCUMENTOS_ESPERADOS } from "../documentos";
 
@@ -118,7 +119,7 @@ export async function getObra(id: string): Promise<ObraDetalhe | null> {
 
   const documentos = await Promise.all(
     (data.obra_documentos ?? []).map(async (doc) => {
-      const { data: signed } = await db.storage
+      const { data: signed } = await storage
         .from("obra-docs")
         .createSignedUrl(doc.storage_path, 60 * 10);
       return {
